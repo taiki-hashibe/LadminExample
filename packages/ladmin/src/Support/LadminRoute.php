@@ -34,7 +34,7 @@ class LadminRoute
     {
         $model = $this->isModelClass($modelClassOrTableName);
         if ($model) {
-            return Crud::model($model);
+            return Crud::model($model)->crud();
         };
     }
 

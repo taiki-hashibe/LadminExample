@@ -2,8 +2,6 @@
 
 use App\Models\User;
 use Illuminate\Support\Facades\Route;
-use LowB\Ladmin\Facades\Crud\Crud;
-use LowB\Ladmin\Facades\Ladmin;
 use LowB\Ladmin\Support\Facades\LadminRoute;
 
 /*
