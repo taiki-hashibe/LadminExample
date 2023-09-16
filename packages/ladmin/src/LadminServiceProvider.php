@@ -2,10 +2,12 @@
 
 namespace LowB\Ladmin;
 
+use App\Models\User;
 use Illuminate\Support\Facades\Blade;
 use Spatie\LaravelPackageTools\Package;
 use Spatie\LaravelPackageTools\PackageServiceProvider;
 use LowB\Ladmin\Commands\LadminCommand;
+use LowB\Ladmin\Support\Facades\LadminRoute;
 
 class LadminServiceProvider extends PackageServiceProvider
 {
