@@ -4,20 +4,21 @@ namespace LowB\Ladmin\Crud;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Schema;
-use LowB\Ladmin\Contracts\Crud\CrudInterface;
 use LowB\Ladmin\Controllers\AbstractCrudController;
+use Illuminate\Support\Arr;
 
-class Crud implements CrudInterface
+class Crud
 {
     protected string $route = 'default';
-    protected array $routes = [];
     protected Model|null $model = null;
     protected string $modelClassBaseName = 'default';
     protected string $tableName = 'default';
+    protected array $columnNames = [];
     protected array $columns = [];
+    protected string $label = '';
+    protected array $config = [];
     protected AbstractCrudController $controller;
 
     public function model(Model $model, array $config = []): self
@@ -31,32 +32,43 @@ class Crud implements CrudInterface
             $columnDetails[$column] = Schema::connection(config('database.default'))->getConnection()->getDoctrineColumn($this->tableName, $column);
         }
         $this->columns = $columnDetails;
+        $this->label = $this->tableName;
+        $this->config = $config;
         $this->controller = $this->getController();
-        $this->crud();
-
+        $this->controller->init($this);
         return $this;
     }
 
-    public function crud(): self
+    public function getModel()
     {
-        $this->show();
-        $this->detail();
-        return $this;
+        return $this->model;
+    }
+
+    public function getColumnNames()
+    {
+        return $this->columnNames;
+    }
+
+    public function getColumns()
+    {
+        return $this->columns;
     }
 
     public function show(): self
     {
-        array_push($this->routes, Route::get($this->tableName . '/show', function (Request $request) {
+        $this->route = '/' . Arr::join([$this->tableName, config('ladmin.route.show')], '/');
+        Route::get($this->route, function (Request $request) {
             return $this->controller->show($request);
-        }));
+        })->name(Arr::join([config('ladmin.route.prefix'), $this->tableName, config('ladmin.route.show')], '.'));
         return $this;
     }
 
     public function detail(): self
     {
-        array_push($this->routes, Route::get($this->tableName . '/detail', function (Request $request) {
+        $this->route = '/' . Arr::join([$this->tableName, config('ladmin.route.detail')], '/') . '{id}';
+        Route::get($this->route, function (Request $request) {
             return $this->controller->detail($request);
-        }));
+        });
         return $this;
     }
 
@@ -73,8 +85,13 @@ class Crud implements CrudInterface
         return $controller;
     }
 
-    public function getRoutes()
+    public function getLabel(): string
     {
-        return $this->routes;
+        return $this->label;
+    }
+
+    public function getRoute(): string
+    {
+        return $this->route;
     }
 }

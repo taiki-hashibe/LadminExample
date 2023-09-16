@@ -8,54 +8,38 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Route;
-use LowB\Ladmin\Crud\Facades\Crud;
+use LowB\Ladmin\Crud\Crud;
+use LowB\Ladmin\Facades\Ladmin;
+use LowB\Ladmin\Navigation\Facades\Navigation;
 
 class LadminRoute
 {
-    public array $routes = [];
-
-    public function route()
-    {
-        return Route::prefix(config('ladmin.route.prefix'))->group($this->routes);
-    }
-
-    public function add(array|Closure|null $routes = null)
-    {
-        if ($routes) {
-            $routes = Arr::wrap($routes);
-            foreach ($routes as $route) {
-                array_push($this->routes, $route);
-            }
-            return;
-        }
-    }
-
     public function crud(string $modelClassOrTableName)
     {
-        $model = $this->isModelClass($modelClassOrTableName);
-        if ($model) {
-            return Crud::model($model)->crud();
+        $this->show($modelClassOrTableName);
+        $this->detail($modelClassOrTableName);
+        return $this;
+    }
+
+    public function show(string $modelClassOrTableName)
+    {
+        $instance = app()->make($modelClassOrTableName);
+        if ($instance instanceof Model) {
+            $crud = new Crud();
+            $crud->model($instance)->show();
+            Navigation::addHeaderNavigation($crud);
+            Navigation::addFooterNavigation($crud);
         };
+        return $this;
     }
 
-    public function isModelClass(string $modelClass): bool|Model
+    public function detail(string $modelClassOrTableName)
     {
-        if (!class_exists($modelClass)) {
-            return false;;
-        }
-        $model = app()->make($modelClass);
-        if (!$model instanceof Model) {
-            return false;
-        }
-        return $model;
-    }
-
-    public function isTableName(string $tableName): bool|Builder
-    {
-        $table = DB::table($tableName);
-        if (!$table) {
-            return false;
-        }
-        return $table;
+        $instance = app()->make($modelClassOrTableName);
+        if ($instance instanceof Model) {
+            $crud = new Crud();
+            $crud->model($instance)->detail();
+        };
+        return $this;
     }
 }

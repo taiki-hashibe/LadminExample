@@ -4,15 +4,33 @@ namespace LowB\Ladmin\Controllers;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Contracts\View\View;
+use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use LowB\Ladmin\Contracts\Controllers\CrudControllerInterface;
+use LowB\Ladmin\Crud\Crud;
 
 class AbstractCrudController extends Controller implements CrudControllerInterface
 {
+    public Crud|null $crud = null;
+    public mixed $primaryKey = 'id';
+    public int $paginate = 24;
+
+    public function init(Crud $crud)
+    {
+        $this->crud = $crud;
+    }
+
     public function show(Request $request): View
     {
-        return view('ladmin::crud.show');
+        $instance = $this->crud->getModel();
+        $columns = $this->crud->getColumns();
+        $items = $instance->paginate($this->paginate);
+        return view('ladmin::crud.show', [
+            'columns' => $columns,
+            'items' => $items
+        ]);
     }
 
     public function detail(Request $request): View

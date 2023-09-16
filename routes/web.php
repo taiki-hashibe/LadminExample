@@ -1,8 +1,7 @@
 <?php
 
-use App\Models\User;
 use Illuminate\Support\Facades\Route;
-use LowB\Ladmin\Support\Facades\LadminRoute;
+use LowB\Ladmin\Facades\Ladmin;
 
 /*
 |--------------------------------------------------------------------------
@@ -15,10 +14,8 @@ use LowB\Ladmin\Support\Facades\LadminRoute;
 |
 */
 
-LadminRoute::add(function () {
-    LadminRoute::crud(User::class);
-});
-LadminRoute::route();
 Route::get('/', function () {
     dump(1);
 });
+
+require __DIR__ . '/admin.php';
