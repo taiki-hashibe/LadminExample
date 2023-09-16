@@ -1,6 +1,10 @@
 <?php
 
+use App\Models\User;
 use Illuminate\Support\Facades\Route;
+use LowB\Ladmin\Facades\Crud\Crud;
+use LowB\Ladmin\Facades\Ladmin;
+use LowB\Ladmin\Support\Facades\LadminRoute;
 
 /*
 |--------------------------------------------------------------------------
@@ -13,6 +17,10 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
+LadminRoute::add(function () {
+    LadminRoute::crud(User::class);
+});
+LadminRoute::route();
 Route::get('/', function () {
-    return view('welcome');
+    dump(1);
 });

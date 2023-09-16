@@ -1,6 +1,7 @@
 <?php
 
-// config for LowB/Ladmin
 return [
-
+    'route' => [
+        'prefix' => 'admin'
+    ]
 ];
