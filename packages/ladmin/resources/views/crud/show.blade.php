@@ -26,7 +26,7 @@
                                         @if (Ladmin::crud()->isDetailable())
                                             <td>
                                                 <a href="{{ route(Ladmin::crud()->getDetailRouteName(), [
-                                                    'primaryKey' => $item->id,
+                                                    'primaryKey' => $item->{Ladmin::crud()->getPrimaryKey()},
                                                 ]) }}"
                                                     class="btn btn-sm btn-primary">{{ __('detail') }}</a>
                                             </td>

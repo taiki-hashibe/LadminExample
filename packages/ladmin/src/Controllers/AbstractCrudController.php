@@ -8,6 +8,7 @@ use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use LowB\Ladmin\Contracts\Controllers\CrudControllerInterface;
 use LowB\Ladmin\Crud\Crud;
+use LowB\Ladmin\Facades\Ladmin;
 
 class AbstractCrudController extends Controller implements CrudControllerInterface
 {
@@ -61,6 +62,8 @@ class AbstractCrudController extends Controller implements CrudControllerInterfa
 
     public function destroy(Request $request): RedirectResponse
     {
-        return redirect('/');
+        $item = $this->crud->getQuery()->where($this->crud->getPrimaryKey(), $request->primaryKey)->first();
+        $item->delete();
+        return redirect()->route(Ladmin::crud()->getShowRouteName());
     }
 }

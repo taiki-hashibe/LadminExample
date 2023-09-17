@@ -60,7 +60,7 @@ class LadminRoute
         if (!$action) {
             $action = [DashboardController::class, 'index'];
         }
-        $uri = SupportLadminRoute::route(config('ladmin.route.dashboard'));
+        $uri = SupportLadminRoute::route(config('ladmin.route.dashboard'), null, false);
         $routeName = config('ladmin.route.dashboard');
         $crud = new Crud();
         $crud->setTableName(config('ladmin.route.dashboard'));
@@ -78,6 +78,10 @@ class LadminRoute
     public function crud(string $modelClassOrTableName)
     {
         $this->detail($modelClassOrTableName);
+        $this->editor($modelClassOrTableName);
+        $this->create($modelClassOrTableName);
+        $this->update($modelClassOrTableName);
+        $this->destroy($modelClassOrTableName);
         $showCrud = $this->show($modelClassOrTableName);
         return $showCrud;
     }
@@ -113,6 +117,82 @@ class LadminRoute
         }
         Route::get($crud->getRoute(), function (Request $request) use ($crud) {
             return $crud->getController()->detail($request);
+        })->name($crud->getRouteName());
+        Ladmin::addRoute($crud->getRoute());
+        Ladmin::addRouteName($crud->getRouteName());
+        Ladmin::crudRegister($crud);
+        return $crud;
+    }
+
+    public function editor(string $modelClassOrTableName)
+    {
+        $instance = $this->createInstance($modelClassOrTableName);
+        $crud = new Crud();
+        if ($instance instanceof Model) {
+            $crud->model($instance)->editor();
+        }
+        if ($instance instanceof Builder) {
+            $crud->table($instance, $modelClassOrTableName)->editor();
+        }
+        Route::get($crud->getRoute(), function (Request $request) use ($crud) {
+            return $crud->getController()->editor($request);
+        })->name($crud->getRouteName());
+        Ladmin::addRoute($crud->getRoute());
+        Ladmin::addRouteName($crud->getRouteName());
+        Ladmin::crudRegister($crud);
+        return $crud;
+    }
+
+    public function create(string $modelClassOrTableName)
+    {
+        $instance = $this->createInstance($modelClassOrTableName);
+        $crud = new Crud();
+        if ($instance instanceof Model) {
+            $crud->model($instance)->create();
+        }
+        if ($instance instanceof Builder) {
+            $crud->table($instance, $modelClassOrTableName)->create();
+        }
+        Route::post($crud->getRoute(), function (Request $request) use ($crud) {
+            return $crud->getController()->create($request);
+        })->name($crud->getRouteName());
+        Ladmin::addRoute($crud->getRoute());
+        Ladmin::addRouteName($crud->getRouteName());
+        Ladmin::crudRegister($crud);
+        return $crud;
+    }
+
+    public function update(string $modelClassOrTableName)
+    {
+        $instance = $this->createInstance($modelClassOrTableName);
+        $crud = new Crud();
+        if ($instance instanceof Model) {
+            $crud->model($instance)->update();
+        }
+        if ($instance instanceof Builder) {
+            $crud->table($instance, $modelClassOrTableName)->update();
+        }
+        Route::post($crud->getRoute(), function (Request $request) use ($crud) {
+            return $crud->getController()->update($request);
+        })->name($crud->getRouteName());
+        Ladmin::addRoute($crud->getRoute());
+        Ladmin::addRouteName($crud->getRouteName());
+        Ladmin::crudRegister($crud);
+        return $crud;
+    }
+
+    public function destroy(string $modelClassOrTableName)
+    {
+        $instance = $this->createInstance($modelClassOrTableName);
+        $crud = new Crud();
+        if ($instance instanceof Model) {
+            $crud->model($instance)->destroy();
+        }
+        if ($instance instanceof Builder) {
+            $crud->table($instance, $modelClassOrTableName)->destroy();
+        }
+        Route::post($crud->getRoute(), function (Request $request) use ($crud) {
+            return $crud->getController()->destroy($request);
         })->name($crud->getRouteName());
         Ladmin::addRoute($crud->getRoute());
         Ladmin::addRouteName($crud->getRouteName());

@@ -163,6 +163,34 @@ class Crud
         return $this;
     }
 
+    public function editor(): self
+    {
+        $this->route = $this->getEditorRoute();
+        $this->routeName = $this->getEditorRouteName();
+        return $this;
+    }
+
+    public function create(): self
+    {
+        $this->route = $this->getCreateRoute();
+        $this->routeName = $this->getCreateRouteName();
+        return $this;
+    }
+
+    public function update(): self
+    {
+        $this->route = $this->getUpdateRoute();
+        $this->routeName = $this->getUpdateRouteName();
+        return $this;
+    }
+
+    public function destroy(): self
+    {
+        $this->route = $this->getDestroyRoute();
+        $this->routeName = $this->getDestroyRouteName();
+        return $this;
+    }
+
     protected function createController(): AbstractCrudController
     {
         $controllerClassName = config('ladmin.path.controller') . '\\' . $this->queryBaseName . 'Controller';
@@ -183,7 +211,7 @@ class Crud
 
     public function getShowRoute(): string
     {
-        return FacadesLadminRoute::route($this->tableName, config('ladmin.route.show'));
+        return FacadesLadminRoute::route($this->tableName, config('ladmin.route.show'), false);
     }
 
     public function getShowRouteName(): string
@@ -193,7 +221,7 @@ class Crud
 
     public function getDetailRoute(): string
     {
-        return FacadesLadminRoute::route($this->tableName, config('ladmin.route.detail'), true);
+        return FacadesLadminRoute::route($this->tableName, config('ladmin.route.detail'));
     }
 
     public function getDetailRouteName(): string
@@ -203,43 +231,43 @@ class Crud
 
     public function getEditorRoute(): string
     {
-        return '/' . Arr::join([config('ladmin.route.prefix'), $this->tableName, config('ladmin.route.editor')], '/') . '/{id?}';
+        return FacadesLadminRoute::route($this->tableName, config('ladmin.route.editor'), '{primaryKey?}');
     }
 
     public function getEditorRouteName(): string
     {
-        return Arr::join([config('ladmin.route.prefix'), $this->tableName, config('ladmin.route.editor')], '.');
+        return FacadesLadminRoute::routeName($this->tableName, config('ladmin.route.editor'));
     }
 
 
     public function getCreateRoute(): string
     {
-        return '/' . Arr::join([config('ladmin.route.prefix'), $this->tableName, config('ladmin.route.create')], '/');
+        return FacadesLadminRoute::route($this->tableName, config('ladmin.route.create'), false);
     }
 
     public function getCreateRouteName(): string
     {
-        return Arr::join([config('ladmin.route.prefix'), $this->tableName, config('ladmin.route.create')], '.');
+        return FacadesLadminRoute::routeName($this->tableName, config('ladmin.route.create'));
     }
 
     public function getUpdateRoute(): string
     {
-        return '/' . Arr::join([config('ladmin.route.prefix'), $this->tableName, config('ladmin.route.update')], '/{id}');
+        return FacadesLadminRoute::route($this->tableName, config('ladmin.route.update'));
     }
 
     public function getUpdateRouteName(): string
     {
-        return Arr::join([config('ladmin.route.prefix'), $this->tableName, config('ladmin.route.update')], '.');
+        return FacadesLadminRoute::routeName($this->tableName, config('ladmin.route.update'));
     }
 
     public function getDestroyRoute(): string
     {
-        return '/' . Arr::join([config('ladmin.route.prefix'), $this->tableName, config('ladmin.route.destroy')], '/{id}');
+        return FacadesLadminRoute::route($this->tableName, config('ladmin.route.destroy'));
     }
 
     public function getDestroyRouteName(): string
     {
-        return Arr::join([config('ladmin.route.prefix'), $this->tableName, config('ladmin.route.destroy')], '.');
+        return FacadesLadminRoute::routeName($this->tableName, config('ladmin.route.destroy'));
     }
 
     public function isDetailable()
