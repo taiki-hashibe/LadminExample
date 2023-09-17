@@ -4,13 +4,6 @@
             <div class="col-2">
                 <div class="w-100 h-100 bg-white shadow px-3 pt-4">
                     <h2 class="fs-5">{{ $crud->getLabel() }}</h2>
-                    {{-- @foreach ($headerNavigation as $item)
-                        <div>
-                            <a href="{{ $item->getRoute() }}">
-                                <span>{{ $item->getLabel() }}</span>
-                            </a>
-                        </div>
-                    @endforeach --}}
                 </div>
             </div>
             <div class="col-10">
@@ -35,7 +28,7 @@
                                             @endforeach
                                             <td class="px-1">
                                                 <a href="{{ route($crud->getDetailRouteName(), [
-                                                    'id' => $item->{$item->getKeyName()},
+                                                    'id' => $item->{$crud->getPrimaryKey()},
                                                 ]) }}"
                                                     class="btn btn-sm btn-primary">
                                                     {{ __('detail') }}

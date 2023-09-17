@@ -15,18 +15,16 @@ use LowB\Ladmin\Support\Facades\LadminRoute;
 class AbstractCrudController extends Controller implements CrudControllerInterface
 {
     public Crud|null $crud = null;
-    public mixed $primaryKey = 'id';
     public int $paginate = 24;
 
     public function init(Crud $crud)
     {
         $this->crud = $crud;
-        $this->primaryKey = $crud->getModel()->getKeyName();
     }
 
     public function show(Request $request): View
     {
-        $instance = $this->crud->getModel();
+        $instance = $this->crud->getQuery();
         $columns = $this->crud->getColumns();
         $items = $instance->paginate($this->paginate);
         return view('ladmin::crud.show', [

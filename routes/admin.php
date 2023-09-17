@@ -2,6 +2,7 @@
 
 use App\Models\Post;
 use App\Models\User;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Route;
 use LowB\Ladmin\Support\Facades\LadminRoute;
 
@@ -10,7 +11,7 @@ use LowB\Ladmin\Support\Facades\LadminRoute;
 // LadminRoute::dashboard(); ダッシュボードのルーティング、Admin/DashboardControllerが存在すれば使う
 // LadminRoute::dashboard()->view('admin.dashboard'); ダッシュボードのビューをセット
 
-LadminRoute::crud(User::class);
+LadminRoute::crud('users');
 LadminRoute::crud(Post::class);
 // LadminRoute::crud(User::class); この中でshow、detail、editor...のルーティングを完結させ、Ladminにnavigationをセットする、Admin/UserControllerが存在すれば使う
 // LadminRoute::show(User::class); showのみ

@@ -10,9 +10,8 @@ class Ladmin
         'navigation' => [
             [
                 'application_key' => '',
-                'type' => 'dashboard',
+                'type' => 'dashboard', // crud|page
                 'label' => 'dashboard',
-                'tableName' => null,
                 'url' => '/admin/dashboard',
                 'active' => false,
                 'target' => [

@@ -3,21 +3,22 @@
 namespace LowB\Ladmin\Crud;
 
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Route;
+use Illuminate\Database\Query\Builder;
 use Illuminate\Support\Facades\Schema;
 use LowB\Ladmin\Controllers\AbstractCrudController;
 use Illuminate\Support\Arr;
+use Illuminate\Support\Str;
 use LowB\Ladmin\Support\Facades\LadminRoute;
 
 class Crud
 {
-    protected Model|null $model = null;
+    protected Model|Builder|null $query = null;
     protected string $label = '';
     protected string $route = 'default';
     protected string $routeName = 'default';
-    protected string $modelClassBaseName = 'default';
+    protected string $queryBaseName = 'default';
     protected string $tableName = 'default';
+    protected string $primaryKey = 'id';
     protected array $columns = [];
     protected array $columnNames = [];
     protected array $config = [];
@@ -25,9 +26,28 @@ class Crud
 
     public function model(Model $model, array $config = []): self
     {
-        $this->model = $model;
-        $this->modelClassBaseName = class_basename(get_class($model));
-        $this->tableName = $this->model->getTable();
+        $this->query = $model;
+        $this->queryBaseName = class_basename(get_class($this->query));
+        $this->tableName = $this->query->getTable();
+        $columns = Schema::connection(config('database.default'))->getColumnListing($this->tableName);
+        $columnDetails = [];
+        foreach ($columns as $column) {
+            $columnDetails[$column] = Schema::connection(config('database.default'))->getConnection()->getDoctrineColumn($this->tableName, $column);
+        }
+        $this->columns = $columnDetails;
+        $this->label = $this->tableName;
+        $this->primaryKey = $this->query->getKeyName();
+        $this->config = $config;
+        $this->controller = $this->createController();
+        $this->controller->init($this);
+        return $this;
+    }
+
+    public function table(Builder $builder, string $tableName, array $config = []): self
+    {
+        $this->query = $builder;
+        $this->queryBaseName = Str::studly($tableName);
+        $this->tableName = $tableName;
         $columns = Schema::connection(config('database.default'))->getColumnListing($this->tableName);
         $columnDetails = [];
         foreach ($columns as $column) {
@@ -51,9 +71,14 @@ class Crud
         return $this->routeName;
     }
 
-    public function getModel()
+    public function getQuery()
     {
-        return $this->model;
+        return $this->query;
+    }
+
+    public function getPrimaryKey()
+    {
+        return $this->primaryKey;
     }
 
     public function getColumnNames()
@@ -64,6 +89,16 @@ class Crud
     public function getColumns()
     {
         return $this->columns;
+    }
+
+    public function getTableName(): string
+    {
+        return $this->tableName;
+    }
+
+    public function getLabel(): string
+    {
+        return $this->label;
     }
 
     public function show(): self
@@ -82,7 +117,7 @@ class Crud
 
     protected function createController(): AbstractCrudController
     {
-        $controllerClassName = config('ladmin.path.controller') . '\\' . $this->modelClassBaseName . 'Controller';
+        $controllerClassName = config('ladmin.path.controller') . '\\' . $this->queryBaseName . 'Controller';
         if (!class_exists($controllerClassName)) {
             return app()->make(AbstractCrudController::class);
         }
@@ -157,16 +192,6 @@ class Crud
     public function getDestroyRouteName(): string
     {
         return Arr::join([config('ladmin.route.prefix'), $this->tableName, config('ladmin.route.destroy')], '.');
-    }
-
-    public function getTableName(): string
-    {
-        return $this->tableName;
-    }
-
-    public function getLabel(): string
-    {
-        return $this->label;
     }
 
     public function isDetailable()
