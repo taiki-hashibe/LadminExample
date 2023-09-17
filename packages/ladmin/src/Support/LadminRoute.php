@@ -2,15 +2,10 @@
 
 namespace LowB\Ladmin\Support;
 
-use Closure;
-use Illuminate\Contracts\Database\Query\Builder;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Http\Request;
-use Illuminate\Support\Arr;
-use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Route;
 use LowB\Ladmin\Crud\Crud;
-use LowB\Ladmin\Facades\Ladmin;
 use LowB\Ladmin\Navigation\Facades\Navigation;
 
 class LadminRoute

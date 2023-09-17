@@ -17,7 +17,6 @@ class AuthLayoutComposer
 
     public function compose(View $view): void
     {
-        dump($this->request->path());
         $view->with([
             'dropdown' => Navigation::getDropdown(),
             'headerNavigation' => Navigation::getHeaderNavigation(),

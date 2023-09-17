@@ -7,7 +7,21 @@ use Illuminate\Support\Arr;
 class Ladmin
 {
     public array $app = [
-        'routes' => []
+        'navigation' => [
+            [
+                'application_key' => '',
+                'type' => 'dashboard',
+                'label' => 'dashboard',
+                'tableName' => null,
+                'url' => '/admin/dashboard',
+                'active' => false,
+                'target' => [
+                    'header',
+                    'footer',
+                    'dropdown'
+                ]
+            ]
+        ]
     ];
 
     public function set(string $key, mixed $value)
