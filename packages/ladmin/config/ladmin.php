@@ -3,6 +3,7 @@
 return [
     'route' => [
         'prefix' => 'admin',
+        'dashboard' => 'dashboard',
         'show' => 'show',
         'detail' => 'detail',
         'editor' => 'editor',

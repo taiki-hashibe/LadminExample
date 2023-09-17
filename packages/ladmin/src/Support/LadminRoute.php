@@ -7,27 +7,35 @@ use Illuminate\Support\Str;
 
 class LadminRoute
 {
-    public function route(string $table, string $crud, string|int|null $primaryKey = null)
+    public function route(string $table, ?string $crud = null, string|int|null $primaryKey = null)
     {
         $prefix = LadminConfig::prefix() ? config('ladmin.route.prefix') : '';
         $route = '/' . $prefix . LadminConfig::route();
         $route = Str::of($route)->replace('{table}', $table);
-        $route = Str::of($route)->replace('{crud}', $crud);
+        if (!$crud) {
+            $route = Str::of($route)->remove('/{crud}');
+        } else {
+            $route = Str::of($route)->replace('{crud}', $crud);
+        }
         if (!$primaryKey) {
             $route = Str::of($route)->remove('/{primaryKey}');
         }
-        return $route;
+        return $route->__toString();
     }
 
-    public function routeName(string $table, string $crud)
+    public function routeName(string $table, ?string $crud = null)
     {
         $prefix = LadminConfig::prefix() ? config('ladmin.route.prefix') : '';
         $route = $prefix . LadminConfig::route();
         $route = Str::of($route)->replace('{table}', $table);
-        $route = Str::of($route)->replace('{crud}', $crud);
+        if (!$crud) {
+            $route = Str::of($route)->remove('/{crud}');
+        } else {
+            $route = Str::of($route)->replace('{crud}', $crud);
+        }
         $route = Str::of($route)->remove('/{primaryKey}');
         $route = Str::of($route)->replace('/', '.');
-        return $route;
+        return $route->__toString();
     }
 
     public function getCurrentTable()

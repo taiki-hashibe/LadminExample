@@ -4,7 +4,7 @@ use App\Models\Post;
 use LowB\Ladmin\Route\Facades\LadminRoute;
 
 // LadminRoute::auth(); ログイン関連のルーティング
-
+LadminRoute::dashboard();
 // LadminRoute::dashboard(); ダッシュボードのルーティング、Admin/DashboardControllerが存在すれば使う
 // LadminRoute::dashboard()->view('admin.dashboard'); ダッシュボードのビューをセット
 
