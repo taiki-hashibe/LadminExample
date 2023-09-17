@@ -5,6 +5,7 @@ namespace LowB\Ladmin\Support;
 use Closure;
 use Illuminate\Contracts\Database\Query\Builder;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Http\Request;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Route;
@@ -27,6 +28,9 @@ class LadminRoute
         if ($instance instanceof Model) {
             $crud = new Crud();
             $crud->model($instance)->show();
+            Route::get($crud->getRoute(), function (Request $request) use ($crud) {
+                return $crud->getController()->show($request);
+            })->name($crud->getRouteName());
             Navigation::addHeaderNavigation($crud);
             Navigation::addFooterNavigation($crud);
         };
@@ -39,7 +43,14 @@ class LadminRoute
         if ($instance instanceof Model) {
             $crud = new Crud();
             $crud->model($instance)->detail();
+            Route::get($crud->getRoute(), function (Request $request) use ($crud) {
+                return $crud->getController()->detail($request);
+            })->name($crud->getRouteName());
         };
         return $this;
+    }
+
+    public function navigation(string $key)
+    {
     }
 }

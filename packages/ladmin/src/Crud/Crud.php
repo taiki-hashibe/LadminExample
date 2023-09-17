@@ -11,13 +11,14 @@ use Illuminate\Support\Arr;
 
 class Crud
 {
-    protected string $route = 'default';
     protected Model|null $model = null;
+    protected string $label = '';
+    protected string $route = 'default';
+    protected string $routeName = 'default';
     protected string $modelClassBaseName = 'default';
     protected string $tableName = 'default';
-    protected array $columnNames = [];
     protected array $columns = [];
-    protected string $label = '';
+    protected array $columnNames = [];
     protected array $config = [];
     protected AbstractCrudController $controller;
 
@@ -34,9 +35,19 @@ class Crud
         $this->columns = $columnDetails;
         $this->label = $this->tableName;
         $this->config = $config;
-        $this->controller = $this->getController();
+        $this->controller = $this->createController();
         $this->controller->init($this);
         return $this;
+    }
+
+    public function getRoute()
+    {
+        return $this->route;
+    }
+
+    public function getRouteName()
+    {
+        return $this->routeName;
     }
 
     public function getModel()
@@ -56,23 +67,19 @@ class Crud
 
     public function show(): self
     {
-        $this->route = '/' . Arr::join([$this->tableName, config('ladmin.route.show')], '/');
-        Route::get($this->route, function (Request $request) {
-            return $this->controller->show($request);
-        })->name(Arr::join([config('ladmin.route.prefix'), $this->tableName, config('ladmin.route.show')], '.'));
+        $this->route = $this->getShowRoute();
+        $this->routeName = $this->getShowRouteName();
         return $this;
     }
 
     public function detail(): self
     {
-        $this->route = '/' . Arr::join([$this->tableName, config('ladmin.route.detail')], '/') . '{id}';
-        Route::get($this->route, function (Request $request) {
-            return $this->controller->detail($request);
-        });
+        $this->route = $this->getDetailRoute();
+        $this->routeName = $this->getDetailRouteName();
         return $this;
     }
 
-    public function getController(): AbstractCrudController
+    protected function createController(): AbstractCrudController
     {
         $controllerClassName = config('ladmin.path.controller') . '\\' . $this->modelClassBaseName . 'Controller';
         if (!class_exists($controllerClassName)) {
@@ -85,13 +92,38 @@ class Crud
         return $controller;
     }
 
+    public function getController()
+    {
+        return $this->controller;
+    }
+
+    public function getShowRoute(): string
+    {
+        return '/' . Arr::join([config('ladmin.route.prefix'), $this->tableName, config('ladmin.route.show')], '/');
+    }
+
+    public function getShowRouteName(): string
+    {
+        return Arr::join([config('ladmin.route.prefix'), $this->tableName, config('ladmin.route.show')], '.');
+    }
+
+    public function getDetailRoute(): string
+    {
+        return '/' . Arr::join([config('ladmin.route.prefix'), $this->tableName, config('ladmin.route.detail')], '/') . '/{id}';
+    }
+
+    public function getDetailRouteName(): string
+    {
+        return Arr::join([config('ladmin.route.prefix'), $this->tableName, config('ladmin.route.detail')], '.');
+    }
+
+    public function getTableName(): string
+    {
+        return $this->tableName;
+    }
+
     public function getLabel(): string
     {
         return $this->label;
-    }
-
-    public function getRoute(): string
-    {
-        return $this->route;
     }
 }

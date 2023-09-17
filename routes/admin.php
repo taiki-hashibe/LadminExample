@@ -2,6 +2,7 @@
 
 use App\Models\Post;
 use App\Models\User;
+use Illuminate\Support\Facades\Route;
 use LowB\Ladmin\Support\Facades\LadminRoute;
 
 // LadminRoute::auth(); ログイン関連のルーティング
@@ -21,6 +22,4 @@ LadminRoute::crud(Post::class);
 // LadminRoute::crud('users'); テーブル名での指定も可能にしたい
 // LadminRoute::crud('users')->setConnection('sqlite'); コネクション指定
 
-// LadminRoute::crudController(UserController::class); CrudControllerを継承するコントローラーを指定
-
-// LadminRoute::get('/profile', ProfileController::class); プレーンなコントローラー、ほぼRouteと同じ機能
+// LadminRoute::get('/profile', [ProfileController::class, 'index']); プレーンなコントローラー、ほぼRouteと同じ機能

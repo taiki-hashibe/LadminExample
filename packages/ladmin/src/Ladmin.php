@@ -2,8 +2,21 @@
 
 namespace LowB\Ladmin;
 
-use LowB\Ladmin\Navigation\Navigation;
+use Illuminate\Support\Arr;
 
 class Ladmin
 {
+    public array $app = [
+        'routes' => []
+    ];
+
+    public function set(string $key, mixed $value)
+    {
+        Arr::set($this->app, $key, $value);
+    }
+
+    public function get()
+    {
+        return $this->app;
+    }
 }

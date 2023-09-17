@@ -1,12 +1,14 @@
 <x-layouts-auth>
     <x-slot name="content">
         <div class="container px-4">
+            @dump(Ladmin::get())
             <table>
                 <thead>
                     <tr class="border">
                         @foreach ($columns as $column)
                             <th class="px-1">{{ $column->getName() }}</th>
                         @endforeach
+                        <th></th>
                     </tr>
                 </thead>
                 <tbody>
@@ -18,7 +20,7 @@
                             @endforeach
                         </tr>
                     @endforeach
-
+                    <tr><a href=""></a></tr>
                 </tbody>
             </table>
         </div>
