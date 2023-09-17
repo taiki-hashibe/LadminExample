@@ -66,14 +66,14 @@ class Crud
         return $this->columns;
     }
 
-    protected function show(): self
+    public function show(): self
     {
         $this->route = $this->getShowRoute();
         $this->routeName = $this->getShowRouteName();
         return $this;
     }
 
-    protected function detail(): self
+    public function detail(): self
     {
         $this->route = $this->getDetailRoute();
         $this->routeName = $this->getDetailRouteName();
