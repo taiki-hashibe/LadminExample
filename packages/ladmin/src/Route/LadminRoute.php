@@ -12,30 +12,6 @@ use LowB\Ladmin\Facades\Ladmin;
 
 class LadminRoute
 {
-    protected array $routes = [];
-    protected array $routeNames = [];
-
-    public function addRoute(string $route)
-    {
-        $this->routes[] = $route;
-        $this->routes = array_unique($this->routes);
-    }
-
-    public function getRoutes()
-    {
-        return $this->routes;
-    }
-
-    public function addRouteName(string $routeName)
-    {
-        $this->routeNames[] = $routeName;
-        $this->routeNames = array_unique($this->routeNames);
-    }
-
-    public function getRouteNames()
-    {
-        return $this->routeNames;
-    }
 
     public function crud(string $modelClassOrTableName)
     {
@@ -65,9 +41,9 @@ class LadminRoute
         Route::get($crud->getRoute(), function (Request $request) use ($crud) {
             return $crud->getController()->show($request);
         })->name($crud->getRouteName());
-        $this->addRoute($crud->getRoute());
-        $this->addRouteName($crud->getRouteName());
         $crud->addNavigation('navigation');
+        Ladmin::addRoute($crud->getRoute());
+        Ladmin::addRouteName($crud->getRouteName());
         Ladmin::crudRegister($crud);
         return $crud;
     }
@@ -85,8 +61,8 @@ class LadminRoute
         Route::get($crud->getRoute(), function (Request $request) use ($crud) {
             return $crud->getController()->detail($request);
         })->name($crud->getRouteName());
-        $this->addRoute($crud->getRoute());
-        $this->addRouteName($crud->getRouteName());
+        Ladmin::addRoute($crud->getRoute());
+        Ladmin::addRouteName($crud->getRouteName());
         Ladmin::crudRegister($crud);
         return $crud;
     }

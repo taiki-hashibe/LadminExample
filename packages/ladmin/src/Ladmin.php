@@ -8,6 +8,30 @@ use LowB\Ladmin\Crud\Crud;
 class Ladmin
 {
     public array $crudList = [];
+    protected array $routes = [];
+    protected array $routeNames = [];
+
+    public function addRoute(string $route)
+    {
+        $this->routes[] = $route;
+        $this->routes = array_unique($this->routes);
+    }
+
+    public function getRoutes()
+    {
+        return $this->routes;
+    }
+
+    public function addRouteName(string $routeName)
+    {
+        $this->routeNames[] = $routeName;
+        $this->routeNames = array_unique($this->routeNames);
+    }
+
+    public function getRouteNames()
+    {
+        return $this->routeNames;
+    }
 
     public function crud()
     {

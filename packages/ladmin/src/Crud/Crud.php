@@ -9,6 +9,7 @@ use LowB\Ladmin\Controllers\AbstractCrudController;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\Request;
 use Illuminate\Support\Str;
+use LowB\Ladmin\Facades\Ladmin;
 use LowB\Ladmin\Route\Facades\LadminRoute;
 use LowB\Ladmin\Support\Facades\LadminRoute as FacadesLadminRoute;
 
@@ -230,27 +231,27 @@ class Crud
 
     public function isDetailable()
     {
-        return in_array($this->getDetailRouteName(), LadminRoute::getRouteNames());
+        return in_array($this->getDetailRouteName(), Ladmin::getRouteNames());
     }
 
     public function isEditable()
     {
-        return in_array($this->getEditorRouteName(), LadminRoute::getRouteNames());
+        return in_array($this->getEditorRouteName(), Ladmin::getRouteNames());
     }
 
     public function isCreatable()
     {
-        return in_array($this->getCreateRouteName(), LadminRoute::getRouteNames());
+        return in_array($this->getCreateRouteName(), Ladmin::getRouteNames());
     }
 
     public function isUpdatable()
     {
-        return in_array($this->getUpdateRouteName(), LadminRoute::getRouteNames());
+        return in_array($this->getUpdateRouteName(), Ladmin::getRouteNames());
     }
 
     public function isDeletable()
     {
-        return in_array($this->getDestroyRouteName(), LadminRoute::getRouteNames());
+        return in_array($this->getDestroyRouteName(), Ladmin::getRouteNames());
     }
 
     public function isActive()
