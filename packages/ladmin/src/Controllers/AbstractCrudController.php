@@ -23,7 +23,6 @@ class AbstractCrudController extends Controller implements CrudControllerInterfa
     {
         $items = $this->crud->getQuery()->paginate($this->paginate);
         return view('ladmin::crud.show', [
-            'crud' => $this->crud,
             'items' => $items
         ]);
     }
@@ -35,14 +34,19 @@ class AbstractCrudController extends Controller implements CrudControllerInterfa
             abort(404);
         }
         return view('ladmin::crud.detail', [
-            'crud' => $this->crud,
             'item' => $item
         ]);
     }
 
     public function editor(Request $request): View
     {
-        return view('ladmin::crud.editor');
+        $item = $this->crud->getQuery()->where($this->crud->getPrimaryKey(), $request->id)->first();
+        if (!$item) {
+            abort(404);
+        }
+        return view('ladmin::crud.editor', [
+            'item' => $item
+        ]);
     }
 
     public function create(Request $request): RedirectResponse
