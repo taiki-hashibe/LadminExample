@@ -8,7 +8,8 @@
             </li>
             @foreach (Ladmin::getNavigation('navigation') as $item)
                 <li class="nav-item">
-                    <a class="nav-link text-dark" href="{{ $item->getRoute() }}">
+                    <a class="nav-link text-dark @if ($item->isActive()) fw-bold @endif"
+                        href="{{ $item->getRoute() }}">
                         {{ $item->getLabel() }}
                     </a>
                 </li>

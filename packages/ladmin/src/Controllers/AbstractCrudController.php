@@ -29,7 +29,7 @@ class AbstractCrudController extends Controller implements CrudControllerInterfa
 
     public function detail(Request $request): View
     {
-        $item = $this->crud->getQuery()->where($this->crud->getPrimaryKey(), $request->id)->first();
+        $item = $this->crud->getQuery()->where($this->crud->getPrimaryKey(), $request->primaryKey)->first();
         if (!$item) {
             abort(404);
         }
@@ -40,7 +40,7 @@ class AbstractCrudController extends Controller implements CrudControllerInterfa
 
     public function editor(Request $request): View
     {
-        $item = $this->crud->getQuery()->where($this->crud->getPrimaryKey(), $request->id)->first();
+        $item = $this->crud->getQuery()->where($this->crud->getPrimaryKey(), $request->primaryKey)->first();
         if (!$item) {
             abort(404);
         }

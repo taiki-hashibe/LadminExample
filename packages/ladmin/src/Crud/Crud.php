@@ -7,8 +7,10 @@ use Illuminate\Database\Query\Builder;
 use Illuminate\Support\Facades\Schema;
 use LowB\Ladmin\Controllers\AbstractCrudController;
 use Illuminate\Support\Arr;
+use Illuminate\Support\Facades\Request;
 use Illuminate\Support\Str;
 use LowB\Ladmin\Route\Facades\LadminRoute;
+use LowB\Ladmin\Support\Facades\LadminRoute as FacadesLadminRoute;
 
 class Crud
 {
@@ -167,22 +169,22 @@ class Crud
 
     public function getShowRoute(): string
     {
-        return '/' . Arr::join([config('ladmin.route.prefix'), $this->tableName, config('ladmin.route.show')], '/');
+        return FacadesLadminRoute::route($this->tableName, config('ladmin.route.show'));
     }
 
     public function getShowRouteName(): string
     {
-        return Arr::join([config('ladmin.route.prefix'), $this->tableName, config('ladmin.route.show')], '.');
+        return FacadesLadminRoute::routeName($this->tableName, config('ladmin.route.show'));
     }
 
     public function getDetailRoute(): string
     {
-        return '/' . Arr::join([config('ladmin.route.prefix'), $this->tableName, config('ladmin.route.detail')], '/') . '/{id}';
+        return FacadesLadminRoute::route($this->tableName, config('ladmin.route.detail'), true);
     }
 
     public function getDetailRouteName(): string
     {
-        return Arr::join([config('ladmin.route.prefix'), $this->tableName, config('ladmin.route.detail')], '.');
+        return FacadesLadminRoute::routeName($this->tableName, config('ladmin.route.detail'));
     }
 
     public function getEditorRoute(): string
@@ -249,5 +251,10 @@ class Crud
     public function isDeletable()
     {
         return in_array($this->getDestroyRouteName(), LadminRoute::getRouteNames());
+    }
+
+    public function isActive()
+    {
+        return FacadesLadminRoute::isCurrentTable($this->tableName);
     }
 }
