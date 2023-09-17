@@ -60,7 +60,19 @@ class LadminRoute
         if (!$action) {
             $action = [DashboardController::class, 'index'];
         }
-        $this->get(SupportLadminRoute::route(config('ladmin.route.dashboard')), $action, config('ladmin.route.dashboard'));
+        $uri = SupportLadminRoute::route(config('ladmin.route.dashboard'));
+        $routeName = config('ladmin.route.dashboard');
+        $crud = new Crud();
+        $crud->setTableName(config('ladmin.route.dashboard'));
+        $crud->setLabel(config('ladmin.route.dashboard'));
+        $crud->setRoute($uri);
+        $crud->setRouteName(SupportLadminRoute::routeName($routeName));
+        $crud->addNavigation('navigation');
+        Ladmin::addRoute($crud->getRoute());
+        Ladmin::addRouteName($crud->getRouteName());
+        Ladmin::crudRegister($crud);
+        $this->get($uri, $action, $routeName);
+        return $crud;
     }
 
     public function crud(string $modelClassOrTableName)

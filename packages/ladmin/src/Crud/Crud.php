@@ -61,9 +61,19 @@ class Crud
         return $this;
     }
 
+    public function setRoute(string $route)
+    {
+        $this->route = $route;
+    }
+
     public function getRoute()
     {
         return $this->route;
+    }
+
+    public function setRouteName(string $routeName)
+    {
+        $this->routeName = $routeName;
     }
 
     public function getRouteName()
@@ -94,6 +104,11 @@ class Crud
     public function getColumns()
     {
         return $this->columns;
+    }
+
+    public function setTableName(string $name): void
+    {
+        $this->tableName = $name;
     }
 
     public function getTableName(): string
