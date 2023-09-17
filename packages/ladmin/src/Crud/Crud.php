@@ -7,10 +7,8 @@ use Illuminate\Database\Query\Builder;
 use Illuminate\Support\Facades\Schema;
 use LowB\Ladmin\Controllers\AbstractCrudController;
 use Illuminate\Support\Arr;
-use Illuminate\Support\Facades\Request;
 use Illuminate\Support\Str;
 use LowB\Ladmin\Facades\Ladmin;
-use LowB\Ladmin\Route\Facades\LadminRoute;
 use LowB\Ladmin\Support\Facades\LadminRoute as FacadesLadminRoute;
 
 class Crud
