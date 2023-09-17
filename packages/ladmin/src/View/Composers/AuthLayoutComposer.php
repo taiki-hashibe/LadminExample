@@ -4,7 +4,6 @@ namespace LowB\Ladmin\View\Composers;
 
 use Illuminate\Http\Request;
 use Illuminate\View\View;
-use LowB\Ladmin\Navigation\Facades\Navigation;
 
 class AuthLayoutComposer
 {

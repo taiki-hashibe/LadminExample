@@ -1,6 +1,6 @@
 <?php
 
-namespace LowB\Ladmin\Support;
+namespace LowB\Ladmin\Route;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Query\Builder;
@@ -8,10 +8,12 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Route;
 use LowB\Ladmin\Crud\Crud;
+use LowB\Ladmin\Facades\Ladmin;
 
 class LadminRoute
 {
     protected array $routes = [];
+    protected array $routeNames = [];
 
     public function addRoute(string $route)
     {
@@ -24,11 +26,22 @@ class LadminRoute
         return $this->routes;
     }
 
+    public function addRouteName(string $routeName)
+    {
+        $this->routeNames[] = $routeName;
+        $this->routeNames = array_unique($this->routeNames);
+    }
+
+    public function getRouteNames()
+    {
+        return $this->routeNames;
+    }
+
     public function crud(string $modelClassOrTableName)
     {
-        $this->show($modelClassOrTableName);
         $this->detail($modelClassOrTableName);
-        return $this;
+        $showCrud = $this->show($modelClassOrTableName);
+        return $showCrud;
     }
 
     protected function createInstance(string $modelClassOrTableName)
@@ -53,7 +66,10 @@ class LadminRoute
             return $crud->getController()->show($request);
         })->name($crud->getRouteName());
         $this->addRoute($crud->getRoute());
-        return $this;
+        $this->addRouteName($crud->getRouteName());
+        $crud->addNavigation('navigation');
+        Ladmin::crudRegister($crud);
+        return $crud;
     }
 
     public function detail(string $modelClassOrTableName)
@@ -70,10 +86,8 @@ class LadminRoute
             return $crud->getController()->detail($request);
         })->name($crud->getRouteName());
         $this->addRoute($crud->getRoute());
-        return $this;
-    }
-
-    public function navigation(string $key)
-    {
+        $this->addRouteName($crud->getRouteName());
+        Ladmin::crudRegister($crud);
+        return $crud;
     }
 }

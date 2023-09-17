@@ -1,46 +1,42 @@
 <x-layouts-auth>
     <x-slot name="content">
-        <div class="row gx-0">
-            <div class="col-2">
-                <div class="w-100 h-100 bg-white shadow px-3 pt-4">
-                    <h2 class="fs-5">{{ $crud->getLabel() }}</h2>
-                </div>
-            </div>
-            <div class="col-10">
-                <div class="w-100 mt-4">
-                    <div class="px-4">
-                        <div class="card p-4 overflow-scroll">
-                            <table class="table table-striped">
-                                <thead>
-                                    <tr>
-                                        @foreach ($columns as $column)
-                                            <th class="px-2">{{ $column->getName() }}</th>
-                                        @endforeach
-                                        <th class="px-2"></th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-
-                                    @foreach ($items as $item)
-                                        <tr>
-                                            @foreach ($columns as $column)
-                                                <x-ladmin::theme.default.show.column>{{ $item->{$column->getName()} }}</x-ladmin::theme.default.show.column>
-                                            @endforeach
-                                            <td class="px-1">
-                                                <a href="{{ route($crud->getDetailRouteName(), [
-                                                    'id' => $item->{$crud->getPrimaryKey()},
-                                                ]) }}"
-                                                    class="btn btn-sm btn-primary">
-                                                    {{ __('detail') }}
-                                                </a>
-                                            </td>
-                                        </tr>
+        <div class="container-fluid">
+            <div class="row">
+                @include('ladmin::layouts.sidebar')
+                <main role="main" class="col-md-9 ml-sm-auto col-lg-10 pt-3 px-4 bg-white">
+                    <h2 class="fs-5 mb-3">{{ Ladmin::crud()->getLabel() }}</h2>
+                    <div class="table-responsive">
+                        <table class="table table-striped table-sm">
+                            <thead>
+                                <tr class="px-2">
+                                    @foreach (Ladmin::crud()->getColumnNames() as $item)
+                                        <th class="px-2">{{ $item }}</th>
                                     @endforeach
-                                </tbody>
-                            </table>
-                        </div>
+                                    @if (Ladmin::crud()->isDetailable())
+                                        <th></th>
+                                    @endif
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach ($items as $item)
+                                    <tr class="px-2">
+                                        @foreach (Ladmin::crud()->getColumnNames() as $column)
+                                            <td class="px-2 text-nowrap">{{ $item->{$column} }}</td>
+                                        @endforeach
+                                        @if (Ladmin::crud()->isDetailable())
+                                            <td>
+                                                <a href="{{ route(Ladmin::crud()->getDetailRouteName(), [
+                                                    'id' => $item->id,
+                                                ]) }}"
+                                                    class="btn btn-sm btn-primary">{{ __('detail') }}</a>
+                                            </td>
+                                        @endif
+                                    </tr>
+                                @endforeach
+                            </tbody>
+                        </table>
                     </div>
-                </div>
+                </main>
             </div>
         </div>
     </x-slot>

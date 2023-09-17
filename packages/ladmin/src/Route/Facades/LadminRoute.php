@@ -1,16 +1,16 @@
 <?php
 
-namespace LowB\Ladmin\Support\Facades;
+namespace LowB\Ladmin\Route\Facades;
 
 use Illuminate\Support\Facades\Facade;
 
 /**
- * @see \LowB\Ladmin\Support\LadminRoute
+ * @see \LowB\Ladmin\Route\LadminRoute
  */
 class LadminRoute extends Facade
 {
     protected static function getFacadeAccessor()
     {
-        return \LowB\Ladmin\Support\LadminRoute::class;
+        return \LowB\Ladmin\Route\LadminRoute::class;
     }
 }

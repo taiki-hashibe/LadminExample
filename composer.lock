@@ -2109,10 +2109,10 @@
             "dist": {
                 "type": "path",
                 "url": "./packages/ladmin",
-                "reference": "21253c1aa97f5a0954591ff110245f2f176a8763"
+                "reference": "6408a35b36140bdcaa984df6f8db3518ca06d3a7"
             },
             "require": {
-                "doctrine/dbal": "*",
+                "doctrine/dbal": "^3.6",
                 "illuminate/contracts": "*",
                 "php": "^8.0.2",
                 "spatie/laravel-package-tools": "^1.16"

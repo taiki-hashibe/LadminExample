@@ -2,34 +2,38 @@
 
 namespace LowB\Ladmin;
 
-use Illuminate\Support\Arr;
+use Illuminate\Support\Facades\Request;
+use LowB\Ladmin\Crud\Crud;
 
 class Ladmin
 {
-    public array $app = [
-        'navigation' => [
-            [
-                'application_key' => '',
-                'type' => 'dashboard', // crud|page
-                'label' => 'dashboard',
-                'url' => '/admin/dashboard',
-                'active' => false,
-                'target' => [
-                    'header',
-                    'footer',
-                    'dropdown'
-                ]
-            ]
-        ]
-    ];
+    public array $crudList = [];
 
-    public function set(string $key, mixed $value)
+    public function crud()
     {
-        Arr::set($this->app, $key, $value);
+        foreach ($this->crudList as $crud) {
+            if (Request::routeIs($crud->getRouteName())) {
+                return $crud;
+            }
+        }
     }
 
-    public function get()
+    public function crudRegister(Crud $crud)
     {
-        return $this->app;
+        $this->crudList[] = $crud;
+    }
+
+    public function getNavigation(string|null $key = null)
+    {
+        if (!$key) {
+            return $this->crudList;
+        }
+        $navigation = [];
+        foreach ($this->crudList as $crud) {
+            if (in_array($key, $crud->getNavigation())) {
+                $navigation[] = $crud;
+            }
+        }
+        return $navigation;
     }
 }

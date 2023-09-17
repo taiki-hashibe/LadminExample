@@ -8,7 +8,7 @@ use Illuminate\Support\Facades\Schema;
 use LowB\Ladmin\Controllers\AbstractCrudController;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Str;
-use LowB\Ladmin\Support\Facades\LadminRoute;
+use LowB\Ladmin\Route\Facades\LadminRoute;
 
 class Crud
 {
@@ -22,24 +22,31 @@ class Crud
     protected array $columns = [];
     protected array $columnNames = [];
     protected array $config = [];
+    protected array $navigation = [];
     protected AbstractCrudController $controller;
 
-    public function model(Model $model, array $config = []): self
+    protected function init()
     {
-        $this->query = $model;
-        $this->queryBaseName = class_basename(get_class($this->query));
-        $this->tableName = $this->query->getTable();
         $columns = Schema::connection(config('database.default'))->getColumnListing($this->tableName);
+        $this->columnNames = $columns;
         $columnDetails = [];
         foreach ($columns as $column) {
             $columnDetails[$column] = Schema::connection(config('database.default'))->getConnection()->getDoctrineColumn($this->tableName, $column);
         }
         $this->columns = $columnDetails;
         $this->label = $this->tableName;
-        $this->primaryKey = $this->query->getKeyName();
-        $this->config = $config;
         $this->controller = $this->createController();
         $this->controller->init($this);
+    }
+
+    public function model(Model $model, array $config = []): self
+    {
+        $this->query = $model;
+        $this->queryBaseName = class_basename(get_class($this->query));
+        $this->primaryKey = $this->query->getKeyName();
+        $this->tableName = $this->query->getTable();
+        $this->config = $config;
+        $this->init();
         return $this;
     }
 
@@ -48,16 +55,8 @@ class Crud
         $this->query = $builder;
         $this->queryBaseName = Str::studly($tableName);
         $this->tableName = $tableName;
-        $columns = Schema::connection(config('database.default'))->getColumnListing($this->tableName);
-        $columnDetails = [];
-        foreach ($columns as $column) {
-            $columnDetails[$column] = Schema::connection(config('database.default'))->getConnection()->getDoctrineColumn($this->tableName, $column);
-        }
-        $this->columns = $columnDetails;
-        $this->label = $this->tableName;
         $this->config = $config;
-        $this->controller = $this->createController();
-        $this->controller->init($this);
+        $this->init();
         return $this;
     }
 
@@ -74,6 +73,11 @@ class Crud
     public function getQuery()
     {
         return $this->query;
+    }
+
+    public function setPrimaryKey(string $primaryKey)
+    {
+        return $this->primaryKey = $primaryKey;
     }
 
     public function getPrimaryKey()
@@ -96,9 +100,37 @@ class Crud
         return $this->tableName;
     }
 
+    public function setLabel(string $label)
+    {
+        return $this->label = $label;
+    }
+
     public function getLabel(): string
     {
         return $this->label;
+    }
+
+    public function setNavigation(array $navigation)
+    {
+        $this->navigation = $navigation;
+    }
+
+    public function addNavigation(string $navigation)
+    {
+        $this->navigation[] = $navigation;
+    }
+
+    public function removeNavigation(string $navigation)
+    {
+        if (($key = array_search($navigation, $this->navigation)) !== false) {
+            unset($this->navigation[$key]);
+        }
+        $this->navigation = array_values($this->navigation);
+    }
+
+    public function getNavigation()
+    {
+        return $this->navigation;
     }
 
     public function show(): self
@@ -196,26 +228,26 @@ class Crud
 
     public function isDetailable()
     {
-        return in_array($this->getDetailRouteName(), LadminRoute::getRoutes());
+        return in_array($this->getDetailRouteName(), LadminRoute::getRouteNames());
     }
 
     public function isEditable()
     {
-        return in_array($this->getEditorRouteName(), LadminRoute::getRoutes());
+        return in_array($this->getEditorRouteName(), LadminRoute::getRouteNames());
     }
 
     public function isCreatable()
     {
-        return in_array($this->getCreateRouteName(), LadminRoute::getRoutes());
+        return in_array($this->getCreateRouteName(), LadminRoute::getRouteNames());
     }
 
     public function isUpdatable()
     {
-        return in_array($this->getUpdateRouteName(), LadminRoute::getRoutes());
+        return in_array($this->getUpdateRouteName(), LadminRoute::getRouteNames());
     }
 
     public function isDeletable()
     {
-        return in_array($this->getDestroyRouteName(), LadminRoute::getRoutes());
+        return in_array($this->getDestroyRouteName(), LadminRoute::getRouteNames());
     }
 }
