@@ -10,6 +10,7 @@ use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use LowB\Ladmin\Contracts\Controllers\CrudControllerInterface;
 use LowB\Ladmin\Crud\Crud;
+use LowB\Ladmin\Support\Facades\LadminRoute;
 
 class AbstractCrudController extends Controller implements CrudControllerInterface
 {
@@ -20,6 +21,7 @@ class AbstractCrudController extends Controller implements CrudControllerInterfa
     public function init(Crud $crud)
     {
         $this->crud = $crud;
+        $this->primaryKey = $crud->getModel()->getKeyName();
     }
 
     public function show(Request $request): View
@@ -28,6 +30,7 @@ class AbstractCrudController extends Controller implements CrudControllerInterfa
         $columns = $this->crud->getColumns();
         $items = $instance->paginate($this->paginate);
         return view('ladmin::crud.show', [
+            'crud' => $this->crud,
             'columns' => $columns,
             'items' => $items
         ]);

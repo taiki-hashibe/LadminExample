@@ -10,6 +10,19 @@ use LowB\Ladmin\Navigation\Facades\Navigation;
 
 class LadminRoute
 {
+    protected array $routes = [];
+
+    public function addRoute(string $route)
+    {
+        $this->routes[] = $route;
+        $this->routes = array_unique($this->routes);
+    }
+
+    public function getRoutes()
+    {
+        return $this->routes;
+    }
+
     public function crud(string $modelClassOrTableName)
     {
         $this->show($modelClassOrTableName);
@@ -26,6 +39,7 @@ class LadminRoute
             Route::get($crud->getRoute(), function (Request $request) use ($crud) {
                 return $crud->getController()->show($request);
             })->name($crud->getRouteName());
+            $this->addRoute($crud->getRoute());
             Navigation::addHeaderNavigation($crud);
             Navigation::addFooterNavigation($crud);
         };
@@ -41,6 +55,7 @@ class LadminRoute
             Route::get($crud->getRoute(), function (Request $request) use ($crud) {
                 return $crud->getController()->detail($request);
             })->name($crud->getRouteName());
+            $this->addRoute($crud->getRoute());
         };
         return $this;
     }

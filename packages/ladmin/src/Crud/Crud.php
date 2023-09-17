@@ -8,6 +8,7 @@ use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Schema;
 use LowB\Ladmin\Controllers\AbstractCrudController;
 use Illuminate\Support\Arr;
+use LowB\Ladmin\Support\Facades\LadminRoute;
 
 class Crud
 {
@@ -65,14 +66,14 @@ class Crud
         return $this->columns;
     }
 
-    public function show(): self
+    protected function show(): self
     {
         $this->route = $this->getShowRoute();
         $this->routeName = $this->getShowRouteName();
         return $this;
     }
 
-    public function detail(): self
+    protected function detail(): self
     {
         $this->route = $this->getDetailRoute();
         $this->routeName = $this->getDetailRouteName();
@@ -117,6 +118,47 @@ class Crud
         return Arr::join([config('ladmin.route.prefix'), $this->tableName, config('ladmin.route.detail')], '.');
     }
 
+    public function getEditorRoute(): string
+    {
+        return '/' . Arr::join([config('ladmin.route.prefix'), $this->tableName, config('ladmin.route.editor')], '/') . '/{id?}';
+    }
+
+    public function getEditorRouteName(): string
+    {
+        return Arr::join([config('ladmin.route.prefix'), $this->tableName, config('ladmin.route.editor')], '.');
+    }
+
+
+    public function getCreateRoute(): string
+    {
+        return '/' . Arr::join([config('ladmin.route.prefix'), $this->tableName, config('ladmin.route.create')], '/');
+    }
+
+    public function getCreateRouteName(): string
+    {
+        return Arr::join([config('ladmin.route.prefix'), $this->tableName, config('ladmin.route.create')], '.');
+    }
+
+    public function getUpdateRoute(): string
+    {
+        return '/' . Arr::join([config('ladmin.route.prefix'), $this->tableName, config('ladmin.route.update')], '/{id}');
+    }
+
+    public function getUpdateRouteName(): string
+    {
+        return Arr::join([config('ladmin.route.prefix'), $this->tableName, config('ladmin.route.update')], '.');
+    }
+
+    public function getDestroyRoute(): string
+    {
+        return '/' . Arr::join([config('ladmin.route.prefix'), $this->tableName, config('ladmin.route.destroy')], '/{id}');
+    }
+
+    public function getDestroyRouteName(): string
+    {
+        return Arr::join([config('ladmin.route.prefix'), $this->tableName, config('ladmin.route.destroy')], '.');
+    }
+
     public function getTableName(): string
     {
         return $this->tableName;
@@ -125,5 +167,30 @@ class Crud
     public function getLabel(): string
     {
         return $this->label;
+    }
+
+    public function isDetailable()
+    {
+        return in_array($this->getDetailRouteName(), LadminRoute::getRoutes());
+    }
+
+    public function isEditable()
+    {
+        return in_array($this->getEditorRouteName(), LadminRoute::getRoutes());
+    }
+
+    public function isCreatable()
+    {
+        return in_array($this->getCreateRouteName(), LadminRoute::getRoutes());
+    }
+
+    public function isUpdatable()
+    {
+        return in_array($this->getUpdateRouteName(), LadminRoute::getRoutes());
+    }
+
+    public function isDeletable()
+    {
+        return in_array($this->getDestroyRouteName(), LadminRoute::getRoutes());
     }
 }
