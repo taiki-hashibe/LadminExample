@@ -2,7 +2,6 @@
 
 namespace LowB\Ladmin\Controllers;
 
-use App\Http\Controllers\Controller;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -11,7 +10,7 @@ use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\View;
 use Illuminate\Validation\Rules\Password;
 
-class ProfileController extends Controller
+class ProfileController
 {
     public function show()
     {

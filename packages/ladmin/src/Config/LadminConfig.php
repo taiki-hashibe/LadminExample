@@ -72,7 +72,7 @@ class LadminConfig
     public function theme(?string $theme = null): string
     {
         if ($theme) {
-            $this->$theme = $theme;
+            $this->theme = $theme;
         }
         return $this->theme;
     }
@@ -80,7 +80,7 @@ class LadminConfig
     public function localViewPrefix(?string $prefix = null): string
     {
         if ($prefix) {
-            $this->$localViewPrefix = $prefix;
+            $this->localViewPrefix = $prefix;
         }
         return $this->localViewPrefix;
     }

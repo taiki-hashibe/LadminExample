@@ -22,10 +22,10 @@ class GenerateFields
                 continue;
             }
             // ArrayType
-            if ($col->getType() instanceof \Doctrine\DBAL\Types\ArrayType) {
-                $showFields[] = ShowField::column($col->getName())->setValidation(GenerateValidationRules::generateColumn($col));
-                continue;
-            }
+            // if ($col->getType() instanceof \Doctrine\DBAL\Types\ArrayType) {
+            //     $showFields[] = ShowField::column($col->getName())->setValidation(GenerateValidationRules::generateColumn($col));
+            //     continue;
+            // }
 
             // AsciiStringType
             if ($col->getType() instanceof \Doctrine\DBAL\Types\AsciiStringType) {
@@ -58,10 +58,10 @@ class GenerateFields
             }
 
             // ConversionException
-            if ($col->getType() instanceof \Doctrine\DBAL\Types\ConversionException) {
-                $showFields[] = ShowField::column($col->getName())->setValidation(GenerateValidationRules::generateColumn($col));
-                continue;
-            }
+            // if ($col->getType() instanceof \Doctrine\DBAL\Types\ConversionException) {
+            //     $showFields[] = ShowField::column($col->getName())->setValidation(GenerateValidationRules::generateColumn($col));
+            //     continue;
+            // }
 
             // DateImmutableType
             if ($col->getType() instanceof \Doctrine\DBAL\Types\DateImmutableType) {
@@ -124,10 +124,10 @@ class GenerateFields
             }
 
             // ObjectType
-            if ($col->getType() instanceof \Doctrine\DBAL\Types\ObjectType) {
-                $showFields[] = ShowField::column($col->getName())->setValidation(GenerateValidationRules::generateColumn($col));
-                continue;
-            }
+            // if ($col->getType() instanceof \Doctrine\DBAL\Types\ObjectType) {
+            //     $showFields[] = ShowField::column($col->getName())->setValidation(GenerateValidationRules::generateColumn($col));
+            //     continue;
+            // }
 
             // PhpDateTimeMappingType
             if ($col->getType() instanceof \Doctrine\DBAL\Types\PhpDateTimeMappingType) {
@@ -184,10 +184,10 @@ class GenerateFields
             }
 
             // VarDateTimeImmutableType
-            if ($col->getType() instanceof \Doctrine\DBAL\Types\VarDateTimeImmutableType) {
-                $showFields[] = ShowField::column($col->getName())->setValidation(GenerateValidationRules::generateColumn($col));
-                continue;
-            }
+            // if ($col->getType() instanceof \Doctrine\DBAL\Types\VarDateTimeImmutableType) {
+            //     $showFields[] = ShowField::column($col->getName())->setValidation(GenerateValidationRules::generateColumn($col));
+            //     continue;
+            // }
 
             // VarDateTimeType
             if ($col->getType() instanceof \Doctrine\DBAL\Types\VarDateTimeType) {
@@ -231,10 +231,10 @@ class GenerateFields
                 continue;
             }
             // ArrayType
-            if ($col->getType() instanceof \Doctrine\DBAL\Types\ArrayType) {
-                $detailFields[] = DetailField::column($col->getName())->setValidation(GenerateValidationRules::generateColumn($col));
-                continue;
-            }
+            // if ($col->getType() instanceof \Doctrine\DBAL\Types\ArrayType) {
+            //     $detailFields[] = DetailField::column($col->getName())->setValidation(GenerateValidationRules::generateColumn($col));
+            //     continue;
+            // }
 
             // AsciiStringType
             if ($col->getType() instanceof \Doctrine\DBAL\Types\AsciiStringType) {
@@ -267,10 +267,10 @@ class GenerateFields
             }
 
             // ConversionException
-            if ($col->getType() instanceof \Doctrine\DBAL\Types\ConversionException) {
-                $detailFields[] = DetailField::column($col->getName())->setValidation(GenerateValidationRules::generateColumn($col));
-                continue;
-            }
+            // if ($col->getType() instanceof \Doctrine\DBAL\Types\ConversionException) {
+            //     $detailFields[] = DetailField::column($col->getName())->setValidation(GenerateValidationRules::generateColumn($col));
+            //     continue;
+            // }
 
             // DateImmutableType
             if ($col->getType() instanceof \Doctrine\DBAL\Types\DateImmutableType) {
@@ -333,10 +333,10 @@ class GenerateFields
             }
 
             // ObjectType
-            if ($col->getType() instanceof \Doctrine\DBAL\Types\ObjectType) {
-                $detailFields[] = DetailField::column($col->getName())->setValidation(GenerateValidationRules::generateColumn($col));
-                continue;
-            }
+            // if ($col->getType() instanceof \Doctrine\DBAL\Types\ObjectType) {
+            //     $detailFields[] = DetailField::column($col->getName())->setValidation(GenerateValidationRules::generateColumn($col));
+            //     continue;
+            // }
 
             // PhpDateTimeMappingType
             if ($col->getType() instanceof \Doctrine\DBAL\Types\PhpDateTimeMappingType) {
@@ -393,10 +393,10 @@ class GenerateFields
             }
 
             // VarDateTimeImmutableType
-            if ($col->getType() instanceof \Doctrine\DBAL\Types\VarDateTimeImmutableType) {
-                $detailFields[] = DetailField::column($col->getName())->setValidation(GenerateValidationRules::generateColumn($col));
-                continue;
-            }
+            // if ($col->getType() instanceof \Doctrine\DBAL\Types\VarDateTimeImmutableType) {
+            //     $detailFields[] = DetailField::column($col->getName())->setValidation(GenerateValidationRules::generateColumn($col));
+            //     continue;
+            // }
 
             // VarDateTimeType
             if ($col->getType() instanceof \Doctrine\DBAL\Types\VarDateTimeType) {
@@ -446,10 +446,10 @@ class GenerateFields
             }
 
             // ArrayType
-            if ($col->getType() instanceof \Doctrine\DBAL\Types\ArrayType) {
-                $editorFields[] = EditorField::column($col->getName())->setValidation(GenerateValidationRules::generateColumn($col));
-                continue;
-            }
+            // if ($col->getType() instanceof \Doctrine\DBAL\Types\ArrayType) {
+            //     $editorFields[] = EditorField::column($col->getName())->setValidation(GenerateValidationRules::generateColumn($col));
+            //     continue;
+            // }
 
             // AsciiStringType
             if ($col->getType() instanceof \Doctrine\DBAL\Types\AsciiStringType) {
@@ -476,10 +476,10 @@ class GenerateFields
             }
 
             // ConversionException
-            if ($col->getType() instanceof \Doctrine\DBAL\Types\ConversionException) {
-                $editorFields[] = EditorField::column($col->getName())->setValidation(GenerateValidationRules::generateColumn($col));
-                continue;
-            }
+            // if ($col->getType() instanceof \Doctrine\DBAL\Types\ConversionException) {
+            //     $editorFields[] = EditorField::column($col->getName())->setValidation(GenerateValidationRules::generateColumn($col));
+            //     continue;
+            // }
 
             // DateImmutableType
             if ($col->getType() instanceof \Doctrine\DBAL\Types\DateImmutableType) {
@@ -542,10 +542,10 @@ class GenerateFields
             }
 
             // ObjectType
-            if ($col->getType() instanceof \Doctrine\DBAL\Types\ObjectType) {
-                $editorFields[] = LongTextEditorField::column($col->getName())->setValidation(GenerateValidationRules::generateColumn($col));
-                continue;
-            }
+            // if ($col->getType() instanceof \Doctrine\DBAL\Types\ObjectType) {
+            //     $editorFields[] = LongTextEditorField::column($col->getName())->setValidation(GenerateValidationRules::generateColumn($col));
+            //     continue;
+            // }
 
             // PhpDateTimeMappingType
             if ($col->getType() instanceof \Doctrine\DBAL\Types\PhpDateTimeMappingType) {
@@ -602,10 +602,10 @@ class GenerateFields
             }
 
             // VarDateTimeImmutableType
-            if ($col->getType() instanceof \Doctrine\DBAL\Types\VarDateTimeImmutableType) {
-                $editorFields[] = EditorField::column($col->getName())->setValidation(GenerateValidationRules::generateColumn($col));
-                continue;
-            }
+            // if ($col->getType() instanceof \Doctrine\DBAL\Types\VarDateTimeImmutableType) {
+            //     $editorFields[] = EditorField::column($col->getName())->setValidation(GenerateValidationRules::generateColumn($col));
+            //     continue;
+            // }
 
             // VarDateTimeType
             if ($col->getType() instanceof \Doctrine\DBAL\Types\VarDateTimeType) {

@@ -3,7 +3,6 @@
 namespace LowB\Ladmin\Commands;
 
 use Illuminate\Console\GeneratorCommand;
-use Illuminate\Database\Eloquent\Model;
 
 class MakeControllerCommand extends GeneratorCommand
 {
@@ -31,11 +30,6 @@ class MakeControllerCommand extends GeneratorCommand
      */
     protected $queryName;
 
-    /**
-     * Execute the console command.
-     *
-     * @return void
-     */
     public function handle()
     {
         $this->queryName = $this->getQueryInput();
@@ -45,6 +39,7 @@ class MakeControllerCommand extends GeneratorCommand
         $path = $this->getPath($name);
         $this->makeDirectory($path);
         $this->files->put($path, $this->sortImports($this->buildClass($name)));
+        return true;
     }
 
     /**

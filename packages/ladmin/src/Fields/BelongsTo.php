@@ -10,7 +10,6 @@ class BelongsTo extends Field
     {
         parent::__construct($columnName, $view);
         $this->belongsTo = $belongsTo;
-        return $this;
     }
 
     public function getValue($model): mixed

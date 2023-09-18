@@ -10,7 +10,7 @@ class GenerateValidationRules
     public function generate(Crud $crud): array
     {
         $validations = [];
-        foreach ($crud->getColumns() as $col) {
+        foreach ($crud->columns() as $col) {
             /** @var \Doctrine\DBAL\Schema\Column $col */
             if (in_array($col->getName(), LadminConfig::hiddenEditor())) {
                 continue;

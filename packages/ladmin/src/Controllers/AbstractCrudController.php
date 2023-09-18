@@ -2,12 +2,11 @@
 
 namespace LowB\Ladmin\Controllers;
 
-use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use LowB\Ladmin\Crud\Crud;
 use LowB\Ladmin\Support\Facades\GenerateFields;
 
-class AbstractCrudController extends Controller
+class AbstractCrudController
 {
     public Crud|null $crud = null;
     public int $paginate = 24;
