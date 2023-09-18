@@ -6,10 +6,11 @@ class BelongsTo extends Field
 {
     protected $belongsTo;
 
-    public function __construct(string $columnName, string $belongsTo)
+    public function __construct(string $columnName, string $belongsTo, string $view)
     {
-        parent::__construct($columnName);
+        parent::__construct($columnName, $view);
         $this->belongsTo = $belongsTo;
+        return $this;
     }
 
     public function getValue($model): mixed

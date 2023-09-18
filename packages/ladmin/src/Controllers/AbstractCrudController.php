@@ -9,6 +9,7 @@ use Illuminate\Http\Request;
 use LowB\Ladmin\Contracts\Controllers\CrudControllerInterface;
 use LowB\Ladmin\Crud\Crud;
 use LowB\Ladmin\Facades\Ladmin;
+use LowB\Ladmin\Fields\Detail\DetailField;
 use LowB\Ladmin\Fields\Show\ShowField;
 
 class AbstractCrudController extends Controller implements CrudControllerInterface
@@ -237,13 +238,221 @@ class AbstractCrudController extends Controller implements CrudControllerInterfa
         ]);
     }
 
+    public function detailFields()
+    {
+        $detailFields = [];
+        foreach ($this->crud->getColumns() as $col) {
+            /** @var \Doctrine\DBAL\Schema\Column $col */
+            // ArrayType
+            if ($col->getType() instanceof \Doctrine\DBAL\Types\ArrayType) {
+                $detailFields[] = DetailField::column($col->getName());
+                continue;
+            }
+
+            // AsciiStringType
+            if ($col->getType() instanceof \Doctrine\DBAL\Types\AsciiStringType) {
+                $detailFields[] = DetailField::column($col->getName());
+                continue;
+            }
+
+            // BigIntType
+            if ($col->getType() instanceof \Doctrine\DBAL\Types\BigIntType) {
+                $detailFields[] = DetailField::column($col->getName());
+                continue;
+            }
+
+            // BinaryType
+            if ($col->getType() instanceof \Doctrine\DBAL\Types\BinaryType) {
+                $detailFields[] = DetailField::column($col->getName());
+                continue;
+            }
+
+            // BlobType
+            if ($col->getType() instanceof \Doctrine\DBAL\Types\BlobType) {
+                $detailFields[] = DetailField::column($col->getName());
+                continue;
+            }
+
+            // BooleanType
+            if ($col->getType() instanceof \Doctrine\DBAL\Types\BooleanType) {
+                $detailFields[] = DetailField::column($col->getName());
+                continue;
+            }
+
+            // ConversionException
+            if ($col->getType() instanceof \Doctrine\DBAL\Types\ConversionException) {
+                $detailFields[] = DetailField::column($col->getName());
+                continue;
+            }
+
+            // DateImmutableType
+            if ($col->getType() instanceof \Doctrine\DBAL\Types\DateImmutableType) {
+                $detailFields[] = DetailField::column($col->getName());
+                continue;
+            }
+
+            // DateIntervalType
+            if ($col->getType() instanceof \Doctrine\DBAL\Types\DateIntervalType) {
+                $detailFields[] = DetailField::column($col->getName());
+                continue;
+            }
+
+            // DateTimeTzImmutableType
+            if ($col->getType() instanceof \Doctrine\DBAL\Types\DateTimeTzImmutableType) {
+                $detailFields[] = DetailField::column($col->getName());
+                continue;
+            }
+
+            // DateTimeTzType
+            if ($col->getType() instanceof \Doctrine\DBAL\Types\DateTimeTzType) {
+                $detailFields[] = DetailField::column($col->getName());
+                continue;
+            }
+
+            // DateType
+            if ($col->getType() instanceof \Doctrine\DBAL\Types\DateType) {
+                $detailFields[] = DetailField::column($col->getName());
+                continue;
+            }
+
+            // DecimalType
+            if ($col->getType() instanceof \Doctrine\DBAL\Types\DecimalType) {
+                $detailFields[] = DetailField::column($col->getName());
+                continue;
+            }
+
+            // FloatType
+            if ($col->getType() instanceof \Doctrine\DBAL\Types\FloatType) {
+                $detailFields[] = DetailField::column($col->getName());
+                continue;
+            }
+
+            // GuidType
+            if ($col->getType() instanceof \Doctrine\DBAL\Types\GuidType) {
+                $detailFields[] = DetailField::column($col->getName());
+                continue;
+            }
+
+            // IntegerType
+            if ($col->getType() instanceof \Doctrine\DBAL\Types\IntegerType) {
+                $detailFields[] = DetailField::column($col->getName());
+                continue;
+            }
+
+            // JsonType
+            if ($col->getType() instanceof \Doctrine\DBAL\Types\JsonType) {
+                $detailFields[] = DetailField::column($col->getName());
+                continue;
+            }
+
+            // ObjectType
+            if ($col->getType() instanceof \Doctrine\DBAL\Types\ObjectType) {
+                $detailFields[] = DetailField::column($col->getName());
+                continue;
+            }
+
+            // PhpDateTimeMappingType
+            if ($col->getType() instanceof \Doctrine\DBAL\Types\PhpDateTimeMappingType) {
+                $detailFields[] = DetailField::column($col->getName());
+                continue;
+            }
+
+            // PhpIntegerMappingType
+            if ($col->getType() instanceof \Doctrine\DBAL\Types\PhpIntegerMappingType) {
+                $detailFields[] = DetailField::column($col->getName());
+                continue;
+            }
+
+            // SimpleArrayType
+            if ($col->getType() instanceof \Doctrine\DBAL\Types\SimpleArrayType) {
+                $detailFields[] = DetailField::column($col->getName());
+                continue;
+            }
+
+            // SmallIntType
+            if ($col->getType() instanceof \Doctrine\DBAL\Types\SmallIntType) {
+                $detailFields[] = DetailField::column($col->getName());
+                continue;
+            }
+
+            // StringType
+            if ($col->getType() instanceof \Doctrine\DBAL\Types\StringType) {
+                $detailFields[] = DetailField::column($col->getName());
+                continue;
+            }
+
+            // TextType
+            if ($col->getType() instanceof \Doctrine\DBAL\Types\TextType) {
+                $detailFields[] = DetailField::column($col->getName());
+                continue;
+            }
+
+            // TimeImmutableType
+            if ($col->getType() instanceof \Doctrine\DBAL\Types\TimeImmutableType) {
+                $detailFields[] = DetailField::column($col->getName());
+                continue;
+            }
+
+            // TimeType
+            if ($col->getType() instanceof \Doctrine\DBAL\Types\TimeType) {
+                $detailFields[] = DetailField::column($col->getName());
+                continue;
+            }
+
+            // Type
+            if ($col->getType() instanceof \Doctrine\DBAL\Types\Type) {
+                $detailFields[] = DetailField::column($col->getName());
+                continue;
+            }
+
+            // VarDateTimeImmutableType
+            if ($col->getType() instanceof \Doctrine\DBAL\Types\VarDateTimeImmutableType) {
+                $detailFields[] = DetailField::column($col->getName());
+                continue;
+            }
+
+            // VarDateTimeType
+            if ($col->getType() instanceof \Doctrine\DBAL\Types\VarDateTimeType) {
+                $detailFields[] = DetailField::column($col->getName());
+                continue;
+            }
+
+            // TypeRegistry
+            if ($col->getType() instanceof \Doctrine\DBAL\Types\TypeRegistry) {
+                $detailFields[] = DetailField::column($col->getName());
+                continue;
+            }
+
+            // Types
+            if ($col->getType() instanceof \Doctrine\DBAL\Types\Types) {
+                $detailFields[] = DetailField::column($col->getName());
+                continue;
+            }
+
+            // Type
+            if ($col->getType() instanceof \Doctrine\DBAL\Types\Type) {
+                $detailFields[] = DetailField::column($col->getName());
+                continue;
+            }
+
+            // TypeRegistry
+            if ($col->getType() instanceof \Doctrine\DBAL\Types\TypeRegistry) {
+                $detailFields[] = DetailField::column($col->getName());
+                continue;
+            }
+        }
+        return $detailFields;
+    }
+
     public function detail(Request $request): View
     {
+        $fields = $this->detailFields();
         $item = $this->crud->getQuery()->where($this->crud->getPrimaryKey(), $request->primaryKey)->first();
         if (!$item) {
             abort(404);
         }
         return view('ladmin::crud.detail', [
+            'fields' => $fields,
             'item' => $item
         ]);
     }

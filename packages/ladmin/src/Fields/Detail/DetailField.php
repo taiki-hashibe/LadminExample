@@ -1,14 +1,14 @@
 <?php
 
-namespace LowB\Ladmin\Fields\Show;
+namespace LowB\Ladmin\Fields\Detail;
 
 use LowB\Ladmin\Contracts\Fields\FieldInterface;
 use LowB\Ladmin\Fields\BelongsTo;
 use LowB\Ladmin\Fields\Column;
 
-class ShowField implements FieldInterface
+class DetailField implements FieldInterface
 {
-    protected static string $view = 'ladmin::fields.show.default';
+    protected static string $view = 'ladmin::fields.detail.default';
 
     public static function column(string $columnName): Column
     {

@@ -10,15 +10,17 @@ abstract class Field
 
     protected string $label;
 
-    public function __construct(string $columnName)
+    public function __construct(string $columnName, string $view)
     {
         $this->columnName = $columnName;
         $this->label = $columnName;
+        $this->view = $view;
     }
 
-    public function setLabel(string $label): void
+    public function setLabel(string $label): self
     {
         $this->label = $label;
+        return $this;
     }
 
     public function getLabel(): string
@@ -31,16 +33,19 @@ abstract class Field
         return $model->{$this->columnName};
     }
 
-    public function setView(string $view): void
+    public function setView(string $view): self
     {
         $this->view = $view;
+        return $this;
     }
 
     public function getView($model)
     {
+        $label = $this->getLabel();
         $value = $this->getValue($model);
 
         return view($this->view, [
+            'label' => $label,
             'value' => $value,
         ]);
     }
