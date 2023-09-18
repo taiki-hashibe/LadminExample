@@ -10,6 +10,8 @@ abstract class Field
 
     protected string $label;
 
+    protected array $validation = [];
+
     public function __construct(string $columnName, string $view)
     {
         $this->columnName = $columnName;
@@ -37,6 +39,16 @@ abstract class Field
     {
         $this->view = $view;
         return $this;
+    }
+
+    public function setValidation(array $validation)
+    {
+        $this->validation = $validation;
+    }
+
+    public function getValidation(): array
+    {
+        return $this->validation;
     }
 
     public function getView($model)
