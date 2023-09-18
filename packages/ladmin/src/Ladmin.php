@@ -141,4 +141,14 @@ class Ladmin
             }
         }
     }
+
+    public function login()
+    {
+        return $this->crudFindByTableName(config('ladmin.route.login'));
+    }
+
+    public function logout()
+    {
+        return $this->crudFindByTableName(config('ladmin.route.logout'));
+    }
 }

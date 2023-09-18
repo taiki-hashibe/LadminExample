@@ -20,7 +20,7 @@ class AuthController
             if (Auth::guard(config('ladmin.auth.guard'))->attempt($credentials)) {
                 $request->session()->regenerate();
 
-                return redirect()->intended(Ladmin::index()->getRouteName());
+                return redirect()->intended(route(Ladmin::index()->getRouteName()));
             }
 
             return back()->withErrors([
@@ -32,6 +32,6 @@ class AuthController
 
     public function logout()
     {
-        return redirect()->route(LadminRoute::route(config('ladmin.route.logout'), null, false));
+        return redirect()->route(Ladmin::login()->getRouteName());
     }
 }

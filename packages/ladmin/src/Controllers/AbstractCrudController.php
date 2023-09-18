@@ -10,7 +10,6 @@ use LowB\Ladmin\Contracts\Controllers\CrudControllerInterface;
 use LowB\Ladmin\Crud\Crud;
 use LowB\Ladmin\Facades\Ladmin;
 use LowB\Ladmin\Support\Facades\GenerateFields;
-use LowB\Ladmin\Support\Facades\GenerateValidationRules;
 
 class AbstractCrudController extends Controller implements CrudControllerInterface
 {

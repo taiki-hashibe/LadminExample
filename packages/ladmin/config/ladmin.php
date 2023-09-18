@@ -23,6 +23,7 @@ return [
         'controller' => 'App\Http\Controllers\Admin',
     ],
     'auth' => [
+        'middleware' => 'auth',
         'guard' => 'web'
     ]
 ];
