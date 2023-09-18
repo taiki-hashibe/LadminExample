@@ -29,9 +29,12 @@
                                 @if (Ladmin::crud()->isDetailable() || Ladmin::crud()->isEditable() || Ladmin::crud()->isDeletable())
                                     <x-ladmin::td>
                                         <a class="text-white p-2 bg-blue-400 rounded-sm"
-                                            href="{{ route(Ladmin::crud()->detailRouteName(), [
-                                                'primaryKey' => $item->{Ladmin::crud()->primaryKey()},
-                                            ]) }}"
+                                            href="{{ route(
+                                                Ladmin::crud()->detail()->routeName(),
+                                                [
+                                                    'primaryKey' => $item->{Ladmin::crud()->primaryKey()},
+                                                ],
+                                            ) }}"
                                             class="dropdown-item text-decoration-none">{{ __('detail') }}</a>
                                     </x-ladmin::td>
                                 @endif

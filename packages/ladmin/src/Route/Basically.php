@@ -40,8 +40,7 @@ trait Basically
         $uri = LadminRoute::route($uri);
         $routeName = LadminRoute::routeName($name);
         $router = Route::match($methods, $uri, $action)->name($routeName);
-        $crud = new Crud($name);
-        $crud->router($router, $name);
+        $crud = new Crud('basic', $name, $uri, $routeName);
         Ladmin::crudRegister($crud);
         return $router;
     }
@@ -51,8 +50,7 @@ trait Basically
         $uri = LadminRoute::route($uri);
         $routeName = LadminRoute::routeName($name);
         $router = Route::{$method}($uri, $action)->name($routeName);
-        $crud = new Crud($name);
-        $crud->router($router, $name);
+        $crud = new Crud('basic', $name, $uri, $routeName);
         Ladmin::crudRegister($crud);
         return $router;
     }

@@ -53,14 +53,15 @@ class Ladmin
         return null;
     }
 
-    public function crudFindByTableName(string $name): Crud|null
+    public function crudFindByTableName(string $name): array
     {
+        $result = [];
         foreach ($this->crudList as $crud) {
             if ($crud->tableName() === $name) {
-                return $crud;
+                $result[] = $crud;
             }
         }
-        return null;
+        return $result;
     }
 
     public function crudRegister(Crud $crud): void
@@ -112,6 +113,15 @@ class Ladmin
             return $query->where($this->crud()->primaryKey(), $primaryKey)->first();
         }
         return null;
+    }
+
+    public function currentItemKey(): mixed
+    {
+        $currentItem = $this->currentItem();
+        if (!$currentItem) {
+            return null;
+        }
+        return $currentItem->{$this->crud()->primaryKey()};
     }
 
     public function currentItemUpdate(mixed $values): mixed

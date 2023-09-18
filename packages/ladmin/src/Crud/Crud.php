@@ -7,13 +7,13 @@ use Illuminate\Database\Query\Builder;
 use Illuminate\Support\Facades\Schema;
 use LowB\Ladmin\Controllers\CrudController;
 use Illuminate\Support\Str;
-use LowB\Ladmin\Config\Facades\LadminConfig;
 use LowB\Ladmin\Facades\Ladmin;
 use LowB\Ladmin\Support\Facades\LadminRoute as FacadesLadminRoute;
 
 class Crud
 {
     protected string $name;
+    protected string $crud;
     protected Model|Builder|null $query = null;
     protected string $label = '';
     protected string $route = 'default';
@@ -27,9 +27,12 @@ class Crud
     protected array $navigation = [];
     protected CrudController $controller;
 
-    public function __construct(string $name)
+    public function __construct(string $crud, string $name, string $route, string $routeName)
     {
+        $this->crud = $crud;
         $this->name = $name;
+        $this->route = $route;
+        $this->routeName = $routeName;
     }
 
     protected function init(): self
@@ -53,7 +56,6 @@ class Crud
         $this->queryBaseName = class_basename(get_class($this->query));
         $this->primaryKey = $this->query->getKeyName();
         $this->tableName = $this->query->getTable();
-        $this->name = $this->query->getTable();
         $this->config = $config;
         $this->init();
         return $this;
@@ -64,41 +66,32 @@ class Crud
         $this->query = $builder;
         $this->queryBaseName = Str::studly($tableName);
         $this->tableName = $tableName;
-        $this->name = $tableName;
         $this->config = $config;
         $this->init();
         return $this;
     }
 
-    public function router(\Illuminate\Routing\Route $router, string $name): self
-    {
-        $this->name = $name;
-        $this->route = '/' . $router->uri;
-        $this->routeName = $router->action['as'];
-        return $this;
-    }
-
-    public function route(?string $route = null): string
+    public function route(?string $route = null): string|self
     {
         if ($route) {
             $this->route = $route;
+            return $this;
         }
         return $this->route;
     }
 
-    public function name(?string $name = null): string
+    public function name(): string
     {
-        if ($name) {
-            $this->name = $name;
-        }
         return $this->name;
     }
 
-    public function routeName(?string $routeName = null): string
+    public function crud(): string
     {
-        if ($routeName) {
-            $this->routeName = $routeName;
-        }
+        return $this->crud;
+    }
+
+    public function routeName(): string
+    {
         return $this->routeName;
     }
 
@@ -107,11 +100,8 @@ class Crud
         return $this->query;
     }
 
-    public function primaryKey(?string $primaryKey = null): string
+    public function primaryKey(): string
     {
-        if ($primaryKey) {
-            $this->primaryKey = $primaryKey;
-        }
         return $this->primaryKey;
     }
 
@@ -120,31 +110,13 @@ class Crud
         return $this->columnNames;
     }
 
-    public function columnNamesForShow(): array
-    {
-        return array_diff($this->columnNames, LadminConfig::hiddenShow());
-    }
-
-    public function columnNamesForDetail(): array
-    {
-        return array_diff($this->columnNames, LadminConfig::hiddenDetail());
-    }
-
-    public function columnNamesForEditor(): array
-    {
-        return array_diff($this->columnNames, LadminConfig::hiddenEditor());
-    }
-
     public function columns(): array
     {
         return $this->columns;
     }
 
-    public function tableName(?string $tableName = null): string
+    public function tableName(): string
     {
-        if ($tableName) {
-            $this->tableName = $tableName;
-        }
         return $this->tableName;
     }
 
@@ -176,48 +148,6 @@ class Crud
         return $this->navigation;
     }
 
-    public function show(): self
-    {
-        $this->route = $this->showRoute();
-        $this->routeName = $this->showRouteName();
-        return $this;
-    }
-
-    public function detail(): self
-    {
-        $this->route = $this->detailRoute();
-        $this->routeName = $this->detailRouteName();
-        return $this;
-    }
-
-    public function editor(): self
-    {
-        $this->route = $this->editorRoute();
-        $this->routeName = $this->editorRouteName();
-        return $this;
-    }
-
-    public function create(): self
-    {
-        $this->route = $this->createRoute();
-        $this->routeName = $this->createRouteName();
-        return $this;
-    }
-
-    public function update(): self
-    {
-        $this->route = $this->updateRoute();
-        $this->routeName = $this->updateRouteName();
-        return $this;
-    }
-
-    public function destroy(): self
-    {
-        $this->route = $this->destroyRoute();
-        $this->routeName = $this->destroyRouteName();
-        return $this;
-    }
-
     protected function createCrudController(): CrudController
     {
         $controllerClassName = config('ladmin.path.controller') . '\\' . $this->queryBaseName . 'CrudController';
@@ -236,90 +166,70 @@ class Crud
         return $this->controller;
     }
 
-    public function showRoute(): string
+    private function findCrudByMethod(string $method): Crud|null
     {
-        return FacadesLadminRoute::route($this->tableName, config('ladmin.route.show'), false);
+        $crudList = Ladmin::crudFindByTableName($this->tableName);
+        foreach ($crudList as $crud) {
+            if ($crud->crud() === $method) {
+                return $crud;
+            }
+        }
+        return null;
     }
 
-    public function showRouteName(): string
+    public function show(): Crud|null
     {
-        return FacadesLadminRoute::routeName($this->tableName, config('ladmin.route.show'));
+        return $this->findCrudByMethod('show');
     }
 
-    public function detailRoute(): string
+    public function detail(): Crud|null
     {
-        return FacadesLadminRoute::route($this->tableName, config('ladmin.route.detail'), true);
+        return $this->findCrudByMethod('detail');
     }
 
-    public function detailRouteName(): string
+    public function editor(): Crud|null
     {
-        return FacadesLadminRoute::routeName($this->tableName, config('ladmin.route.detail'));
+        return $this->findCrudByMethod('editor');
     }
 
-    public function editorRoute(): string
+    public function create(): Crud|null
     {
-        return FacadesLadminRoute::route($this->tableName, config('ladmin.route.editor'), '{primaryKey?}');
+        return $this->findCrudByMethod('create');
     }
 
-    public function editorRouteName(): string
+    public function update(): Crud|null
     {
-        return FacadesLadminRoute::routeName($this->tableName, config('ladmin.route.editor'));
+        return $this->findCrudByMethod('update');
     }
 
-
-    public function createRoute(): string
+    public function destroy(): Crud|null
     {
-        return FacadesLadminRoute::route($this->tableName, config('ladmin.route.create'), false);
-    }
-
-    public function createRouteName(): string
-    {
-        return FacadesLadminRoute::routeName($this->tableName, config('ladmin.route.create'));
-    }
-
-    public function updateRoute(): string
-    {
-        return FacadesLadminRoute::route($this->tableName, config('ladmin.route.update'));
-    }
-
-    public function updateRouteName(): string
-    {
-        return FacadesLadminRoute::routeName($this->tableName, config('ladmin.route.update'));
-    }
-
-    public function destroyRoute(): string
-    {
-        return FacadesLadminRoute::route($this->tableName, config('ladmin.route.destroy'));
-    }
-
-    public function destroyRouteName(): string
-    {
-        return FacadesLadminRoute::routeName($this->tableName, config('ladmin.route.destroy'));
+        return $this->findCrudByMethod('destroy');
     }
 
     public function isDetailable(): bool
     {
-        return in_array($this->detailRouteName(), Ladmin::getRouteNames());
+        return $this->detail() !== null;
     }
 
     public function isEditable(): bool
     {
-        return in_array($this->editorRouteName(), Ladmin::getRouteNames());
+        return $this->editor() !== null;
     }
 
     public function isCreatable(): bool
     {
-        return in_array($this->createRouteName(), Ladmin::getRouteNames());
+        return $this->create() !== null;
     }
 
     public function isUpdatable(): bool
     {
-        return in_array($this->updateRouteName(), Ladmin::getRouteNames());
+        return $this->update() !== null;
     }
 
     public function isDeletable(): bool
     {
-        return in_array($this->destroyRouteName(), Ladmin::getRouteNames());
+        return $this->destroy() !== null;
     }
 
     public function isActive(): bool
@@ -330,6 +240,7 @@ class Crud
     public function toArray(): array
     {
         return [
+            'name' => $this->name,
             'label' => $this->label,
             'route' => $this->route,
             'routeName' => $this->routeName,

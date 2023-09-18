@@ -24,26 +24,22 @@ class CrudController extends AbstractCrudController
     public function detail(Request $request): View
     {
         $fields = $this->detailFields();
-        $item = Ladmin::currentItem();
-        if (!$item) {
+        if (!Ladmin::currentItem()) {
             abort(404);
         }
         return FacadesView::first(['admin.crud.detail', LadminConfig::theme() . 'crud.detail'], [
             'fields' => $fields,
-            'item' => $item
         ]);
     }
 
     public function editor(Request $request): View
     {
         $fields = $this->editorFields();
-        $item = Ladmin::currentItem();
-        if (!$item) {
+        if (!Ladmin::currentItem()) {
             abort(404);
         }
         return FacadesView::first(['admin.crud.detail', LadminConfig::theme() . 'crud.editor'], [
             'fields' => $fields,
-            'item' => $item
         ]);
     }
 

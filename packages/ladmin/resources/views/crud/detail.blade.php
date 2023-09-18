@@ -10,23 +10,29 @@
                 <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
                     <div class="p-6 text-gray-900">
                         @foreach ($fields as $field)
-                            {{ $field->getView($item) }}
+                            {{ $field->getView(Ladmin::currentItem()) }}
                         @endforeach
                         <div class="flex justify-end px-0 md:px-4">
                             @if (Ladmin::crud()->isEditable())
                                 <a class="text-white p-2 bg-blue-400 rounded-sm @if (Ladmin::crud()->isDeletable()) me-4 @endif"
-                                    href="{{ route(Ladmin::crud()->editorRouteName(), [
-                                        'primaryKey' => $item->{Ladmin::crud()->primaryKey()},
-                                    ]) }}">{{ __('edit') }}</a>
+                                    href="{{ route(
+                                        Ladmin::crud()->editor()->RouteName(),
+                                        [
+                                            'primaryKey' => Ladmin::currentItemKey(),
+                                        ],
+                                    ) }}">{{ __('edit') }}</a>
                             @endif
                             @if (Ladmin::crud()->isDeletable())
                                 <x-ladmin::danger-button x-data=""
                                     x-on:click.prevent="$dispatch('open-modal', 'confirm-item-delete')">{{ __('delete') }}</x-ladmin::danger-button>
                                 <x-ladmin::modal name="confirm-item-delete">
                                     <form method="post"
-                                        action="{{ route(Ladmin::crud()->destroyRouteName(), [
-                                            'primaryKey' => $item->{Ladmin::crud()->primaryKey()},
-                                        ]) }}"
+                                        action="{{ route(
+                                            Ladmin::crud()->destroy()->RouteName(),
+                                            [
+                                                'primaryKey' => Ladmin::currentItemKey(),
+                                            ],
+                                        ) }}"
                                         class="p-6">
                                         @csrf
 
