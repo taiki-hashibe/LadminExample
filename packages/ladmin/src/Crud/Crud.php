@@ -2,7 +2,6 @@
 
 namespace LowB\Ladmin\Crud;
 
-use App\Http\Controllers\Controller;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Query\Builder;
 use Illuminate\Support\Facades\Schema;
@@ -14,6 +13,7 @@ use LowB\Ladmin\Support\Facades\LadminRoute as FacadesLadminRoute;
 
 class Crud
 {
+    protected string $name = '';
     protected Model|Builder|null $query = null;
     protected string $label = '';
     protected string $route = 'default';
@@ -47,6 +47,7 @@ class Crud
         $this->queryBaseName = class_basename(get_class($this->query));
         $this->primaryKey = $this->query->getKeyName();
         $this->tableName = $this->query->getTable();
+        $this->name = $this->query->getTable();
         $this->config = $config;
         $this->init();
         return $this;
@@ -57,99 +58,95 @@ class Crud
         $this->query = $builder;
         $this->queryBaseName = Str::studly($tableName);
         $this->tableName = $tableName;
+        $this->name = $tableName;
         $this->config = $config;
         $this->init();
         return $this;
     }
 
-    public function setRoute(string $route)
+    public function router(\Illuminate\Routing\Route $router, string $name)
     {
-        $this->route = $route;
+        $this->name = $name;
+        $this->route = $router->uri;
+        $this->routeName = $router->action['as'];
     }
 
-    public function getRoute()
+    public function route(?string $route = null)
     {
+        if ($route) {
+            $this->route = $route;
+        }
         return $this->route;
     }
 
-    public function setRouteName(string $routeName)
+    public function name(?string $name = null)
     {
-        $this->routeName = $routeName;
-    }
-
-    public function getRouteName()
-    {
+        if ($name) {
+            $this->name = $name;
+        }
         return $this->routeName;
     }
 
-    public function getQuery()
+    public function routeName(?string $routeName = null)
+    {
+        if ($routeName) {
+            $this->routeName = $routeName;
+        }
+        return $this->routeName;
+    }
+
+    public function query()
     {
         return $this->query;
     }
 
-    public function setPrimaryKey(string $primaryKey)
+    public function primaryKey(?string $primaryKey = null)
     {
-        return $this->primaryKey = $primaryKey;
-    }
-
-    public function getPrimaryKey()
-    {
+        if ($primaryKey) {
+            $this->primaryKey = $primaryKey;
+        }
         return $this->primaryKey;
     }
 
-    public function getColumnNames()
+    public function columnNames()
     {
         return $this->columnNames;
     }
 
-    public function getColumnNamesForShow()
+    public function columnNamesForShow()
     {
         return array_diff($this->columnNames, LadminConfig::hiddenShow());
     }
 
-    public function getColumnNamesForDetail()
+    public function columnNamesForDetail()
     {
         return array_diff($this->columnNames, LadminConfig::hiddenDetail());
     }
 
-    public function getColumnNamesForEditor()
+    public function columnNamesForEditor()
     {
         return array_diff($this->columnNames, LadminConfig::hiddenEditor());
     }
 
-    public function getColumns()
+    public function columns()
     {
         return $this->columns;
     }
 
-    public function setTableName(string $name): void
+    public function tableName(?string $tableName = null)
     {
-        $this->tableName = $name;
-    }
-
-    public function getTableName(): string
-    {
+        if ($tableName) {
+            $this->tableName = $tableName;
+        }
         return $this->tableName;
     }
 
-    public function setLabel(string $label)
+    public function label(?string $label = null)
     {
-        return $this->label = $label;
-    }
-
-    public function getLabel(): string
-    {
+        if ($label) {
+            $this->label = $label;
+        }
         return $this->label;
-    }
-
-    public function setNavigation(array $navigation)
-    {
-        $this->navigation = $navigation;
-    }
-
-    public function addNavigation(string $navigation)
-    {
-        $this->navigation[] = $navigation;
     }
 
     public function removeNavigation(string $navigation)
@@ -160,50 +157,55 @@ class Crud
         $this->navigation = array_values($this->navigation);
     }
 
-    public function getNavigation()
+    public function navigation(string|array|null $navigation = null)
     {
+        if (is_array($navigation)) {
+            $this->navigation = $navigation;
+        } elseif ($navigation) {
+            $this->navigation[] = $navigation;
+        }
         return $this->navigation;
     }
 
     public function show(): self
     {
-        $this->route = $this->getShowRoute();
-        $this->routeName = $this->getShowRouteName();
+        $this->route = $this->showRoute();
+        $this->routeName = $this->showRouteName();
         return $this;
     }
 
     public function detail(): self
     {
-        $this->route = $this->getDetailRoute();
-        $this->routeName = $this->getDetailRouteName();
+        $this->route = $this->detailRoute();
+        $this->routeName = $this->detailRouteName();
         return $this;
     }
 
     public function editor(): self
     {
-        $this->route = $this->getEditorRoute();
-        $this->routeName = $this->getEditorRouteName();
+        $this->route = $this->editorRoute();
+        $this->routeName = $this->editorRouteName();
         return $this;
     }
 
     public function create(): self
     {
-        $this->route = $this->getCreateRoute();
-        $this->routeName = $this->getCreateRouteName();
+        $this->route = $this->createRoute();
+        $this->routeName = $this->createRouteName();
         return $this;
     }
 
     public function update(): self
     {
-        $this->route = $this->getUpdateRoute();
-        $this->routeName = $this->getUpdateRouteName();
+        $this->route = $this->updateRoute();
+        $this->routeName = $this->updateRouteName();
         return $this;
     }
 
     public function destroy(): self
     {
-        $this->route = $this->getDestroyRoute();
-        $this->routeName = $this->getDestroyRouteName();
+        $this->route = $this->destroyRoute();
+        $this->routeName = $this->destroyRouteName();
         return $this;
     }
 
@@ -220,95 +222,95 @@ class Crud
         return $controller;
     }
 
-    public function getController()
+    public function controller()
     {
         return $this->controller;
     }
 
-    public function getShowRoute(): string
+    public function showRoute(): string
     {
         return FacadesLadminRoute::route($this->tableName, config('ladmin.route.show'), false);
     }
 
-    public function getShowRouteName(): string
+    public function showRouteName(): string
     {
         return FacadesLadminRoute::routeName($this->tableName, config('ladmin.route.show'));
     }
 
-    public function getDetailRoute(): string
+    public function detailRoute(): string
     {
         return FacadesLadminRoute::route($this->tableName, config('ladmin.route.detail'), true);
     }
 
-    public function getDetailRouteName(): string
+    public function detailRouteName(): string
     {
         return FacadesLadminRoute::routeName($this->tableName, config('ladmin.route.detail'));
     }
 
-    public function getEditorRoute(): string
+    public function editorRoute(): string
     {
         return FacadesLadminRoute::route($this->tableName, config('ladmin.route.editor'), '{primaryKey?}');
     }
 
-    public function getEditorRouteName(): string
+    public function editorRouteName(): string
     {
         return FacadesLadminRoute::routeName($this->tableName, config('ladmin.route.editor'));
     }
 
 
-    public function getCreateRoute(): string
+    public function createRoute(): string
     {
         return FacadesLadminRoute::route($this->tableName, config('ladmin.route.create'), false);
     }
 
-    public function getCreateRouteName(): string
+    public function createRouteName(): string
     {
         return FacadesLadminRoute::routeName($this->tableName, config('ladmin.route.create'));
     }
 
-    public function getUpdateRoute(): string
+    public function updateRoute(): string
     {
         return FacadesLadminRoute::route($this->tableName, config('ladmin.route.update'));
     }
 
-    public function getUpdateRouteName(): string
+    public function updateRouteName(): string
     {
         return FacadesLadminRoute::routeName($this->tableName, config('ladmin.route.update'));
     }
 
-    public function getDestroyRoute(): string
+    public function destroyRoute(): string
     {
         return FacadesLadminRoute::route($this->tableName, config('ladmin.route.destroy'));
     }
 
-    public function getDestroyRouteName(): string
+    public function destroyRouteName(): string
     {
         return FacadesLadminRoute::routeName($this->tableName, config('ladmin.route.destroy'));
     }
 
     public function isDetailable()
     {
-        return in_array($this->getDetailRouteName(), Ladmin::getRouteNames());
+        return in_array($this->detailRouteName(), Ladmin::getRouteNames());
     }
 
     public function isEditable()
     {
-        return in_array($this->getEditorRouteName(), Ladmin::getRouteNames());
+        return in_array($this->editorRouteName(), Ladmin::getRouteNames());
     }
 
     public function isCreatable()
     {
-        return in_array($this->getCreateRouteName(), Ladmin::getRouteNames());
+        return in_array($this->createRouteName(), Ladmin::getRouteNames());
     }
 
     public function isUpdatable()
     {
-        return in_array($this->getUpdateRouteName(), Ladmin::getRouteNames());
+        return in_array($this->updateRouteName(), Ladmin::getRouteNames());
     }
 
     public function isDeletable()
     {
-        return in_array($this->getDestroyRouteName(), Ladmin::getRouteNames());
+        return in_array($this->destroyRouteName(), Ladmin::getRouteNames());
     }
 
     public function isActive()

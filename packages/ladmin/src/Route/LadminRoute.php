@@ -9,7 +9,6 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Route;
 use LowB\Ladmin\Controllers\AuthController;
 use LowB\Ladmin\Controllers\DashboardController;
-use LowB\Ladmin\Controllers\PasswordController;
 use LowB\Ladmin\Controllers\ProfileController;
 use LowB\Ladmin\Crud\Crud;
 use LowB\Ladmin\Facades\Ladmin;
@@ -22,68 +21,72 @@ class LadminRoute
     {
         $uri = SupportLadminRoute::route($uri);
         $routeName = SupportLadminRoute::routeName($name);
-        return Route::get($uri, $action)->name($routeName);
+        $router = Route::get($uri, $action)->name($routeName);
+        $crud = new Crud();
+        $crud->router($router, $name);
+        Ladmin::crudRegister($crud);
+        return $router;
     }
 
     public function post(string $uri, array|string|callable|null $action = null, string $name)
     {
         $uri = SupportLadminRoute::route($uri);
         $routeName = SupportLadminRoute::routeName($name);
-        return Route::post($uri, $action)->name($routeName);
+        $router = Route::post($uri, $action)->name($routeName);
+        $crud = new Crud();
+        $crud->router($router, $name);
+        Ladmin::crudRegister($crud);
+        return $router;
     }
 
     public function put(string $uri, array|string|callable|null $action = null, string $name)
     {
         $uri = SupportLadminRoute::route($uri);
         $routeName = SupportLadminRoute::routeName($name);
-        return Route::put($uri, $action)->name($routeName);
+        $router = Route::put($uri, $action)->name($routeName);
+        $crud = new Crud();
+        $crud->router($router, $name);
+        Ladmin::crudRegister($crud);
+        return $router;
     }
 
     public function patch(string $uri, array|string|callable|null $action = null, string $name)
     {
         $uri = SupportLadminRoute::route($uri);
         $routeName = SupportLadminRoute::routeName($name);
-        return Route::patch($uri, $action)->name($routeName);
+        $router = Route::patch($uri, $action)->name($routeName);
+        $crud = new Crud();
+        $crud->router($router, $name);
+        Ladmin::crudRegister($crud);
+        return $router;
     }
 
     public function delete(string $uri, array|string|callable|null $action = null, string $name)
     {
         $uri = SupportLadminRoute::route($uri);
         $routeName = SupportLadminRoute::routeName($name);
-        return Route::delete($uri, $action)->name($routeName);
+        $router = Route::delete($uri, $action)->name($routeName);
+        $crud = new Crud();
+        $crud->router($router, $name);
+        Ladmin::crudRegister($crud);
+        return $router;
     }
 
     public function match(array|string $methods, string $uri, array|string|callable|null $action = null, string $name)
     {
         $uri = SupportLadminRoute::route($uri);
         $routeName = SupportLadminRoute::routeName($name);
-        return Route::match($methods, $uri, $action)->name($routeName);
+        $router = Route::match($methods, $uri, $action)->name($routeName);
+        $crud = new Crud();
+        $crud->router($router, $name);
+        Ladmin::crudRegister($crud);
+        return $router;
     }
 
     public function auth()
     {
-        $action = [AuthController::class, 'logout'];
-        $uri = SupportLadminRoute::route(config('ladmin.route.logout'));
-        $routeName = config('ladmin.route.logout');
-        $crud = new Crud();
-        $crud->setTableName(config('ladmin.route.logout'));
-        $crud->setLabel(config('ladmin.route.logout'));
-        $crud->setRoute($uri);
-        $crud->setRouteName(SupportLadminRoute::routeName($routeName));
-        Ladmin::crudRegister($crud);
-        $this->post($uri, $action, $routeName)->middleware(config('ladmin.auth.middleware'));
-
-        $action = [AuthController::class, 'login'];
-        $uri = SupportLadminRoute::route(config('ladmin.route.login'));
-        $routeName = config('ladmin.route.login');
-        $crud = new Crud();
-        $crud->setTableName(config('ladmin.route.login'));
-        $crud->setLabel(config('ladmin.route.login'));
-        $crud->setRoute($uri);
-        $crud->setRouteName(SupportLadminRoute::routeName($routeName));
-        Ladmin::crudRegister($crud);
-        $this->match(['GET', 'POST'], $uri, $action, $routeName);
-        return $crud;
+        $this->post(config('ladmin.auth.logout.url'), [AuthController::class, 'logout'], config('ladmin.auth.logout.name'))->middleware(config('ladmin.auth.middleware'));
+        $this->match(['GET', 'POST'], config('ladmin.auth.login.name'), [AuthController::class, 'login'], config('ladmin.auth.login.name'));
     }
 
     public function dashboard()
@@ -118,10 +121,10 @@ class LadminRoute
         } else if ($instance instanceof Builder) {
             $crud->table($instance, $modelClassOrTableName)->show();
         }
-        Route::middleware(config('ladmin.auth.middleware'))->get($crud->getRoute(), function (Request $request) use ($crud) {
-            return $crud->getController()->show($request);
-        })->name($crud->getRouteName());
-        $crud->addNavigation('navigation');
+        Route::middleware(config('ladmin.auth.middleware'))->get($crud->route(), function (Request $request) use ($crud) {
+            return $crud->controller()->show($request);
+        })->name($crud->routeName());
+        $crud->navigation('navigation');
         Ladmin::crudRegister($crud);
         return $crud;
     }
@@ -136,9 +139,9 @@ class LadminRoute
         if ($instance instanceof Builder) {
             $crud->table($instance, $modelClassOrTableName)->detail();
         }
-        Route::middleware(config('ladmin.auth.middleware'))->get($crud->getRoute(), function (Request $request) use ($crud) {
-            return $crud->getController()->detail($request);
-        })->name($crud->getRouteName());
+        Route::middleware(config('ladmin.auth.middleware'))->get($crud->route(), function (Request $request) use ($crud) {
+            return $crud->controller()->detail($request);
+        })->name($crud->routeName());
         Ladmin::crudRegister($crud);
         return $crud;
     }
@@ -153,9 +156,9 @@ class LadminRoute
         if ($instance instanceof Builder) {
             $crud->table($instance, $modelClassOrTableName)->editor();
         }
-        Route::middleware(config('ladmin.auth.middleware'))->get($crud->getRoute(), function (Request $request) use ($crud) {
-            return $crud->getController()->editor($request);
-        })->name($crud->getRouteName());
+        Route::middleware(config('ladmin.auth.middleware'))->get($crud->route(), function (Request $request) use ($crud) {
+            return $crud->controller()->editor($request);
+        })->name($crud->routeName());
         Ladmin::crudRegister($crud);
         return $crud;
     }
@@ -170,9 +173,9 @@ class LadminRoute
         if ($instance instanceof Builder) {
             $crud->table($instance, $modelClassOrTableName)->create();
         }
-        Route::middleware(config('ladmin.auth.middleware'))->post($crud->getRoute(), function (Request $request) use ($crud) {
-            return $crud->getController()->create($request);
-        })->name($crud->getRouteName());
+        Route::middleware(config('ladmin.auth.middleware'))->post($crud->route(), function (Request $request) use ($crud) {
+            return $crud->controller()->create($request);
+        })->name($crud->routeName());
         Ladmin::crudRegister($crud);
         return $crud;
     }
@@ -187,9 +190,9 @@ class LadminRoute
         if ($instance instanceof Builder) {
             $crud->table($instance, $modelClassOrTableName)->update();
         }
-        Route::middleware(config('ladmin.auth.middleware'))->post($crud->getRoute(), function (Request $request) use ($crud) {
-            return $crud->getController()->update($request);
-        })->name($crud->getRouteName());
+        Route::middleware(config('ladmin.auth.middleware'))->post($crud->route(), function (Request $request) use ($crud) {
+            return $crud->controller()->update($request);
+        })->name($crud->routeName());
         Ladmin::crudRegister($crud);
         return $crud;
     }
@@ -204,9 +207,9 @@ class LadminRoute
         if ($instance instanceof Builder) {
             $crud->table($instance, $modelClassOrTableName)->destroy();
         }
-        Route::middleware(config('ladmin.auth.middleware'))->post($crud->getRoute(), function (Request $request) use ($crud) {
-            return $crud->getController()->destroy($request);
-        })->name($crud->getRouteName());
+        Route::middleware(config('ladmin.auth.middleware'))->post($crud->route(), function (Request $request) use ($crud) {
+            return $crud->controller()->destroy($request);
+        })->name($crud->routeName());
         Ladmin::crudRegister($crud);
         return $crud;
     }

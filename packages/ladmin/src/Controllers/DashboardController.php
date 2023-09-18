@@ -4,7 +4,7 @@ namespace LowB\Ladmin\Controllers;
 
 class DashboardController
 {
-    public function index()
+    public function show()
     {
         return view('ladmin::dashboard');
     }

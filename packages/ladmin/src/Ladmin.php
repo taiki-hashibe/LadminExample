@@ -6,7 +6,6 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Query\Builder;
 use Illuminate\Support\Facades\Request;
 use LowB\Ladmin\Crud\Crud;
-use Illuminate\Support\Arr;
 
 class Ladmin
 {
@@ -36,10 +35,17 @@ class Ladmin
         return $this->routeNames;
     }
 
-    public function crud()
+    public function crud(?string $name = null)
     {
+        if ($name) {
+            foreach ($this->crudList as $crud) {
+                if ($crud->name() === $name) {
+                    return $crud;
+                }
+            }
+        }
         foreach ($this->crudList as $crud) {
-            if (Request::routeIs($crud->getRouteName())) {
+            if (Request::routeIs($crud->routeName())) {
                 return $crud;
             }
         }
@@ -48,7 +54,7 @@ class Ladmin
     public function crudFindByTableName(string $name)
     {
         foreach ($this->crudList as $crud) {
-            if ($crud->getTableName() === $name) {
+            if ($crud->tableName() === $name) {
                 return $crud;
             }
         }
@@ -57,18 +63,18 @@ class Ladmin
     public function crudRegister(Crud $crud)
     {
         $this->crudList[] = $crud;
-        $this->addRoute($crud->getRoute());
-        $this->addRouteName($crud->getRouteName());
+        $this->addRoute($crud->route());
+        $this->addRouteName($crud->routeName());
     }
 
-    public function getNavigation(string|null $key = null)
+    public function navigation(string|null $key = null)
     {
         if (!$key) {
             return $this->crudList;
         }
         $navigation = [];
         foreach ($this->crudList as $crud) {
-            if (in_array($key, $crud->getNavigation())) {
+            if (in_array($key, $crud->navigation())) {
                 $navigation[] = $crud;
             }
         }
@@ -77,7 +83,7 @@ class Ladmin
 
     public function query()
     {
-        return $this->crud()->getQuery();
+        return $this->crud()->query();
     }
 
     public function currentPrimaryKey()
@@ -97,10 +103,10 @@ class Ladmin
         $primaryKey = request()->primaryKey;
         $query = $this->query();
         if ($query instanceof Model) {
-            return $query->where($this->crud()->getPrimaryKey(), $primaryKey)->first();
+            return $query->where($this->crud()->primaryKey(), $primaryKey)->first();
         }
         if ($query instanceof Builder) {
-            return $query->where($this->crud()->getPrimaryKey(), $primaryKey)->first();
+            return $query->where($this->crud()->primaryKey(), $primaryKey)->first();
         }
         return null;
     }
@@ -113,10 +119,10 @@ class Ladmin
         $primaryKey = request()->primaryKey;
         $query = $this->query();
         if ($query instanceof Model) {
-            return $query->where($this->crud()->getPrimaryKey(), $primaryKey)->first()->update($values);
+            return $query->where($this->crud()->primaryKey(), $primaryKey)->first()->update($values);
         }
         if ($query instanceof Builder) {
-            return $query->where($this->crud()->getPrimaryKey(), $primaryKey)->update($values);
+            return $query->where($this->crud()->primaryKey(), $primaryKey)->update($values);
         }
         return null;
     }
@@ -125,10 +131,10 @@ class Ladmin
     {
         $query = $this->query();
         if ($query instanceof Model) {
-            return $query->where($this->crud()->getPrimaryKey(), $primaryKey)->first()->delete();
+            return $query->where($this->crud()->primaryKey(), $primaryKey)->first()->delete();
         }
         if ($query instanceof Builder) {
-            return $query->where($this->crud()->getPrimaryKey(), $primaryKey)->delete();
+            return $query->where($this->crud()->primaryKey(), $primaryKey)->delete();
         }
         return null;
     }
@@ -150,7 +156,7 @@ class Ladmin
         }
 
         foreach ($this->crudList as $crud) {
-            if ($crud->getTableName() !== config('ladmin.route.login') && $crud->getTableName() !== config('ladmin.route.logout') && $crud->getTableName() !== config('ladmin.route.register')) {
+            if ($crud->name() !== config('ladmin.route.login') && $crud->name() !== config('ladmin.route.logout') && $crud->name() !== config('ladmin.route.register')) {
                 return $crud;
             }
         }
@@ -158,26 +164,26 @@ class Ladmin
 
     public function login()
     {
-        return $this->crudFindByTableName(config('ladmin.route.login'));
+        return $this->crud(config('ladmin.auth.login'));
     }
 
     public function logout()
     {
-        return $this->crudFindByTableName(config('ladmin.route.logout'));
+        return $this->crud(config('ladmin.auth.logout'));
     }
 
     public function profile()
     {
-        return $this->crudFindByTableName(config('ladmin.route.profile'));
+        return $this->crud(config('ladmin.profile.show'));
     }
 
     public function password()
     {
-        return $this->crudFindByTableName(config('ladmin.route.profile') . '-password');
+        return $this->crud(config('ladmin.profile.password-update'));
     }
 
     public function hasProfile()
     {
-        return $this->crudFindByTableName(config('ladmin.route.profile'));
+        return $this->crud(config('ladmin.profile.show'));
     }
 }

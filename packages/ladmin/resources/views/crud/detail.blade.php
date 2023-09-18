@@ -2,7 +2,7 @@
     <x-slot name="content">
         <div class="bg-white shadow">
             <div class="max-w-7xl mx-auto py-6 px-4 sm:px-6 lg:px-8">
-                {{ Ladmin::crud()->getLabel() }}
+                {{ Ladmin::crud()->label() }}
             </div>
         </div>
         <div class="py-12">
@@ -15,8 +15,8 @@
                         <div class="flex justify-end px-0 md:px-4">
                             @if (Ladmin::crud()->isEditable())
                                 <a class="text-white p-2 bg-blue-400 rounded-sm @if (Ladmin::crud()->isDeletable()) me-4 @endif"
-                                    href="{{ route(Ladmin::crud()->getEditorRouteName(), [
-                                        'primaryKey' => $item->{Ladmin::crud()->getPrimaryKey()},
+                                    href="{{ route(Ladmin::crud()->editorRouteName(), [
+                                        'primaryKey' => $item->{Ladmin::crud()->primaryKey()},
                                     ]) }}">{{ __('edit') }}</a>
                             @endif
                             @if (Ladmin::crud()->isDeletable())
@@ -24,8 +24,8 @@
                                     x-on:click.prevent="$dispatch('open-modal', 'confirm-item-delete')">{{ __('delete') }}</x-ladmin::danger-button>
                                 <x-ladmin::modal name="confirm-item-delete">
                                     <form method="post"
-                                        action="{{ route(Ladmin::crud()->getDestroyRouteName(), [
-                                            'primaryKey' => $item->{Ladmin::crud()->getPrimaryKey()},
+                                        action="{{ route(Ladmin::crud()->destroyRouteName(), [
+                                            'primaryKey' => $item->{Ladmin::crud()->primaryKey()},
                                         ]) }}"
                                         class="p-6">
                                         @csrf

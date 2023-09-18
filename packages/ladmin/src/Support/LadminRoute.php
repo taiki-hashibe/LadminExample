@@ -11,6 +11,9 @@ class LadminRoute
     {
         $prefix = LadminConfig::prefix() ? config('ladmin.route.prefix') : '';
         $route = '/' . $prefix . LadminConfig::route();
+        if (Str::startsWith($table, '/')) {
+            $table = ltrim($table, '/');
+        }
         $route = Str::of($route)->replace('{table}', $table);
         if (!$crud) {
             $route = Str::of($route)->remove('/{crud}');

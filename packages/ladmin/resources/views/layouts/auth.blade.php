@@ -12,10 +12,10 @@
                         </div>
                         <div class="sb-x-view flex w-[90%]">
                             <div class="sb-content px-4 flex">
-                                @foreach (Ladmin::getNavigation('navigation') as $item)
+                                @foreach (Ladmin::navigation('navigation') as $item)
                                     <div class="hidden space-x-8 sm:-my-px sm:ml-10 sm:flex">
-                                        <x-ladmin::nav-link :href="$item->getRoute()" :active="$item->isActive()">
-                                            {{ $item->getLabel() }}
+                                        <x-ladmin::nav-link :href="$item->route()" :active="$item->isActive()">
+                                            {{ $item->label() }}
                                         </x-ladmin::nav-link>
                                     </div>
                                 @endforeach
@@ -42,12 +42,13 @@
                             </x-slot>
 
                             <x-slot name="content">
-                                <x-ladmin::dropdown-link :href="route(Ladmin::profile()->getRouteName())">
+                                <x-ladmin::dropdown-link :href="route(Ladmin::crud(config('ladmin.profile.show.name'))->routeName())">
                                     {{ __('Profile') }}
                                 </x-ladmin::dropdown-link>
 
                                 <!-- Authentication -->
-                                <form method="POST" action="{{ route(Ladmin::logout()->getRouteName()) }}">
+                                <form method="POST"
+                                    action="{{ route(Ladmin::crud(config('ladmin.auth.login.name'))->routeName()) }}">
                                     @csrf
 
                                     <button

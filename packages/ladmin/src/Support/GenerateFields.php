@@ -16,7 +16,7 @@ class GenerateFields
     public function show(Crud $crud)
     {
         $showFields = [];
-        foreach ($crud->getColumns() as $col) {
+        foreach ($crud->columns() as $col) {
             /** @var \Doctrine\DBAL\Schema\Column $col */
             if (in_array($col->getName(), LadminConfig::hiddenShow())) {
                 continue;
@@ -225,7 +225,7 @@ class GenerateFields
     public function detail(Crud $crud)
     {
         $detailFields = [];
-        foreach ($crud->getColumns() as $col) {
+        foreach ($crud->columns() as $col) {
             /** @var \Doctrine\DBAL\Schema\Column $col */
             if (in_array($col->getName(), LadminConfig::hiddenDetail())) {
                 continue;
@@ -434,7 +434,7 @@ class GenerateFields
     public function editor(Crud $crud)
     {
         $editorFields = [];
-        foreach ($crud->getColumns() as $col) {
+        foreach ($crud->columns() as $col) {
             /** @var \Doctrine\DBAL\Schema\Column $col */
             if (in_array($col->getName(), LadminConfig::hiddenEditor())) {
                 continue;
