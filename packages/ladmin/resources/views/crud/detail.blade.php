@@ -19,17 +19,38 @@
                                     ]) }}">{{ __('edit') }}</a>
                             @endif
                             @if (Ladmin::crud()->isDeletable())
-                                <form
-                                    action="{{ route(Ladmin::crud()->getDestroyRouteName(), [
-                                        'primaryKey' => $item->{Ladmin::crud()->getPrimaryKey()},
-                                    ]) }}"
-                                    method="post">
-                                    @csrf
-                                    <button class="btn btn-sm btn-danger"
-                                        href="{{ route(Ladmin::crud()->getDestroyRouteName(), [
-                                            'primaryKey' => $item->{Ladmin::crud()->getPrimaryKey()},
-                                        ]) }}">{{ __('delete') }}</button>
-                                </form>
+                                <a class="btn btn-sm btn-danger" data-bs-toggle="modal"
+                                    data-bs-target="#delete-modal">{{ __('delete') }}</a>
+                                <div class="modal fade" id="delete-modal" tabindex="-1"
+                                    aria-labelledby="delete-modal-label" aria-hidden="true">
+                                    <div class="modal-dialog">
+                                        <div class="modal-content">
+                                            <div class="modal-header">
+                                                <h5 class="modal-title" id="delete-modal-label">Delete</h5>
+                                                <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                                    aria-label="Close"></button>
+                                            </div>
+                                            <div class="modal-body">
+                                                Are you sure you want to delete?
+                                            </div>
+                                            <div class="modal-footer">
+                                                <button type="button" class="btn btn-sm btn-secondary"
+                                                    data-bs-dismiss="modal">Close</button>
+                                                <form
+                                                    action="{{ route(Ladmin::crud()->getDestroyRouteName(), [
+                                                        'primaryKey' => $item->{Ladmin::crud()->getPrimaryKey()},
+                                                    ]) }}"
+                                                    method="post">
+                                                    @csrf
+                                                    <button class="btn btn-sm btn-danger"
+                                                        href="{{ route(Ladmin::crud()->getDestroyRouteName(), [
+                                                            'primaryKey' => $item->{Ladmin::crud()->getPrimaryKey()},
+                                                        ]) }}">{{ __('delete') }}</button>
+                                                </form>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
                             @endif
                         </div>
 

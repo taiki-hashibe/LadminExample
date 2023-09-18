@@ -70,6 +70,16 @@ class AbstractCrudController extends Controller implements CrudControllerInterfa
         return $validations;
     }
 
+    protected function getRequestValues(Request $request): array
+    {
+        $values = [];
+        $editorFields = $this->editorFields();
+        foreach ($editorFields as $field) {
+            $values[$field->getName()] = $request->{$field->getName()};
+        }
+        return $values;
+    }
+
     public function editor(Request $request): View
     {
         $fields = $this->editorFields();
@@ -85,12 +95,22 @@ class AbstractCrudController extends Controller implements CrudControllerInterfa
 
     public function create(Request $request): RedirectResponse
     {
-        return redirect('/');
+        $request->validate($this->validationRules());
+        $item = $this->crud->getQuery()->where($this->crud->getPrimaryKey(), $request->primaryKey)->first();
+        $item->create($this->getRequestValues($request));
+        return redirect()->route(Ladmin::crud()->getDetailRouteName(), [
+            'primaryKey' => $item->{Ladmin::crud()->getPrimaryKey()}
+        ]);;
     }
 
     public function update(Request $request): RedirectResponse
     {
-        return redirect('/');
+        $request->validate($this->validationRules());
+        $item = $this->crud->getQuery()->where($this->crud->getPrimaryKey(), $request->primaryKey)->first();
+        $item->update($this->getRequestValues($request));
+        return redirect()->route(Ladmin::crud()->getDetailRouteName(), [
+            'primaryKey' => $item->{Ladmin::crud()->getPrimaryKey()}
+        ]);;
     }
 
     public function destroy(Request $request): RedirectResponse
