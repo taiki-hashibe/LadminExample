@@ -121,6 +121,18 @@ class Ladmin
         return null;
     }
 
+    public function itemDelete(mixed $primaryKey)
+    {
+        $query = $this->query();
+        if ($query instanceof Model) {
+            return $query->where($this->crud()->getPrimaryKey(), $primaryKey)->first()->delete();
+        }
+        if ($query instanceof Builder) {
+            return $query->where($this->crud()->getPrimaryKey(), $primaryKey)->delete();
+        }
+        return null;
+    }
+
     public function index()
     {
         if (config('ladmin.index')) {

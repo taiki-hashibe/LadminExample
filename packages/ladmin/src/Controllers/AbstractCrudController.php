@@ -112,8 +112,7 @@ class AbstractCrudController extends Controller implements CrudControllerInterfa
 
     public function destroy(Request $request): RedirectResponse
     {
-        $item = $this->crud->getQuery()->where($this->crud->getPrimaryKey(), $request->primaryKey)->first();
-        $item->delete();
+        Ladmin::itemDelete($request->primaryKey);
         return redirect()->route(Ladmin::crud()->getShowRouteName());
     }
 }
