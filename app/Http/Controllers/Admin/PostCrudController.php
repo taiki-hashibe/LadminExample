@@ -10,7 +10,7 @@ class PostCrudController extends CrudController
     public function showFields()
     {
         return [
-            ShowField::column('title'),
+            ShowField::column('title')->setLabel('タイトル'),
             ShowField::column('content')
         ];
     }

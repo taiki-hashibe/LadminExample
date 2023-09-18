@@ -12,7 +12,7 @@
                         <tr>
                             @foreach ($fields as $field)
                                 <x-ladmin::th>
-                                    {{ __($field->getName()) }}
+                                    {{ __($field->getLabel()) }}
                                 </x-ladmin::th>
                             @endforeach
                             @if (Ladmin::crud()->isDetailable())
