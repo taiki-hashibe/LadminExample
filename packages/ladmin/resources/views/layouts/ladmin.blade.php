@@ -19,6 +19,20 @@
         {{ $content }}
         {{ $footer }}
     </div>
+    <script>
+        const viewElms = document.querySelectorAll('.sb-x-view');
+        viewElms.forEach((e) => {
+            const c = e.querySelector(".sb-content");
+            if (c) {
+                new ScrollBooster({
+                    viewport: e,
+                    content: c,
+                    scrollMode: 'transform',
+                    direction: 'horizontal'
+                });
+            }
+        })
+    </script>
 </body>
 
 </html>
