@@ -2,6 +2,9 @@
 
 namespace LowB\Ladmin\Fields;
 
+use Illuminate\Support\Facades\View;
+use Illuminate\Support\Str;
+
 abstract class Field
 {
     protected string $view = 'ladmin::fields.show.default';
@@ -59,7 +62,7 @@ abstract class Field
 
     public function getView($model)
     {
-        return view($this->view, [
+        return View::first([$this->generateLocalViewName(), $this->view], [
             'field' => $this,
             'label' => $this->getLabel(),
             'name' => $this->columnName,
@@ -70,5 +73,10 @@ abstract class Field
     public function isRequired(): bool
     {
         return in_array('required', $this->validation);
+    }
+
+    private function generateLocalViewName()
+    {
+        return Str::replaceFirst('ladmin::', 'admin.', $this->view);
     }
 }

@@ -5,7 +5,7 @@ namespace LowB\Ladmin\Controllers;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use LowB\Ladmin\Facades\Ladmin;
-use LowB\Ladmin\Support\Facades\LadminRoute;
+use Illuminate\Support\Facades\View as FacadesView;
 
 class AuthController
 {
@@ -27,7 +27,7 @@ class AuthController
                 'email' => 'The provided credentials do not match our records.',
             ])->onlyInput('email');
         }
-        return view('ladmin::auth.login');
+        return FacadesView::first(['admin.auth.login', 'ladmin::auth.login']);
     }
 
     public function logout()

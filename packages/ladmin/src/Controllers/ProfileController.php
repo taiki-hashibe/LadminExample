@@ -8,13 +8,14 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use LowB\Ladmin\Facades\Ladmin;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\View;
 use Illuminate\Validation\Rules\Password;
 
 class ProfileController extends Controller
 {
     public function show()
     {
-        return view('ladmin::profile.index', [
+        return View::first(['admin.profile.index', 'ladmin::profile.index'], [
             'user' => Auth::user()
         ]);
     }

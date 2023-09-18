@@ -5,7 +5,7 @@ namespace LowB\Ladmin\Crud;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Query\Builder;
 use Illuminate\Support\Facades\Schema;
-use LowB\Ladmin\Controllers\AbstractCrudController;
+use LowB\Ladmin\Controllers\CrudController;
 use Illuminate\Support\Str;
 use LowB\Ladmin\Config\Facades\LadminConfig;
 use LowB\Ladmin\Facades\Ladmin;
@@ -25,7 +25,7 @@ class Crud
     protected array $columnNames = [];
     protected array $config = [];
     protected array $navigation = [];
-    protected AbstractCrudController $controller;
+    protected CrudController $controller;
 
     protected function init()
     {
@@ -209,15 +209,15 @@ class Crud
         return $this;
     }
 
-    protected function createCrudController(): AbstractCrudController
+    protected function createCrudController(): CrudController
     {
         $controllerClassName = config('ladmin.path.controller') . '\\' . $this->queryBaseName . 'CrudController';
         if (!class_exists($controllerClassName)) {
-            return app()->make(AbstractCrudController::class);
+            return app()->make(CrudController::class);
         }
         $controller = app()->make($controllerClassName);
-        if (!$controller instanceof AbstractCrudController) {
-            return app()->make(AbstractCrudController::class);
+        if (!$controller instanceof CrudController) {
+            return app()->make(CrudController::class);
         }
         return $controller;
     }

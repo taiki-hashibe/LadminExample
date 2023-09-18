@@ -2,10 +2,12 @@
 
 namespace LowB\Ladmin\Controllers;
 
+use Illuminate\Support\Facades\View;
+
 class DashboardController
 {
     public function show()
     {
-        return view('ladmin::dashboard');
+        return View::first(['admin.dashboard', 'ladmin::dashboard']);
     }
 }
