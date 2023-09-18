@@ -20,8 +20,8 @@
                             <tbody>
                                 @foreach ($items as $item)
                                     <tr class="px-2">
-                                        @foreach (Ladmin::crud()->getColumnNames() as $column)
-                                            <td class="px-2 text-nowrap">{{ $item->{$column} }}</td>
+                                        @foreach ($fields as $field)
+                                            {{ $field->getView($item) }}
                                         @endforeach
                                         @if (Ladmin::crud()->isDetailable())
                                             <td>
