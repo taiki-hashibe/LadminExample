@@ -2,6 +2,7 @@
 
 namespace LowB\Ladmin\Support;
 
+use LowB\Ladmin\Config\Facades\LadminConfig;
 use LowB\Ladmin\Crud\Crud;
 use LowB\Ladmin\Fields\Detail\DetailField;
 use LowB\Ladmin\Fields\Editor\EditorField;
@@ -16,6 +17,9 @@ class GenerateFields
         $showFields = [];
         foreach ($crud->getColumns() as $col) {
             /** @var \Doctrine\DBAL\Schema\Column $col */
+            if (in_array($col->getName(), LadminConfig::hiddenShow())) {
+                continue;
+            }
             // ArrayType
             if ($col->getType() instanceof \Doctrine\DBAL\Types\ArrayType) {
                 $showFields[] = ShowField::column($col->getName());
@@ -222,6 +226,9 @@ class GenerateFields
         $detailFields = [];
         foreach ($crud->getColumns() as $col) {
             /** @var \Doctrine\DBAL\Schema\Column $col */
+            if (in_array($col->getName(), LadminConfig::hiddenDetail())) {
+                continue;
+            }
             // ArrayType
             if ($col->getType() instanceof \Doctrine\DBAL\Types\ArrayType) {
                 $detailFields[] = DetailField::column($col->getName());
@@ -428,6 +435,9 @@ class GenerateFields
         $editorFields = [];
         foreach ($crud->getColumns() as $col) {
             /** @var \Doctrine\DBAL\Schema\Column $col */
+            if (in_array($col->getName(), LadminConfig::hiddenEditor())) {
+                continue;
+            }
             // BigIntType
             if ($col->getType() instanceof \Doctrine\DBAL\Types\BigIntType) {
                 $editorFields[] = NumberEditorField::column($col->getName());

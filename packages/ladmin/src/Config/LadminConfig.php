@@ -6,6 +6,18 @@ class LadminConfig
 {
     protected string $route = '/{table}/{crud}/{primaryKey}';
     protected bool $prefix = true;
+    protected array $hiddenColumns = [
+        'email_verified_at',
+        'password',
+        'remember_token',
+    ];
+    protected array $hiddenShow = [];
+    protected array $hiddenDetail = [];
+    protected array $hiddenEditor = [
+        'id',
+        'created_at',
+        'updated_at'
+    ];
 
     public function route(?string $route = null): string
     {
@@ -21,5 +33,37 @@ class LadminConfig
             $this->prefix = $prefix;
         }
         return $this->prefix;
+    }
+
+    public function hiddenColumns(?array $hiddenColumns = null): array
+    {
+        if ($hiddenColumns) {
+            $this->hiddenColumns = $hiddenColumns;
+        }
+        return $this->hiddenColumns;
+    }
+
+    public function hiddenShow(?array $hiddenShow = null): array
+    {
+        if ($hiddenShow) {
+            $this->hiddenShow = $hiddenShow;
+        }
+        return array_unique(array_merge($this->hiddenColumns, $this->hiddenShow));
+    }
+
+    public function hiddenDetail(?array $hiddenDetail = null): array
+    {
+        if ($hiddenDetail) {
+            $this->hiddenDetail = $hiddenDetail;
+        }
+        return array_unique(array_merge($this->hiddenColumns, $this->hiddenDetail));
+    }
+
+    public function hiddenEditor(?array $hiddenEditor = null): array
+    {
+        if ($hiddenEditor) {
+            $this->hiddenDetail = $hiddenEditor;
+        }
+        return array_unique(array_merge($this->hiddenColumns, $this->hiddenEditor));
     }
 }

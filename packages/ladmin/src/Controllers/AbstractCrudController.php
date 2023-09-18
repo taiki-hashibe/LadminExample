@@ -68,6 +68,7 @@ class AbstractCrudController extends Controller implements CrudControllerInterfa
     public function editor(Request $request): View
     {
         $fields = $this->editorFields();
+        dump($this->validationRules());
         $item = $this->crud->getQuery()->where($this->crud->getPrimaryKey(), $request->primaryKey)->first();
         if (!$item) {
             abort(404);

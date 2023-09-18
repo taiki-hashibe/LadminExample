@@ -2,15 +2,33 @@
 
 namespace LowB\Ladmin\Support;
 
+use LowB\Ladmin\Config\Facades\LadminConfig;
+use LowB\Ladmin\Crud\Crud;
+
 class GenerateValidationRules
 {
-    protected function generate(\Doctrine\DBAL\Schema\Column $column): array
+    public function generate(Crud $crud): array
+    {
+        $validations = [];
+        foreach ($crud->getColumns() as $col) {
+            /** @var \Doctrine\DBAL\Schema\Column $col */
+            if (in_array($col->getName(), LadminConfig::hiddenEditor())) {
+                continue;
+            }
+            $validations[$col->getName()][] = $this->generateColumn($col);
+        }
+        return $validations;
+    }
+
+    public function generateColumn(\Doctrine\DBAL\Schema\Column $column): array
     {
         $rules = [];
 
         // Check for NOT NULL constraint
         if (!$column->getNotnull()) {
             $rules[] = 'nullable';
+        } else {
+            $rules[] = 'required';
         }
 
         // Check for data type and add appropriate rules
