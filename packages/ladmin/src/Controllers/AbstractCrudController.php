@@ -62,7 +62,12 @@ class AbstractCrudController extends Controller implements CrudControllerInterfa
 
     protected function validationRules(): array
     {
-        return GenerateValidationRules::generate($this->crud);
+        $validations = [];
+        $editorFields = $this->editorFields();
+        foreach ($editorFields as $field) {
+            $validations[$field->getName()] = $field->getValidation();
+        }
+        return $validations;
     }
 
     public function editor(Request $request): View

@@ -19,6 +19,11 @@ abstract class Field
         $this->view = $view;
     }
 
+    public function getName(): string
+    {
+        return $this->columnName;
+    }
+
     public function setLabel(string $label): self
     {
         $this->label = $label;
@@ -59,5 +64,10 @@ abstract class Field
             'name' => $this->columnName,
             'value' => $this->getValue($model),
         ]);
+    }
+
+    public function isRequired(): bool
+    {
+        return in_array('required', $this->validation);
     }
 }
