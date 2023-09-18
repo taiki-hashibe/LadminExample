@@ -11,22 +11,22 @@ class AbstractCrudController
     public Crud|null $crud = null;
     public int $paginate = 24;
 
-    public function init(Crud $crud)
+    public function init(Crud $crud): void
     {
         $this->crud = $crud;
     }
 
-    public function showFields()
+    public function showFields(): array
     {
         return GenerateFields::show($this->crud);
     }
 
-    public function detailFields()
+    public function detailFields(): array
     {
         return GenerateFields::detail($this->crud);
     }
 
-    public function editorFields()
+    public function editorFields(): array
     {
         return GenerateFields::editor($this->crud);
     }

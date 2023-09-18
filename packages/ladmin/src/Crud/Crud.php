@@ -27,7 +27,7 @@ class Crud
     protected array $navigation = [];
     protected CrudController $controller;
 
-    protected function init()
+    protected function init(): self
     {
         $columns = Schema::connection(config('database.default'))->getColumnListing($this->tableName);
         $this->columnNames = $columns;
@@ -39,6 +39,7 @@ class Crud
         $this->label = $this->tableName;
         $this->controller = $this->createCrudController();
         $this->controller->init($this);
+        return $this;
     }
 
     public function model(Model $model, array $config = []): self
@@ -64,14 +65,15 @@ class Crud
         return $this;
     }
 
-    public function router(\Illuminate\Routing\Route $router, string $name)
+    public function router(\Illuminate\Routing\Route $router, string $name): self
     {
         $this->name = $name;
         $this->route = '/' . $router->uri;
         $this->routeName = $router->action['as'];
+        return $this;
     }
 
-    public function route(?string $route = null)
+    public function route(?string $route = null): string
     {
         if ($route) {
             $this->route = $route;
@@ -79,7 +81,7 @@ class Crud
         return $this->route;
     }
 
-    public function name(?string $name = null)
+    public function name(?string $name = null): string
     {
         if ($name) {
             $this->name = $name;
@@ -87,7 +89,7 @@ class Crud
         return $this->name;
     }
 
-    public function routeName(?string $routeName = null)
+    public function routeName(?string $routeName = null): string
     {
         if ($routeName) {
             $this->routeName = $routeName;
@@ -95,12 +97,12 @@ class Crud
         return $this->routeName;
     }
 
-    public function query()
+    public function query(): Model|Builder|null
     {
         return $this->query;
     }
 
-    public function primaryKey(?string $primaryKey = null)
+    public function primaryKey(?string $primaryKey = null): string
     {
         if ($primaryKey) {
             $this->primaryKey = $primaryKey;
@@ -108,32 +110,32 @@ class Crud
         return $this->primaryKey;
     }
 
-    public function columnNames()
+    public function columnNames(): array
     {
         return $this->columnNames;
     }
 
-    public function columnNamesForShow()
+    public function columnNamesForShow(): array
     {
         return array_diff($this->columnNames, LadminConfig::hiddenShow());
     }
 
-    public function columnNamesForDetail()
+    public function columnNamesForDetail(): array
     {
         return array_diff($this->columnNames, LadminConfig::hiddenDetail());
     }
 
-    public function columnNamesForEditor()
+    public function columnNamesForEditor(): array
     {
         return array_diff($this->columnNames, LadminConfig::hiddenEditor());
     }
 
-    public function columns()
+    public function columns(): array
     {
         return $this->columns;
     }
 
-    public function tableName(?string $tableName = null)
+    public function tableName(?string $tableName = null): string
     {
         if ($tableName) {
             $this->tableName = $tableName;
@@ -141,7 +143,7 @@ class Crud
         return $this->tableName;
     }
 
-    public function label(?string $label = null)
+    public function label(?string $label = null): string
     {
         if ($label) {
             $this->label = $label;
@@ -149,7 +151,7 @@ class Crud
         return $this->label;
     }
 
-    public function removeNavigation(string $navigation)
+    public function removeNavigation(string $navigation): void
     {
         if (($key = array_search($navigation, $this->navigation)) !== false) {
             unset($this->navigation[$key]);
@@ -157,7 +159,7 @@ class Crud
         $this->navigation = array_values($this->navigation);
     }
 
-    public function navigation(string|array|null $navigation = null)
+    public function navigation(string|array|null $navigation = null): array
     {
         if (is_array($navigation)) {
             $this->navigation = $navigation;
@@ -222,7 +224,7 @@ class Crud
         return $controller;
     }
 
-    public function controller()
+    public function controller(): CrudController|null
     {
         return $this->controller;
     }
@@ -288,32 +290,32 @@ class Crud
         return FacadesLadminRoute::routeName($this->tableName, config('ladmin.route.destroy'));
     }
 
-    public function isDetailable()
+    public function isDetailable(): bool
     {
         return in_array($this->detailRouteName(), Ladmin::getRouteNames());
     }
 
-    public function isEditable()
+    public function isEditable(): bool
     {
         return in_array($this->editorRouteName(), Ladmin::getRouteNames());
     }
 
-    public function isCreatable()
+    public function isCreatable(): bool
     {
         return in_array($this->createRouteName(), Ladmin::getRouteNames());
     }
 
-    public function isUpdatable()
+    public function isUpdatable(): bool
     {
         return in_array($this->updateRouteName(), Ladmin::getRouteNames());
     }
 
-    public function isDeletable()
+    public function isDeletable(): bool
     {
         return in_array($this->destroyRouteName(), Ladmin::getRouteNames());
     }
 
-    public function isActive()
+    public function isActive(): bool
     {
         return FacadesLadminRoute::isCurrentTable($this->tableName);
     }

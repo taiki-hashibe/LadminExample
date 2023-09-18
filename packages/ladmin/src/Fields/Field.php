@@ -2,6 +2,7 @@
 
 namespace LowB\Ladmin\Fields;
 
+use Illuminate\Contracts\View\View as ViewView;
 use Illuminate\Support\Facades\View;
 use LowB\Ladmin\Config\Facades\LadminConfig;
 
@@ -38,7 +39,7 @@ abstract class Field
         return $this->label;
     }
 
-    public function getValue($model): mixed
+    public function getValue(mixed $model): mixed
     {
         return $model->{$this->columnName};
     }
@@ -60,7 +61,7 @@ abstract class Field
         return $this->validation;
     }
 
-    public function getView($model)
+    public function getView(mixed $model): ViewView
     {
         return View::first([$this->generateLocalViewName(), LadminConfig::theme() . $this->view], [
             'field' => $this,
@@ -75,7 +76,7 @@ abstract class Field
         return in_array('required', $this->validation);
     }
 
-    private function generateLocalViewName()
+    private function generateLocalViewName(): string
     {
         return LadminConfig::localViewPrefix() . $this->view;
     }

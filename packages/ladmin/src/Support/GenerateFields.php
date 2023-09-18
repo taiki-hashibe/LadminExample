@@ -13,7 +13,7 @@ use LowB\Ladmin\Support\Facades\GenerateValidationRules;
 
 class GenerateFields
 {
-    public function show(Crud $crud)
+    public function show(Crud $crud): array
     {
         $showFields = [];
         foreach ($crud->columns() as $col) {
@@ -222,7 +222,7 @@ class GenerateFields
         return $showFields;
     }
 
-    public function detail(Crud $crud)
+    public function detail(Crud $crud): array
     {
         $detailFields = [];
         foreach ($crud->columns() as $col) {
@@ -431,7 +431,7 @@ class GenerateFields
         return $detailFields;
     }
 
-    public function editor(Crud $crud)
+    public function editor(Crud $crud): array
     {
         $editorFields = [];
         foreach ($crud->columns() as $col) {

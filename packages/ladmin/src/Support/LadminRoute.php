@@ -7,7 +7,7 @@ use Illuminate\Support\Str;
 
 class LadminRoute
 {
-    public function route(string $table, ?string $crud = null, string|bool $primaryKey = false)
+    public function route(string $table, ?string $crud = null, string|bool $primaryKey = false): string
     {
         $prefix = LadminConfig::prefix() ? config('ladmin.route.prefix') : '';
         $route = '/' . $prefix . LadminConfig::route();
@@ -28,7 +28,7 @@ class LadminRoute
         return $route->__toString();
     }
 
-    public function routeName(string $table, ?string $crud = null)
+    public function routeName(string $table, ?string $crud = null): string
     {
         $prefix = LadminConfig::prefix() ? config('ladmin.route.prefix') : '';
         $route = $prefix . LadminConfig::route();
@@ -43,7 +43,7 @@ class LadminRoute
         return $route->__toString();
     }
 
-    public function getCurrentTable()
+    public function getCurrentTable(): string
     {
         $route = LadminConfig::route();
         $prefix = LadminConfig::prefix();
@@ -56,7 +56,7 @@ class LadminRoute
         return $table;
     }
 
-    public function isCurrentTable(string $table)
+    public function isCurrentTable(string $table): bool
     {
         $currentTable = $this->getCurrentTable();
         return $currentTable === $table;

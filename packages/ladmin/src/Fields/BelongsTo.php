@@ -12,7 +12,7 @@ class BelongsTo extends Field
         $this->belongsTo = $belongsTo;
     }
 
-    public function getValue($model): mixed
+    public function getValue(mixed $model): mixed
     {
         return $model->{$this->columnName}->{$this->belongsTo};
     }

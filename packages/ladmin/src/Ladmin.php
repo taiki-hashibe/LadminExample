@@ -2,6 +2,7 @@
 
 namespace LowB\Ladmin;
 
+use Illuminate\Contracts\Database\Query\Builder as QueryBuilder;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Query\Builder;
 use Illuminate\Support\Facades\Request;
@@ -13,29 +14,29 @@ class Ladmin
     protected array $routes = [];
     protected array $routeNames = [];
 
-    public function addRoute(string $route)
+    public function addRoute(string $route): void
     {
         $this->routes[] = $route;
         $this->routes = array_unique($this->routes);
     }
 
-    public function getRoutes()
+    public function getRoutes(): array
     {
         return $this->routes;
     }
 
-    public function addRouteName(string $routeName)
+    public function addRouteName(string $routeName): void
     {
         $this->routeNames[] = $routeName;
         $this->routeNames = array_unique($this->routeNames);
     }
 
-    public function getRouteNames()
+    public function getRouteNames(): array
     {
         return $this->routeNames;
     }
 
-    public function crud(?string $name = null)
+    public function crud(?string $name = null): Crud|null
     {
         if ($name) {
             foreach ($this->crudList as $crud) {
@@ -49,25 +50,27 @@ class Ladmin
                 return $crud;
             }
         }
+        return null;
     }
 
-    public function crudFindByTableName(string $name)
+    public function crudFindByTableName(string $name): Crud|null
     {
         foreach ($this->crudList as $crud) {
             if ($crud->tableName() === $name) {
                 return $crud;
             }
         }
+        return null;
     }
 
-    public function crudRegister(Crud $crud)
+    public function crudRegister(Crud $crud): void
     {
         $this->crudList[] = $crud;
         $this->addRoute($crud->route());
         $this->addRouteName($crud->routeName());
     }
 
-    public function navigation(string|null $key = null)
+    public function navigation(string|null $key = null): array
     {
         if (!$key) {
             return $this->crudList;
@@ -81,12 +84,12 @@ class Ladmin
         return $navigation;
     }
 
-    public function query()
+    public function query(): Model|QueryBuilder
     {
         return $this->crud()->query();
     }
 
-    public function currentPrimaryKey()
+    public function currentPrimaryKey(): string|null
     {
         if (!request()->primaryKey) {
             return null;
@@ -95,7 +98,7 @@ class Ladmin
         return $primaryKey;
     }
 
-    public function currentItem()
+    public function currentItem(): mixed
     {
         if (!request()->primaryKey) {
             return null;
@@ -111,7 +114,7 @@ class Ladmin
         return null;
     }
 
-    public function currentItemUpdate(mixed $values)
+    public function currentItemUpdate(mixed $values): mixed
     {
         if (!request()->primaryKey) {
             return null;
@@ -127,7 +130,7 @@ class Ladmin
         return null;
     }
 
-    public function itemDelete(mixed $primaryKey)
+    public function itemDelete(mixed $primaryKey): mixed
     {
         $query = $this->query();
         if ($query instanceof Model) {
@@ -139,7 +142,7 @@ class Ladmin
         return null;
     }
 
-    public function index()
+    public function index(): Crud|null
     {
         if (config('ladmin.index')) {
             return config('ladmin.index');
@@ -160,34 +163,36 @@ class Ladmin
                 return $crud;
             }
         }
+
+        return null;
     }
 
-    public function route(?string $name = null)
+    public function route(?string $name = null): string|null
     {
         return $this->crud($name)->route();
     }
 
-    public function login()
+    public function login(): Crud|null
     {
         return $this->crud(config('ladmin.auth.login'));
     }
 
-    public function logout()
+    public function logout(): Crud|null
     {
         return $this->crud(config('ladmin.auth.logout'));
     }
 
-    public function profile()
+    public function profile(): Crud|null
     {
         return $this->crud(config('ladmin.profile.show.name'));
     }
 
-    public function password()
+    public function password(): Crud|null
     {
         return $this->crud(config('ladmin.profile.password-update.name'));
     }
 
-    public function hasProfile()
+    public function hasProfile(): Crud|null
     {
         return $this->crud(config('ladmin.profile.show.name'));
     }

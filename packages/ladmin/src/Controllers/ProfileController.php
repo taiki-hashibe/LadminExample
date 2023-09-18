@@ -2,6 +2,7 @@
 
 namespace LowB\Ladmin\Controllers;
 
+use Illuminate\Contracts\View\View as ViewView;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -13,14 +14,14 @@ use LowB\Ladmin\Config\Facades\LadminConfig;
 
 class ProfileController
 {
-    public function show()
+    public function show(): ViewView
     {
         return View::first(['admin.profile.index', LadminConfig::theme() . 'profile.index'], [
             'user' => Auth::user()
         ]);
     }
 
-    public function update(Request $request)
+    public function update(Request $request): RedirectResponse
     {
         $request->user()->update([
             'name' => $request->name,

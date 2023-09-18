@@ -2,6 +2,7 @@
 
 namespace LowB\Ladmin\Route;
 
+use Illuminate\Contracts\Database\Query\Builder as QueryBuilder;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Query\Builder;
 use Illuminate\Http\Request;
@@ -17,7 +18,7 @@ use LowB\Ladmin\Support\Facades\LadminRoute as SupportLadminRoute;
 class LadminRoute
 {
 
-    public function get(string $uri, array|string|callable|null $action = null, string $name)
+    public function get(string $uri, array|string|callable|null $action = null, string $name): \Illuminate\Routing\Route
     {
         $uri = SupportLadminRoute::route($uri);
         $routeName = SupportLadminRoute::routeName($name);
@@ -28,7 +29,7 @@ class LadminRoute
         return $router;
     }
 
-    public function post(string $uri, array|string|callable|null $action = null, string $name)
+    public function post(string $uri, array|string|callable|null $action = null, string $name): \Illuminate\Routing\Route
     {
         $uri = SupportLadminRoute::route($uri);
         $routeName = SupportLadminRoute::routeName($name);
@@ -39,7 +40,7 @@ class LadminRoute
         return $router;
     }
 
-    public function put(string $uri, array|string|callable|null $action = null, string $name)
+    public function put(string $uri, array|string|callable|null $action = null, string $name): \Illuminate\Routing\Route
     {
         $uri = SupportLadminRoute::route($uri);
         $routeName = SupportLadminRoute::routeName($name);
@@ -50,7 +51,7 @@ class LadminRoute
         return $router;
     }
 
-    public function patch(string $uri, array|string|callable|null $action = null, string $name)
+    public function patch(string $uri, array|string|callable|null $action = null, string $name): \Illuminate\Routing\Route
     {
         $uri = SupportLadminRoute::route($uri);
         $routeName = SupportLadminRoute::routeName($name);
@@ -61,7 +62,7 @@ class LadminRoute
         return $router;
     }
 
-    public function delete(string $uri, array|string|callable|null $action = null, string $name)
+    public function delete(string $uri, array|string|callable|null $action = null, string $name): \Illuminate\Routing\Route
     {
         $uri = SupportLadminRoute::route($uri);
         $routeName = SupportLadminRoute::routeName($name);
@@ -72,7 +73,7 @@ class LadminRoute
         return $router;
     }
 
-    public function match(array|string $methods, string $uri, array|string|callable|null $action = null, string $name)
+    public function match(array|string $methods, string $uri, array|string|callable|null $action = null, string $name): \Illuminate\Routing\Route
     {
         $uri = SupportLadminRoute::route($uri);
         $routeName = SupportLadminRoute::routeName($name);
@@ -83,25 +84,25 @@ class LadminRoute
         return $router;
     }
 
-    public function auth()
+    public function auth(): void
     {
         $this->post(config('ladmin.auth.logout.url'), [AuthController::class, 'logout'], config('ladmin.auth.logout.name'))->middleware(config('ladmin.auth.middleware'));
         $this->match(['GET', 'POST'], config('ladmin.auth.login.name'), [AuthController::class, 'login'], config('ladmin.auth.login.name'));
     }
 
-    public function dashboard()
+    public function dashboard(): void
     {
         $this->get(config('ladmin.dashboard.show.url'), [DashboardController::class, 'show'], config('ladmin.dashboard.show.name'))->middleware(config('ladmin.auth.middleware'));
     }
 
-    public function profile()
+    public function profile(): void
     {
         $this->get(config('ladmin.profile.show.url'), [ProfileController::class, 'show'], config('ladmin.profile.show.name'))->middleware(config('ladmin.auth.middleware'));
         $this->post(config('ladmin.profile.update.url'), [ProfileController::class, 'update'], config('ladmin.profile.update.name'))->middleware(config('ladmin.auth.middleware'));
         $this->post(config('ladmin.profile.destroy.url'), [ProfileController::class, 'destroy'], config('ladmin.profile.destroy.name'))->middleware(config('ladmin.auth.middleware'));
     }
 
-    public function crud(string $modelClassOrTableName)
+    public function crud(string $modelClassOrTableName): Crud
     {
         $this->detail($modelClassOrTableName);
         $this->editor($modelClassOrTableName);
@@ -112,7 +113,7 @@ class LadminRoute
         return $showCrud;
     }
 
-    public function show(string $modelClassOrTableName)
+    public function show(string $modelClassOrTableName): Crud
     {
         $instance = $this->createInstance($modelClassOrTableName);
         $crud = new Crud();
@@ -129,7 +130,7 @@ class LadminRoute
         return $crud;
     }
 
-    public function detail(string $modelClassOrTableName)
+    public function detail(string $modelClassOrTableName): Crud
     {
         $instance = $this->createInstance($modelClassOrTableName);
         $crud = new Crud();
@@ -146,7 +147,7 @@ class LadminRoute
         return $crud;
     }
 
-    public function editor(string $modelClassOrTableName)
+    public function editor(string $modelClassOrTableName): Crud
     {
         $instance = $this->createInstance($modelClassOrTableName);
         $crud = new Crud();
@@ -163,7 +164,7 @@ class LadminRoute
         return $crud;
     }
 
-    public function create(string $modelClassOrTableName)
+    public function create(string $modelClassOrTableName): Crud
     {
         $instance = $this->createInstance($modelClassOrTableName);
         $crud = new Crud();
@@ -180,7 +181,7 @@ class LadminRoute
         return $crud;
     }
 
-    public function update(string $modelClassOrTableName)
+    public function update(string $modelClassOrTableName): Crud
     {
         $instance = $this->createInstance($modelClassOrTableName);
         $crud = new Crud();
@@ -197,7 +198,7 @@ class LadminRoute
         return $crud;
     }
 
-    public function destroy(string $modelClassOrTableName)
+    public function destroy(string $modelClassOrTableName): Crud
     {
         $instance = $this->createInstance($modelClassOrTableName);
         $crud = new Crud();
@@ -214,7 +215,7 @@ class LadminRoute
         return $crud;
     }
 
-    protected function createInstance(string $modelClassOrTableName)
+    protected function createInstance(string $modelClassOrTableName): Model | QueryBuilder
     {
         if (class_exists($modelClassOrTableName) && is_subclass_of($modelClassOrTableName, 'Illuminate\Database\Eloquent\Model')) {
             return app()->make($modelClassOrTableName);
