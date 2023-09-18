@@ -8,6 +8,7 @@ use Illuminate\Support\Facades\Schema;
 use LowB\Ladmin\Controllers\AbstractCrudController;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Str;
+use LowB\Ladmin\Config\Facades\LadminConfig;
 use LowB\Ladmin\Facades\Ladmin;
 use LowB\Ladmin\Support\Facades\LadminRoute as FacadesLadminRoute;
 
@@ -99,6 +100,21 @@ class Crud
     public function getColumnNames()
     {
         return $this->columnNames;
+    }
+
+    public function getColumnNamesForShow()
+    {
+        return array_diff($this->columnNames, LadminConfig::hiddenShow());
+    }
+
+    public function getColumnNamesForDetail()
+    {
+        return array_diff($this->columnNames, LadminConfig::hiddenDetail());
+    }
+
+    public function getColumnNamesForEditor()
+    {
+        return array_diff($this->columnNames, LadminConfig::hiddenEditor());
     }
 
     public function getColumns()

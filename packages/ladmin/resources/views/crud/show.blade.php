@@ -9,7 +9,7 @@
                         <table class="table table-striped table-sm">
                             <thead>
                                 <tr class="px-2">
-                                    @foreach (Ladmin::crud()->getColumnNames() as $item)
+                                    @foreach (Ladmin::crud()->getColumnNamesForShow() as $item)
                                         <th class="px-2">{{ $item }}</th>
                                     @endforeach
                                     @if (Ladmin::crud()->isDetailable())
