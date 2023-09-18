@@ -1,10 +1,12 @@
 <?php
 
 return [
+    'index' => null,
     'route' => [
         'prefix' => 'admin',
         'login' => 'login',
         'logout' => 'logout',
+        'register' => 'register',
         'dashboard' => 'dashboard',
         'profile' => 'profile',
         'show' => 'show',
@@ -19,5 +21,8 @@ return [
     ],
     'namespace' => [
         'controller' => 'App\Http\Controllers\Admin',
+    ],
+    'auth' => [
+        'guard' => 'web'
     ]
 ];

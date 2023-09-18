@@ -314,4 +314,20 @@ class Crud
     {
         return FacadesLadminRoute::isCurrentTable($this->tableName);
     }
+
+    public function toArray(): array
+    {
+        return [
+            'label' => $this->label,
+            'route' => $this->route,
+            'routeName' => $this->routeName,
+            'queryBaseName' => $this->queryBaseName,
+            'tableName' => $this->tableName,
+            'primaryKey' => $this->primaryKey,
+            'columns' => $this->columns,
+            'columnNames' => $this->columnNames,
+            'config' => $this->config,
+            'navigation' => $this->navigation
+        ];
+    }
 }

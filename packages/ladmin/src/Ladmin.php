@@ -6,6 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Query\Builder;
 use Illuminate\Support\Facades\Request;
 use LowB\Ladmin\Crud\Crud;
+use Illuminate\Support\Arr;
 
 class Ladmin
 {
@@ -39,6 +40,15 @@ class Ladmin
     {
         foreach ($this->crudList as $crud) {
             if (Request::routeIs($crud->getRouteName())) {
+                return $crud;
+            }
+        }
+    }
+
+    public function crudFindByTableName(string $name)
+    {
+        foreach ($this->crudList as $crud) {
+            if ($crud->getTableName() === $name) {
                 return $crud;
             }
         }
@@ -107,5 +117,28 @@ class Ladmin
             return $query->where($this->crud()->getPrimaryKey(), $primaryKey)->update($values);
         }
         return null;
+    }
+
+    public function index()
+    {
+        if (config('ladmin.index')) {
+            return config('ladmin.index');
+        }
+        $crudList = [];
+        foreach ($this->crudList as $crud) {
+            $crudList[] = $crud->toArray();
+        }
+        if (in_array(config('ladmin.route.dashboard'), array_column($crudList, 'tableName'))) {
+            return $this->crudFindByTableName(config('ladmin.route.dashboard'));
+        };
+        if (in_array(config('ladmin.route.profile'), array_column($crudList, 'tableName'))) {
+            return $this->crudFindByTableName(config('ladmin.route.profile'));
+        }
+
+        foreach ($this->crudList as $crud) {
+            if ($crud->getTableName() !== config('ladmin.route.login') && $crud->getTableName() !== config('ladmin.route.logout') && $crud->getTableName() !== config('ladmin.route.register')) {
+                return $crud;
+            }
+        }
     }
 }

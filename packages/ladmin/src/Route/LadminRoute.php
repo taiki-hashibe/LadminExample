@@ -57,6 +57,14 @@ class LadminRoute
         Ladmin::addRouteName($routeName);
     }
 
+    public function match(array|string $methods, string $uri, array|string|callable|null $action = null, string $name)
+    {
+        $routeName = SupportLadminRoute::routeName($name);
+        Route::match($methods, $uri, $action)->name($routeName);
+        Ladmin::addRoute($uri);
+        Ladmin::addRouteName($routeName);
+    }
+
     public function auth()
     {
         $action = [AuthController::class, 'logout'];
@@ -83,7 +91,7 @@ class LadminRoute
         Ladmin::addRoute($crud->getRoute());
         Ladmin::addRouteName($crud->getRouteName());
         Ladmin::crudRegister($crud);
-        $this->get($uri, $action, $routeName);
+        $this->match(['GET', 'POST'], $uri, $action, $routeName);
         return $crud;
     }
 
