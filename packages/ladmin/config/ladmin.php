@@ -13,5 +13,8 @@ return [
     ],
     'path' => [
         'controller' => 'App\Http\Controllers\Admin',
+    ],
+    'namespace' => [
+        'controller' => 'App\Http\Controllers\Admin',
     ]
 ];

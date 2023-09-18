@@ -7,6 +7,7 @@ use Illuminate\Support\Facades\View;
 use Spatie\LaravelPackageTools\Package;
 use Spatie\LaravelPackageTools\PackageServiceProvider;
 use LowB\Ladmin\Commands\LadminCommand;
+use LowB\Ladmin\Commands\MakeControllerCommand;
 use LowB\Ladmin\View\Composers\AuthLayoutComposer;
 
 class LadminServiceProvider extends PackageServiceProvider
@@ -23,7 +24,8 @@ class LadminServiceProvider extends PackageServiceProvider
             ->hasConfigFile()
             ->hasViews()
             ->hasMigration('create_ladmin_table')
-            ->hasCommand(LadminCommand::class);
+            ->hasCommand(LadminCommand::class)
+            ->hasCommand(MakeControllerCommand::class);
         Blade::component('layouts-ladmin', \LowB\Ladmin\View\Components\LadminLayout::class);
         Blade::component('layouts-auth', \LowB\Ladmin\View\Components\AuthLayout::class);
         Blade::component('layout-guest', \LowB\Ladmin\View\Components\GuestLayout::class);

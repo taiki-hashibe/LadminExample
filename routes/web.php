@@ -1,5 +1,6 @@
 <?php
 
+use App\Models\User;
 use Illuminate\Support\Facades\Route;
 use LowB\Ladmin\Facades\Ladmin;
 
@@ -15,7 +16,7 @@ use LowB\Ladmin\Facades\Ladmin;
 */
 
 Route::get('/', function () {
-    dump(1);
+    dump(User::class);
 });
 
 require __DIR__ . '/admin.php';

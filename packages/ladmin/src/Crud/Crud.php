@@ -208,7 +208,7 @@ class Crud
 
     protected function createController(): AbstractCrudController
     {
-        $controllerClassName = config('ladmin.path.controller') . '\\' . $this->queryBaseName . 'Controller';
+        $controllerClassName = config('ladmin.path.controller') . '\\' . $this->queryBaseName . 'CrudController';
         if (!class_exists($controllerClassName)) {
             return app()->make(AbstractCrudController::class);
         }

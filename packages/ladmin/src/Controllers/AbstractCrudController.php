@@ -60,7 +60,7 @@ class AbstractCrudController extends Controller implements CrudControllerInterfa
         return GenerateFields::editor($this->crud);
     }
 
-    protected function validationRules(): array
+    private function validationRules(): array
     {
         $validations = [];
         $editorFields = $this->editorFields();
