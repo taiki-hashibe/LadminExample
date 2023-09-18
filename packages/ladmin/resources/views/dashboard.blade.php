@@ -1,11 +1,15 @@
 <x-layouts-auth>
     <x-slot name="content">
-        <div class="container-fluid">
-            <div class="row">
-                @include('ladmin::layouts.sidebar')
-                <main role="main" class="col-md-9 ml-sm-auto col-lg-10 pt-3 px-4 bg-white">
-                    <h2 class="fs-5 mb-3">{{ __('dashboard') }}</h2>
-                </main>
+        <div class="bg-white shadow">
+            <div class="max-w-7xl mx-auto py-6 px-4 sm:px-6 lg:px-8">
+                {{ Ladmin::crud()->getLabel() }}
+            </div>
+        </div>
+        <div class="py-12">
+            <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
+                <div class="p-4 mb-6 sm:p-8 bg-white shadow sm:rounded-lg">
+
+                </div>
             </div>
         </div>
     </x-slot>
