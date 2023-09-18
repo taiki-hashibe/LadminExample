@@ -41,9 +41,10 @@ abstract class Field
         return $this;
     }
 
-    public function setValidation(array $validation)
+    public function setValidation(array $validation): self
     {
         $this->validation = $validation;
+        return $this;
     }
 
     public function getValidation(): array
