@@ -1,5 +1,6 @@
 <?php
 
+use App\Models\Comments;
 use App\Models\Post;
 use LowB\Ladmin\Route\Facades\LadminRoute;
 
@@ -10,6 +11,7 @@ LadminRoute::dashboard();
 
 LadminRoute::crud('users')->setLabel('ユーザー');
 LadminRoute::crud(Post::class)->setLabel('投稿');
+LadminRoute::show(Comments::class)->setLabel('コメント');
 // LadminRoute::crud(User::class); この中でshow、detail、editor...のルーティングを完結させ、Ladminにnavigationをセットする、Admin/UserControllerが存在すれば使う
 // LadminRoute::show(User::class); showのみ
 // LadminRoute::detail(User::class); detailのみ
