@@ -6,6 +6,7 @@ use Illuminate\Contracts\View\View;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\View as FacadesView;
+use LowB\Ladmin\Config\Facades\LadminConfig;
 use LowB\Ladmin\Facades\Ladmin;
 
 class CrudController extends AbstractCrudController
@@ -14,7 +15,7 @@ class CrudController extends AbstractCrudController
     {
         $fields = $this->showFields();
         $items = Ladmin::query()->paginate($this->paginate);
-        return FacadesView::first(['admin.crud.show', 'ladmin::crud.show'], [
+        return FacadesView::first(['admin.crud.show', LadminConfig::theme() . 'crud.show'], [
             'items' => $items,
             'fields' => $fields
         ]);
@@ -27,7 +28,7 @@ class CrudController extends AbstractCrudController
         if (!$item) {
             abort(404);
         }
-        return FacadesView::first(['admin.crud.detail', 'ladmin::crud.detail'], [
+        return FacadesView::first(['admin.crud.detail', LadminConfig::theme() . 'crud.detail'], [
             'fields' => $fields,
             'item' => $item
         ]);
@@ -40,7 +41,7 @@ class CrudController extends AbstractCrudController
         if (!$item) {
             abort(404);
         }
-        return FacadesView::first(['admin.crud.detail', 'ladmin::crud.editor'], [
+        return FacadesView::first(['admin.crud.detail', LadminConfig::theme() . 'crud.editor'], [
             'fields' => $fields,
             'item' => $item
         ]);
