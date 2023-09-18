@@ -20,7 +20,32 @@
                                     ]) }}">{{ __('edit') }}</a>
                             @endif
                             @if (Ladmin::crud()->isDeletable())
-                                <span>TODO</span>
+                                <x-ladmin::danger-button x-data=""
+                                    x-on:click.prevent="$dispatch('open-modal', 'confirm-item-delete')">{{ __('delete') }}</x-ladmin::danger-button>
+                                <x-ladmin::modal name="confirm-item-delete">
+                                    <form method="post"
+                                        action="{{ route(Ladmin::crud()->getDestroyRouteName(), [
+                                            'primaryKey' => $item->{Ladmin::crud()->getPrimaryKey()},
+                                        ]) }}"
+                                        class="p-6">
+                                        @csrf
+
+                                        <p class="mt-1 text-sm text-gray-600">
+                                            {{ __('Are you sure you want to delete?') }}
+                                        </p>
+
+
+                                        <div class="mt-6 flex justify-end">
+                                            <x-ladmin::secondary-button x-on:click="$dispatch('close')">
+                                                {{ __('cancel') }}
+                                            </x-ladmin::secondary-button>
+
+                                            <x-ladmin::danger-button class="ml-3">
+                                                {{ __('delete') }}
+                                            </x-ladmin::danger-button>
+                                        </div>
+                                    </form>
+                                </x-ladmin::modal>
                             @endif
                         </div>
                     </div>
