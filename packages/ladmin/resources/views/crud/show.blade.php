@@ -2,7 +2,7 @@
     <x-slot name="content">
         <div class="bg-white shadow">
             <div class="max-w-7xl mx-auto py-6 px-4 sm:px-6 lg:px-8">
-                {{ Ladmin::crud()->label() }}
+                {{ __(Ladmin::crud()->label()) }}
             </div>
         </div>
         <div class="py-12">
@@ -12,7 +12,7 @@
                         <tr>
                             @foreach ($fields as $field)
                                 <x-ladmin::th>
-                                    {{ $field->getName() }}
+                                    {{ __($field->getName()) }}
                                 </x-ladmin::th>
                             @endforeach
                             @if (Ladmin::crud()->isDetailable())
