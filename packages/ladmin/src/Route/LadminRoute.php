@@ -9,6 +9,7 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Route;
 use LowB\Ladmin\Controllers\AuthController;
 use LowB\Ladmin\Controllers\DashboardController;
+use LowB\Ladmin\Controllers\PasswordController;
 use LowB\Ladmin\Controllers\ProfileController;
 use LowB\Ladmin\Crud\Crud;
 use LowB\Ladmin\Facades\Ladmin;
@@ -99,9 +100,41 @@ class LadminRoute
 
     public function profile(?array $action = null)
     {
-        if (!$action) {
-            $action = [ProfileController::class, 'index'];
-        }
+        $action = [PasswordController::class, 'update'];
+        $uri = SupportLadminRoute::route(config('ladmin.route.profile') . '-password', config('ladmin.route.update'), false);
+        $routeName = config('ladmin.route.profile') . '-password';
+        $crud = new Crud();
+        $crud->setTableName($routeName);
+        $crud->setLabel(config('ladmin.route.profile') . '-password');
+        $crud->setRoute($uri);
+        $crud->setRouteName($routeName . '.' . config('ladmin.route.update'));
+        Ladmin::crudRegister($crud);
+
+        $this->post($uri, $action, $routeName . '.' . config('ladmin.route.update'))->middleware(config('ladmin.auth.middleware'));
+
+        $action = [ProfileController::class, 'update'];
+        $uri = SupportLadminRoute::route(config('ladmin.route.profile'), config('ladmin.route.update'), false);
+        $routeName = config('ladmin.route.profile') . '.' . config('ladmin.route.update');
+        $crud = new Crud();
+        $crud->setTableName($routeName);
+        $crud->setLabel(config('ladmin.route.profile'));
+        $crud->setRoute($uri);
+        $crud->setRouteName($routeName);
+        Ladmin::crudRegister($crud);
+        $this->post($uri, $action, $routeName)->middleware(config('ladmin.auth.middleware'));
+
+        $action = [ProfileController::class, 'destroy'];
+        $uri = SupportLadminRoute::route(config('ladmin.route.profile'), config('ladmin.route.destroy'), false);
+        $routeName = config('ladmin.route.profile') . '.' . config('ladmin.route.destroy');
+        $crud = new Crud();
+        $crud->setTableName($routeName);
+        $crud->setLabel(config('ladmin.route.profile'));
+        $crud->setRoute($uri);
+        $crud->setRouteName($routeName);
+        Ladmin::crudRegister($crud);
+        $this->post($uri, $action, $routeName)->middleware(config('ladmin.auth.middleware'));
+
+        $action = [ProfileController::class, 'show'];
         $uri = SupportLadminRoute::route(config('ladmin.route.profile'), null, false);
         $routeName = config('ladmin.route.profile');
         $crud = new Crud();

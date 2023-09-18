@@ -171,6 +171,11 @@ class Ladmin
         return $this->crudFindByTableName(config('ladmin.route.profile'));
     }
 
+    public function password()
+    {
+        return $this->crudFindByTableName(config('ladmin.route.profile') . '-password');
+    }
+
     public function hasProfile()
     {
         return $this->crudFindByTableName(config('ladmin.route.profile'));

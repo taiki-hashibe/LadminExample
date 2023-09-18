@@ -2,6 +2,7 @@
 
 namespace LowB\Ladmin\Crud;
 
+use App\Http\Controllers\Controller;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Query\Builder;
 use Illuminate\Support\Facades\Schema;
@@ -36,7 +37,7 @@ class Crud
         }
         $this->columns = $columnDetails;
         $this->label = $this->tableName;
-        $this->controller = $this->createController();
+        $this->controller = $this->createCrudController();
         $this->controller->init($this);
     }
 
@@ -206,7 +207,7 @@ class Crud
         return $this;
     }
 
-    protected function createController(): AbstractCrudController
+    protected function createCrudController(): AbstractCrudController
     {
         $controllerClassName = config('ladmin.path.controller') . '\\' . $this->queryBaseName . 'CrudController';
         if (!class_exists($controllerClassName)) {
