@@ -13,37 +13,37 @@ use LowB\Ladmin\Support\Facades\LadminRoute;
 trait CrudRoute
 {
 
-    public function show(string $modelClassOrTableName): Crud
+    public function show(string $modelClassOrTableName, string $displayKey): Crud
     {
-        return $this->crudMethods('show', 'get', $modelClassOrTableName)->navigation('navigation');
+        return $this->crudMethods('show', 'get', $modelClassOrTableName, $displayKey)->navigation('navigation');
     }
 
-    public function detail(string $modelClassOrTableName): Crud
+    public function detail(string $modelClassOrTableName, string $displayKey): Crud
     {
-        return $this->crudMethods('detail', 'get', $modelClassOrTableName);
+        return $this->crudMethods('detail', 'get', $modelClassOrTableName, $displayKey);
     }
 
-    public function editor(string $modelClassOrTableName): Crud
+    public function editor(string $modelClassOrTableName, string $displayKey): Crud
     {
-        return $this->crudMethods('editor', 'get', $modelClassOrTableName, '{primaryKey?}');
+        return $this->crudMethods('editor', 'get', $modelClassOrTableName, $displayKey, '{primaryKey?}');
     }
 
-    public function create(string $modelClassOrTableName): Crud
+    public function create(string $modelClassOrTableName, string $displayKey): Crud
     {
-        return $this->crudMethods('create', 'post', $modelClassOrTableName);
+        return $this->crudMethods('create', 'post', $modelClassOrTableName, $displayKey);
     }
 
-    public function update(string $modelClassOrTableName): Crud
+    public function update(string $modelClassOrTableName, string $displayKey): Crud
     {
-        return $this->crudMethods('update', 'post', $modelClassOrTableName);
+        return $this->crudMethods('update', 'post', $modelClassOrTableName, $displayKey);
     }
 
-    public function destroy(string $modelClassOrTableName): Crud
+    public function destroy(string $modelClassOrTableName, string $displayKey): Crud
     {
-        return $this->crudMethods('destroy', 'post', $modelClassOrTableName);
+        return $this->crudMethods('destroy', 'post', $modelClassOrTableName, $displayKey);
     }
 
-    private function crudMethods(string $crudMethod, string $routingMethod, string $modelClassOrTableName, string|bool $primaryKey = false): Crud
+    private function crudMethods(string $crudMethod, string $routingMethod, string $modelClassOrTableName, string $displayKey, string|bool $primaryKey = false): Crud
     {
         $instance = $this->createInstance($modelClassOrTableName);
         $crud = null;
@@ -53,12 +53,12 @@ trait CrudRoute
             $route = LadminRoute::route($instance->getTable(), config('ladmin.route.' . $crudMethod), $primaryKey);
             $routeName = LadminRoute::routeName($instance->getTable(), config('ladmin.route.' . $crudMethod));
             $crud = new Crud($crudMethod, $instance->getTable(), $route, $routeName);
-            $crud->model($instance)->{$crudMethod}();
+            $crud->model($instance, $displayKey)->{$crudMethod}();
         } else if ($instance instanceof Builder) {
             $route = LadminRoute::route($modelClassOrTableName, config('ladmin.route.' . $crudMethod), $primaryKey);
             $routeName = LadminRoute::routeName($modelClassOrTableName, config('ladmin.route.' . $crudMethod));
             $crud = new Crud($crudMethod, $modelClassOrTableName, $route, $routeName);
-            $crud->table($instance, $modelClassOrTableName)->{$crudMethod}();
+            $crud->table($instance, $modelClassOrTableName, $displayKey)->{$crudMethod}();
         }
         Route::middleware(config('ladmin.auth.middleware'))->{$routingMethod}($crud->route(), function (Request $request) use ($crud, $crudMethod) {
             return $crud->controller()->{$crudMethod}($request);

@@ -10,9 +10,9 @@ LadminRoute::dashboard();
 // LadminRoute::dashboard(); ダッシュボードのルーティング、Admin/DashboardControllerが存在すれば使う
 // LadminRoute::dashboard()->view('admin.dashboard'); ダッシュボードのビューをセット
 LadminRoute::profile();
-LadminRoute::crud('users')->label('ユーザー');
-LadminRoute::crud(Post::class)->label('投稿');
-LadminRoute::show(Comments::class)->label('コメント');
+LadminRoute::crud('users', 'name')->label('ユーザー');
+LadminRoute::crud(Post::class, 'title')->label('投稿');
+LadminRoute::show(Comments::class, 'text')->label('コメント');
 // LadminRoute::crud(User::class); この中でshow、detail、editor...のルーティングを完結させ、Ladminにnavigationをセットする、Admin/UserControllerが存在すれば使う
 // LadminRoute::show(User::class); showのみ
 // LadminRoute::detail(User::class); detailのみ

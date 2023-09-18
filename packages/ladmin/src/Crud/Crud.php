@@ -21,9 +21,9 @@ class Crud
     protected string $queryBaseName = 'default';
     protected string $tableName = 'default';
     protected string $primaryKey = 'id';
+    protected string $displayKey = '';
     protected array $columns = [];
     protected array $columnNames = [];
-    protected array $config = [];
     protected array $navigation = [];
     protected CrudController $controller;
 
@@ -50,23 +50,23 @@ class Crud
         return $this;
     }
 
-    public function model(Model $model, array $config = []): self
+    public function model(Model $model, string $displayKey): self
     {
         $this->query = $model;
         $this->queryBaseName = class_basename(get_class($this->query));
         $this->primaryKey = $this->query->getKeyName();
+        $this->displayKey = $displayKey;
         $this->tableName = $this->query->getTable();
-        $this->config = $config;
         $this->init();
         return $this;
     }
 
-    public function table(Builder $builder, string $tableName, array $config = []): self
+    public function table(Builder $builder, string $tableName, string $displayKey): self
     {
         $this->query = $builder;
         $this->queryBaseName = Str::studly($tableName);
         $this->tableName = $tableName;
-        $this->config = $config;
+        $this->displayKey = $displayKey;
         $this->init();
         return $this;
     }
@@ -247,9 +247,9 @@ class Crud
             'queryBaseName' => $this->queryBaseName,
             'tableName' => $this->tableName,
             'primaryKey' => $this->primaryKey,
+            'displayKey' => $this->displayKey,
             'columns' => $this->columns,
             'columnNames' => $this->columnNames,
-            'config' => $this->config,
             'navigation' => $this->navigation
         ];
     }
