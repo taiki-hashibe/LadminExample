@@ -3,12 +3,16 @@
 namespace App\Http\Controllers\Admin;
 
 use LowB\Ladmin\Controllers\CrudController;
+use LowB\Ladmin\Fields\Show\ShowField;
 
 class PostCrudController extends CrudController
 {
     public function showFields()
     {
-        return [];
+        return [
+            ShowField::column('title'),
+            ShowField::column('content')
+        ];
     }
 
     public function detailFields()
