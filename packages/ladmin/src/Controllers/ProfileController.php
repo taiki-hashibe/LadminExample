@@ -12,7 +12,7 @@ use Illuminate\Support\Facades\View;
 use Illuminate\Validation\Rules\Password;
 use LowB\Ladmin\Config\Facades\LadminConfig;
 
-class ProfileController
+class ProfileController extends Controller
 {
     public function show(): ViewView
     {

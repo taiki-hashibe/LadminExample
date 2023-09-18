@@ -6,7 +6,7 @@ use Illuminate\Contracts\View\View as ViewView;
 use Illuminate\Support\Facades\View;
 use LowB\Ladmin\Config\Facades\LadminConfig;
 
-class DashboardController
+class DashboardController extends Controller
 {
     public function show(): ViewView
     {

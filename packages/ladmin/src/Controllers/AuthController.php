@@ -10,7 +10,7 @@ use LowB\Ladmin\Facades\Ladmin;
 use Illuminate\Support\Facades\View as FacadesView;
 use LowB\Ladmin\Config\Facades\LadminConfig;
 
-class AuthController
+class AuthController extends Controller
 {
     public function login(Request $request): View|RedirectResponse
     {

@@ -6,7 +6,7 @@ use Illuminate\Http\Request;
 use LowB\Ladmin\Crud\Crud;
 use LowB\Ladmin\Support\Facades\GenerateFields;
 
-class AbstractCrudController
+class AbstractCrudController extends Controller
 {
     public Crud|null $crud = null;
     public int $paginate = 24;
