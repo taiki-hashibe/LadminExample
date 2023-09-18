@@ -60,6 +60,7 @@ abstract class Field
     public function getView($model)
     {
         return view($this->view, [
+            'field' => $this,
             'label' => $this->getLabel(),
             'name' => $this->columnName,
             'value' => $this->getValue($model),
