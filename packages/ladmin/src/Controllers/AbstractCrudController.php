@@ -10,6 +10,7 @@ use LowB\Ladmin\Contracts\Controllers\CrudControllerInterface;
 use LowB\Ladmin\Crud\Crud;
 use LowB\Ladmin\Facades\Ladmin;
 use LowB\Ladmin\Fields\Detail\DetailField;
+use LowB\Ladmin\Fields\Editor\EditorField;
 use LowB\Ladmin\Fields\Show\ShowField;
 
 class AbstractCrudController extends Controller implements CrudControllerInterface
@@ -457,13 +458,221 @@ class AbstractCrudController extends Controller implements CrudControllerInterfa
         ]);
     }
 
+    public function editorFields()
+    {
+        $editorFields = [];
+        foreach ($this->crud->getColumns() as $col) {
+            /** @var \Doctrine\DBAL\Schema\Column $col */
+            // ArrayType
+            if ($col->getType() instanceof \Doctrine\DBAL\Types\ArrayType) {
+                $editorFields[] = EditorField::column($col->getName());
+                continue;
+            }
+
+            // AsciiStringType
+            if ($col->getType() instanceof \Doctrine\DBAL\Types\AsciiStringType) {
+                $editorFields[] = EditorField::column($col->getName());
+                continue;
+            }
+
+            // BigIntType
+            if ($col->getType() instanceof \Doctrine\DBAL\Types\BigIntType) {
+                $editorFields[] = EditorField::column($col->getName());
+                continue;
+            }
+
+            // BinaryType
+            if ($col->getType() instanceof \Doctrine\DBAL\Types\BinaryType) {
+                $editorFields[] = EditorField::column($col->getName());
+                continue;
+            }
+
+            // BlobType
+            if ($col->getType() instanceof \Doctrine\DBAL\Types\BlobType) {
+                $editorFields[] = EditorField::column($col->getName());
+                continue;
+            }
+
+            // BooleanType
+            if ($col->getType() instanceof \Doctrine\DBAL\Types\BooleanType) {
+                $editorFields[] = EditorField::column($col->getName());
+                continue;
+            }
+
+            // ConversionException
+            if ($col->getType() instanceof \Doctrine\DBAL\Types\ConversionException) {
+                $editorFields[] = EditorField::column($col->getName());
+                continue;
+            }
+
+            // DateImmutableType
+            if ($col->getType() instanceof \Doctrine\DBAL\Types\DateImmutableType) {
+                $editorFields[] = EditorField::column($col->getName());
+                continue;
+            }
+
+            // DateIntervalType
+            if ($col->getType() instanceof \Doctrine\DBAL\Types\DateIntervalType) {
+                $editorFields[] = EditorField::column($col->getName());
+                continue;
+            }
+
+            // DateTimeTzImmutableType
+            if ($col->getType() instanceof \Doctrine\DBAL\Types\DateTimeTzImmutableType) {
+                $editorFields[] = EditorField::column($col->getName());
+                continue;
+            }
+
+            // DateTimeTzType
+            if ($col->getType() instanceof \Doctrine\DBAL\Types\DateTimeTzType) {
+                $editorFields[] = EditorField::column($col->getName());
+                continue;
+            }
+
+            // DateType
+            if ($col->getType() instanceof \Doctrine\DBAL\Types\DateType) {
+                $editorFields[] = EditorField::column($col->getName());
+                continue;
+            }
+
+            // DecimalType
+            if ($col->getType() instanceof \Doctrine\DBAL\Types\DecimalType) {
+                $editorFields[] = EditorField::column($col->getName());
+                continue;
+            }
+
+            // FloatType
+            if ($col->getType() instanceof \Doctrine\DBAL\Types\FloatType) {
+                $editorFields[] = EditorField::column($col->getName());
+                continue;
+            }
+
+            // GuidType
+            if ($col->getType() instanceof \Doctrine\DBAL\Types\GuidType) {
+                $editorFields[] = EditorField::column($col->getName());
+                continue;
+            }
+
+            // IntegerType
+            if ($col->getType() instanceof \Doctrine\DBAL\Types\IntegerType) {
+                $editorFields[] = EditorField::column($col->getName());
+                continue;
+            }
+
+            // JsonType
+            if ($col->getType() instanceof \Doctrine\DBAL\Types\JsonType) {
+                $editorFields[] = EditorField::column($col->getName());
+                continue;
+            }
+
+            // ObjectType
+            if ($col->getType() instanceof \Doctrine\DBAL\Types\ObjectType) {
+                $editorFields[] = EditorField::column($col->getName());
+                continue;
+            }
+
+            // PhpDateTimeMappingType
+            if ($col->getType() instanceof \Doctrine\DBAL\Types\PhpDateTimeMappingType) {
+                $editorFields[] = EditorField::column($col->getName());
+                continue;
+            }
+
+            // PhpIntegerMappingType
+            if ($col->getType() instanceof \Doctrine\DBAL\Types\PhpIntegerMappingType) {
+                $editorFields[] = EditorField::column($col->getName());
+                continue;
+            }
+
+            // SimpleArrayType
+            if ($col->getType() instanceof \Doctrine\DBAL\Types\SimpleArrayType) {
+                $editorFields[] = EditorField::column($col->getName());
+                continue;
+            }
+
+            // SmallIntType
+            if ($col->getType() instanceof \Doctrine\DBAL\Types\SmallIntType) {
+                $editorFields[] = EditorField::column($col->getName());
+                continue;
+            }
+
+            // StringType
+            if ($col->getType() instanceof \Doctrine\DBAL\Types\StringType) {
+                $editorFields[] = EditorField::column($col->getName());
+                continue;
+            }
+
+            // TextType
+            if ($col->getType() instanceof \Doctrine\DBAL\Types\TextType) {
+                $editorFields[] = EditorField::column($col->getName());
+                continue;
+            }
+
+            // TimeImmutableType
+            if ($col->getType() instanceof \Doctrine\DBAL\Types\TimeImmutableType) {
+                $editorFields[] = EditorField::column($col->getName());
+                continue;
+            }
+
+            // TimeType
+            if ($col->getType() instanceof \Doctrine\DBAL\Types\TimeType) {
+                $editorFields[] = EditorField::column($col->getName());
+                continue;
+            }
+
+            // Type
+            if ($col->getType() instanceof \Doctrine\DBAL\Types\Type) {
+                $editorFields[] = EditorField::column($col->getName());
+                continue;
+            }
+
+            // VarDateTimeImmutableType
+            if ($col->getType() instanceof \Doctrine\DBAL\Types\VarDateTimeImmutableType) {
+                $editorFields[] = EditorField::column($col->getName());
+                continue;
+            }
+
+            // VarDateTimeType
+            if ($col->getType() instanceof \Doctrine\DBAL\Types\VarDateTimeType) {
+                $editorFields[] = EditorField::column($col->getName());
+                continue;
+            }
+
+            // TypeRegistry
+            if ($col->getType() instanceof \Doctrine\DBAL\Types\TypeRegistry) {
+                $editorFields[] = EditorField::column($col->getName());
+                continue;
+            }
+
+            // Types
+            if ($col->getType() instanceof \Doctrine\DBAL\Types\Types) {
+                $editorFields[] = EditorField::column($col->getName());
+                continue;
+            }
+
+            // Type
+            if ($col->getType() instanceof \Doctrine\DBAL\Types\Type) {
+                $editorFields[] = EditorField::column($col->getName());
+                continue;
+            }
+
+            // TypeRegistry
+            if ($col->getType() instanceof \Doctrine\DBAL\Types\TypeRegistry) {
+                $editorFields[] = EditorField::column($col->getName());
+                continue;
+            }
+        }
+        return $editorFields;
+    }
+
     public function editor(Request $request): View
     {
+        $fields = $this->editorFields();
         $item = $this->crud->getQuery()->where($this->crud->getPrimaryKey(), $request->primaryKey)->first();
         if (!$item) {
             abort(404);
         }
         return view('ladmin::crud.editor', [
+            'fields' => $fields,
             'item' => $item
         ]);
     }

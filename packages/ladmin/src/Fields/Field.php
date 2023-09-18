@@ -41,12 +41,10 @@ abstract class Field
 
     public function getView($model)
     {
-        $label = $this->getLabel();
-        $value = $this->getValue($model);
-
         return view($this->view, [
-            'label' => $label,
-            'value' => $value,
+            'label' => $this->getLabel(),
+            'name' => $this->columnName,
+            'value' => $this->getValue($model),
         ]);
     }
 }
