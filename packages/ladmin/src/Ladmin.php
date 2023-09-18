@@ -57,6 +57,8 @@ class Ladmin
     public function crudRegister(Crud $crud)
     {
         $this->crudList[] = $crud;
+        $this->addRoute($crud->getRoute());
+        $this->addRouteName($crud->getRouteName());
     }
 
     public function getNavigation(string|null $key = null)

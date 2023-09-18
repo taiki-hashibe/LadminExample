@@ -20,48 +20,36 @@ class LadminRoute
     public function get(string $uri, array|string|callable|null $action = null, string $name)
     {
         $routeName = SupportLadminRoute::routeName($name);
-        Ladmin::addRoute($uri);
-        Ladmin::addRouteName($routeName);
         return Route::get($uri, $action)->name($routeName);
     }
 
     public function post(string $uri, array|string|callable|null $action = null, string $name)
     {
         $routeName = SupportLadminRoute::routeName($name);
-        Ladmin::addRoute($uri);
-        Ladmin::addRouteName($routeName);
         return Route::post($uri, $action)->name($routeName);
     }
 
     public function put(string $uri, array|string|callable|null $action = null, string $name)
     {
         $routeName = SupportLadminRoute::routeName($name);
-        Ladmin::addRoute($uri);
-        Ladmin::addRouteName($routeName);
         return Route::put($uri, $action)->name($routeName);
     }
 
     public function patch(string $uri, array|string|callable|null $action = null, string $name)
     {
         $routeName = SupportLadminRoute::routeName($name);
-        Ladmin::addRoute($uri);
-        Ladmin::addRouteName($routeName);
         return Route::patch($uri, $action)->name($routeName);
     }
 
     public function delete(string $uri, array|string|callable|null $action = null, string $name)
     {
         $routeName = SupportLadminRoute::routeName($name);
-        Ladmin::addRoute($uri);
-        Ladmin::addRouteName($routeName);
         return Route::delete($uri, $action)->name($routeName);
     }
 
     public function match(array|string $methods, string $uri, array|string|callable|null $action = null, string $name)
     {
         $routeName = SupportLadminRoute::routeName($name);
-        Ladmin::addRoute($uri);
-        Ladmin::addRouteName($routeName);
         return Route::match($methods, $uri, $action)->name($routeName);
     }
 
@@ -75,8 +63,6 @@ class LadminRoute
         $crud->setLabel(config('ladmin.route.logout'));
         $crud->setRoute($uri);
         $crud->setRouteName(SupportLadminRoute::routeName($routeName));
-        Ladmin::addRoute($crud->getRoute());
-        Ladmin::addRouteName($crud->getRouteName());
         Ladmin::crudRegister($crud);
         $this->post($uri, $action, $routeName)->middleware(config('ladmin.auth.middleware'));
 
@@ -88,8 +74,6 @@ class LadminRoute
         $crud->setLabel(config('ladmin.route.login'));
         $crud->setRoute($uri);
         $crud->setRouteName(SupportLadminRoute::routeName($routeName));
-        Ladmin::addRoute($crud->getRoute());
-        Ladmin::addRouteName($crud->getRouteName());
         Ladmin::crudRegister($crud);
         $this->match(['GET', 'POST'], $uri, $action, $routeName);
         return $crud;
@@ -108,8 +92,6 @@ class LadminRoute
         $crud->setRoute($uri);
         $crud->setRouteName(SupportLadminRoute::routeName($routeName));
         $crud->addNavigation('navigation');
-        Ladmin::addRoute($crud->getRoute());
-        Ladmin::addRouteName($crud->getRouteName());
         Ladmin::crudRegister($crud);
         $this->get($uri, $action, $routeName)->middleware(config('ladmin.auth.middleware'));
         return $crud;
@@ -128,8 +110,6 @@ class LadminRoute
         $crud->setRoute($uri);
         $crud->setRouteName(SupportLadminRoute::routeName($routeName));
         $crud->addNavigation('dropdown');
-        Ladmin::addRoute($crud->getRoute());
-        Ladmin::addRouteName($crud->getRouteName());
         Ladmin::crudRegister($crud);
         $this->get($uri, $action, $routeName)->middleware(config('ladmin.auth.middleware'));
         return $crud;
@@ -159,8 +139,6 @@ class LadminRoute
             return $crud->getController()->show($request);
         })->name($crud->getRouteName());
         $crud->addNavigation('navigation');
-        Ladmin::addRoute($crud->getRoute());
-        Ladmin::addRouteName($crud->getRouteName());
         Ladmin::crudRegister($crud);
         return $crud;
     }
@@ -178,8 +156,6 @@ class LadminRoute
         Route::middleware(config('ladmin.auth.middleware'))->get($crud->getRoute(), function (Request $request) use ($crud) {
             return $crud->getController()->detail($request);
         })->name($crud->getRouteName());
-        Ladmin::addRoute($crud->getRoute());
-        Ladmin::addRouteName($crud->getRouteName());
         Ladmin::crudRegister($crud);
         return $crud;
     }
@@ -197,8 +173,6 @@ class LadminRoute
         Route::middleware(config('ladmin.auth.middleware'))->get($crud->getRoute(), function (Request $request) use ($crud) {
             return $crud->getController()->editor($request);
         })->name($crud->getRouteName());
-        Ladmin::addRoute($crud->getRoute());
-        Ladmin::addRouteName($crud->getRouteName());
         Ladmin::crudRegister($crud);
         return $crud;
     }
@@ -216,8 +190,6 @@ class LadminRoute
         Route::middleware(config('ladmin.auth.middleware'))->post($crud->getRoute(), function (Request $request) use ($crud) {
             return $crud->getController()->create($request);
         })->name($crud->getRouteName());
-        Ladmin::addRoute($crud->getRoute());
-        Ladmin::addRouteName($crud->getRouteName());
         Ladmin::crudRegister($crud);
         return $crud;
     }
@@ -235,8 +207,6 @@ class LadminRoute
         Route::middleware(config('ladmin.auth.middleware'))->post($crud->getRoute(), function (Request $request) use ($crud) {
             return $crud->getController()->update($request);
         })->name($crud->getRouteName());
-        Ladmin::addRoute($crud->getRoute());
-        Ladmin::addRouteName($crud->getRouteName());
         Ladmin::crudRegister($crud);
         return $crud;
     }
@@ -254,8 +224,6 @@ class LadminRoute
         Route::middleware(config('ladmin.auth.middleware'))->post($crud->getRoute(), function (Request $request) use ($crud) {
             return $crud->getController()->destroy($request);
         })->name($crud->getRouteName());
-        Ladmin::addRoute($crud->getRoute());
-        Ladmin::addRouteName($crud->getRouteName());
         Ladmin::crudRegister($crud);
         return $crud;
     }
