@@ -7,7 +7,9 @@ use Illuminate\Database\Query\Builder;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Route;
+use LowB\Ladmin\Controllers\AuthController;
 use LowB\Ladmin\Controllers\DashboardController;
+use LowB\Ladmin\Controllers\ProfileController;
 use LowB\Ladmin\Crud\Crud;
 use LowB\Ladmin\Facades\Ladmin;
 use LowB\Ladmin\Support\Facades\LadminRoute as SupportLadminRoute;
@@ -55,6 +57,36 @@ class LadminRoute
         Ladmin::addRouteName($routeName);
     }
 
+    public function auth()
+    {
+        $action = [AuthController::class, 'logout'];
+        $uri = SupportLadminRoute::route(config('ladmin.route.logout'), null, false);
+        $routeName = config('ladmin.route.logout');
+        $crud = new Crud();
+        $crud->setTableName(config('ladmin.route.logout'));
+        $crud->setLabel(config('ladmin.route.logout'));
+        $crud->setRoute($uri);
+        $crud->setRouteName(SupportLadminRoute::routeName($routeName));
+        Ladmin::addRoute($crud->getRoute());
+        Ladmin::addRouteName($crud->getRouteName());
+        Ladmin::crudRegister($crud);
+        $this->post($uri, $action, $routeName);
+
+        $action = [AuthController::class, 'login'];
+        $uri = SupportLadminRoute::route(config('ladmin.route.login'), null, false);
+        $routeName = config('ladmin.route.login');
+        $crud = new Crud();
+        $crud->setTableName(config('ladmin.route.login'));
+        $crud->setLabel(config('ladmin.route.login'));
+        $crud->setRoute($uri);
+        $crud->setRouteName(SupportLadminRoute::routeName($routeName));
+        Ladmin::addRoute($crud->getRoute());
+        Ladmin::addRouteName($crud->getRouteName());
+        Ladmin::crudRegister($crud);
+        $this->get($uri, $action, $routeName);
+        return $crud;
+    }
+
     public function dashboard(?array $action = null)
     {
         if (!$action) {
@@ -68,6 +100,26 @@ class LadminRoute
         $crud->setRoute($uri);
         $crud->setRouteName(SupportLadminRoute::routeName($routeName));
         $crud->addNavigation('navigation');
+        Ladmin::addRoute($crud->getRoute());
+        Ladmin::addRouteName($crud->getRouteName());
+        Ladmin::crudRegister($crud);
+        $this->get($uri, $action, $routeName);
+        return $crud;
+    }
+
+    public function profile(?array $action = null)
+    {
+        if (!$action) {
+            $action = [ProfileController::class, 'index'];
+        }
+        $uri = SupportLadminRoute::route(config('ladmin.route.profile'), null, false);
+        $routeName = config('ladmin.route.profile');
+        $crud = new Crud();
+        $crud->setTableName(config('ladmin.route.profile'));
+        $crud->setLabel(config('ladmin.route.profile'));
+        $crud->setRoute($uri);
+        $crud->setRouteName(SupportLadminRoute::routeName($routeName));
+        $crud->addNavigation('dropdown');
         Ladmin::addRoute($crud->getRoute());
         Ladmin::addRouteName($crud->getRouteName());
         Ladmin::crudRegister($crud);

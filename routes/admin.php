@@ -4,11 +4,11 @@ use App\Models\Comments;
 use App\Models\Post;
 use LowB\Ladmin\Route\Facades\LadminRoute;
 
-// LadminRoute::auth(); ログイン関連のルーティング
+LadminRoute::auth();
 LadminRoute::dashboard();
 // LadminRoute::dashboard(); ダッシュボードのルーティング、Admin/DashboardControllerが存在すれば使う
 // LadminRoute::dashboard()->view('admin.dashboard'); ダッシュボードのビューをセット
-
+LadminRoute::profile();
 LadminRoute::crud('users')->setLabel('ユーザー');
 LadminRoute::crud(Post::class)->setLabel('投稿');
 LadminRoute::show(Comments::class)->setLabel('コメント');
