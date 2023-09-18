@@ -224,7 +224,7 @@ class Crud
         return $controller;
     }
 
-    public function controller(): CrudController|null
+    public function controller(): CrudController
     {
         return $this->controller;
     }

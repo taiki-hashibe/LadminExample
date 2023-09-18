@@ -84,7 +84,7 @@ class Ladmin
         return $navigation;
     }
 
-    public function query(): Model|QueryBuilder
+    public function query(): Model|QueryBuilder|null
     {
         return $this->crud()->query();
     }
