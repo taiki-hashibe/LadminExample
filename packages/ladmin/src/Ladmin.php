@@ -2,6 +2,8 @@
 
 namespace LowB\Ladmin;
 
+use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Query\Builder;
 use Illuminate\Support\Facades\Request;
 use LowB\Ladmin\Crud\Crud;
 
@@ -59,5 +61,51 @@ class Ladmin
             }
         }
         return $navigation;
+    }
+
+    public function query()
+    {
+        return $this->crud()->getQuery();
+    }
+
+    public function currentPrimaryKey()
+    {
+        if (!request()->primaryKey) {
+            return null;
+        };
+        $primaryKey = request()->primaryKey;
+        return $primaryKey;
+    }
+
+    public function currentItem()
+    {
+        if (!request()->primaryKey) {
+            return null;
+        };
+        $primaryKey = request()->primaryKey;
+        $query = $this->query();
+        if ($query instanceof Model) {
+            return $query->where($this->crud()->getPrimaryKey(), $primaryKey)->first();
+        }
+        if ($query instanceof Builder) {
+            return $query->where($this->crud()->getPrimaryKey(), $primaryKey)->first();
+        }
+        return null;
+    }
+
+    public function currentItemUpdate(mixed $values)
+    {
+        if (!request()->primaryKey) {
+            return null;
+        };
+        $primaryKey = request()->primaryKey;
+        $query = $this->query();
+        if ($query instanceof Model) {
+            return $query->where($this->crud()->getPrimaryKey(), $primaryKey)->first()->update($values);
+        }
+        if ($query instanceof Builder) {
+            return $query->where($this->crud()->getPrimaryKey(), $primaryKey)->update($values);
+        }
+        return null;
     }
 }

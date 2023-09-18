@@ -30,7 +30,7 @@ class AbstractCrudController extends Controller implements CrudControllerInterfa
     public function show(Request $request): View
     {
         $fields = $this->showFields();
-        $items = $this->crud->getQuery()->paginate($this->paginate);
+        $items = Ladmin::query()->paginate($this->paginate);
         return view('ladmin::crud.show', [
             'items' => $items,
             'fields' => $fields
@@ -45,7 +45,7 @@ class AbstractCrudController extends Controller implements CrudControllerInterfa
     public function detail(Request $request): View
     {
         $fields = $this->detailFields();
-        $item = $this->crud->getQuery()->where($this->crud->getPrimaryKey(), $request->primaryKey)->first();
+        $item = Ladmin::currentItem();
         if (!$item) {
             abort(404);
         }
@@ -83,7 +83,7 @@ class AbstractCrudController extends Controller implements CrudControllerInterfa
     public function editor(Request $request): View
     {
         $fields = $this->editorFields();
-        $item = $this->crud->getQuery()->where($this->crud->getPrimaryKey(), $request->primaryKey)->first();
+        $item = Ladmin::currentItem();
         if (!$item) {
             abort(404);
         }
@@ -96,20 +96,18 @@ class AbstractCrudController extends Controller implements CrudControllerInterfa
     public function create(Request $request): RedirectResponse
     {
         $request->validate($this->validationRules());
-        $item = $this->crud->getQuery()->where($this->crud->getPrimaryKey(), $request->primaryKey)->first();
-        $item->create($this->getRequestValues($request));
+        Ladmin::query()->create($this->getRequestValues($request));
         return redirect()->route(Ladmin::crud()->getDetailRouteName(), [
-            'primaryKey' => $item->{Ladmin::crud()->getPrimaryKey()}
-        ]);;
+            'primaryKey' => Ladmin::currentPrimaryKey()
+        ]);
     }
 
     public function update(Request $request): RedirectResponse
     {
         $request->validate($this->validationRules());
-        $item = $this->crud->getQuery()->where($this->crud->getPrimaryKey(), $request->primaryKey)->first();
-        $item->update($this->getRequestValues($request));
+        Ladmin::currentItemUpdate($this->getRequestValues($request));
         return redirect()->route(Ladmin::crud()->getDetailRouteName(), [
-            'primaryKey' => $item->{Ladmin::crud()->getPrimaryKey()}
+            'primaryKey' => Ladmin::currentPrimaryKey()
         ]);;
     }
 
