@@ -153,4 +153,14 @@ class Ladmin
     {
         return $this->crudFindByTableName(config('ladmin.route.logout'));
     }
+
+    public function profile()
+    {
+        return $this->crudFindByTableName(config('ladmin.route.profile'));
+    }
+
+    public function hasProfile()
+    {
+        return $this->crudFindByTableName(config('ladmin.route.profile'));
+    }
 }
