@@ -3,11 +3,11 @@
 namespace LowB\Ladmin\Fields;
 
 use Illuminate\Support\Facades\View;
-use Illuminate\Support\Str;
+use LowB\Ladmin\Config\Facades\LadminConfig;
 
 abstract class Field
 {
-    protected string $view = 'ladmin::fields.show.default';
+    protected string $view = 'fields.show.default';
 
     protected string $columnName;
 
@@ -62,7 +62,7 @@ abstract class Field
 
     public function getView($model)
     {
-        return View::first([$this->generateLocalViewName(), $this->view], [
+        return View::first([$this->generateLocalViewName(), LadminConfig::theme() . $this->view], [
             'field' => $this,
             'label' => $this->getLabel(),
             'name' => $this->columnName,
@@ -77,6 +77,6 @@ abstract class Field
 
     private function generateLocalViewName()
     {
-        return Str::replaceFirst('ladmin::', 'admin.', $this->view);
+        return LadminConfig::localViewPrefix() . $this->view;
     }
 }

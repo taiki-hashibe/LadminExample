@@ -8,7 +8,7 @@ use LowB\Ladmin\Fields\Column;
 
 class DetailField implements FieldInterface
 {
-    protected static string $view = 'ladmin::fields.detail.default';
+    protected static string $view = 'fields.detail.default';
 
     public static function column(string $columnName): Column
     {

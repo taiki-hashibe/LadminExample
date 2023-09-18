@@ -8,7 +8,7 @@ use LowB\Ladmin\Fields\Column;
 
 class NumberEditorField implements FieldInterface
 {
-    protected static string $view = 'ladmin::fields.editor.number';
+    protected static string $view = 'fields.editor.number';
 
     public static function column(string $columnName): Column
     {
