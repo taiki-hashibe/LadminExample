@@ -20,57 +20,27 @@ class LadminRoute
 
     public function get(string $uri, array|string|callable|null $action = null, string $name): \Illuminate\Routing\Route
     {
-        $uri = SupportLadminRoute::route($uri);
-        $routeName = SupportLadminRoute::routeName($name);
-        $router = Route::get($uri, $action)->name($routeName);
-        $crud = new Crud();
-        $crud->router($router, $name);
-        Ladmin::crudRegister($crud);
-        return $router;
+        return $this->routing('get', $uri, $action, $name);
     }
 
     public function post(string $uri, array|string|callable|null $action = null, string $name): \Illuminate\Routing\Route
     {
-        $uri = SupportLadminRoute::route($uri);
-        $routeName = SupportLadminRoute::routeName($name);
-        $router = Route::post($uri, $action)->name($routeName);
-        $crud = new Crud();
-        $crud->router($router, $name);
-        Ladmin::crudRegister($crud);
-        return $router;
+        return $this->routing('post', $uri, $action, $name);
     }
 
     public function put(string $uri, array|string|callable|null $action = null, string $name): \Illuminate\Routing\Route
     {
-        $uri = SupportLadminRoute::route($uri);
-        $routeName = SupportLadminRoute::routeName($name);
-        $router = Route::put($uri, $action)->name($routeName);
-        $crud = new Crud();
-        $crud->router($router, $name);
-        Ladmin::crudRegister($crud);
-        return $router;
+        return $this->routing('put', $uri, $action, $name);
     }
 
     public function patch(string $uri, array|string|callable|null $action = null, string $name): \Illuminate\Routing\Route
     {
-        $uri = SupportLadminRoute::route($uri);
-        $routeName = SupportLadminRoute::routeName($name);
-        $router = Route::patch($uri, $action)->name($routeName);
-        $crud = new Crud();
-        $crud->router($router, $name);
-        Ladmin::crudRegister($crud);
-        return $router;
+        return $this->routing('patch', $uri, $action, $name);
     }
 
     public function delete(string $uri, array|string|callable|null $action = null, string $name): \Illuminate\Routing\Route
     {
-        $uri = SupportLadminRoute::route($uri);
-        $routeName = SupportLadminRoute::routeName($name);
-        $router = Route::delete($uri, $action)->name($routeName);
-        $crud = new Crud();
-        $crud->router($router, $name);
-        Ladmin::crudRegister($crud);
-        return $router;
+        return $this->routing('delete', $uri, $action, $name);
     }
 
     public function match(array|string $methods, string $uri, array|string|callable|null $action = null, string $name): \Illuminate\Routing\Route
@@ -78,7 +48,18 @@ class LadminRoute
         $uri = SupportLadminRoute::route($uri);
         $routeName = SupportLadminRoute::routeName($name);
         $router = Route::match($methods, $uri, $action)->name($routeName);
-        $crud = new Crud();
+        $crud = new Crud($name);
+        $crud->router($router, $name);
+        Ladmin::crudRegister($crud);
+        return $router;
+    }
+
+    protected function routing(string $method, string $uri, array|string|callable|null $action = null, string $name): \Illuminate\Routing\Route
+    {
+        $uri = SupportLadminRoute::route($uri);
+        $routeName = SupportLadminRoute::routeName($name);
+        $router = Route::{$method}($uri, $action)->name($routeName);
+        $crud = new Crud($name);
         $crud->router($router, $name);
         Ladmin::crudRegister($crud);
         return $router;
@@ -115,101 +96,50 @@ class LadminRoute
 
     public function show(string $modelClassOrTableName): Crud
     {
-        $instance = $this->createInstance($modelClassOrTableName);
-        $crud = new Crud();
-        if ($instance instanceof Model) {
-            $crud->model($instance)->show();
-        } else if ($instance instanceof Builder) {
-            $crud->table($instance, $modelClassOrTableName)->show();
-        }
-        Route::middleware(config('ladmin.auth.middleware'))->get($crud->route(), function (Request $request) use ($crud) {
-            return $crud->controller()->show($request);
-        })->name($crud->routeName());
-        $crud->navigation('navigation');
-        Ladmin::crudRegister($crud);
-        return $crud;
+        return $this->crudMethods('show', 'get', $modelClassOrTableName)->navigation('navigation');
     }
 
     public function detail(string $modelClassOrTableName): Crud
     {
-        $instance = $this->createInstance($modelClassOrTableName);
-        $crud = new Crud();
-        if ($instance instanceof Model) {
-            $crud->model($instance)->detail();
-        }
-        if ($instance instanceof Builder) {
-            $crud->table($instance, $modelClassOrTableName)->detail();
-        }
-        Route::middleware(config('ladmin.auth.middleware'))->get($crud->route(), function (Request $request) use ($crud) {
-            return $crud->controller()->detail($request);
-        })->name($crud->routeName());
-        Ladmin::crudRegister($crud);
-        return $crud;
+        return $this->crudMethods('detail', 'get', $modelClassOrTableName);
     }
 
     public function editor(string $modelClassOrTableName): Crud
     {
-        $instance = $this->createInstance($modelClassOrTableName);
-        $crud = new Crud();
-        if ($instance instanceof Model) {
-            $crud->model($instance)->editor();
-        }
-        if ($instance instanceof Builder) {
-            $crud->table($instance, $modelClassOrTableName)->editor();
-        }
-        Route::middleware(config('ladmin.auth.middleware'))->get($crud->route(), function (Request $request) use ($crud) {
-            return $crud->controller()->editor($request);
-        })->name($crud->routeName());
-        Ladmin::crudRegister($crud);
-        return $crud;
+        return $this->crudMethods('editor', 'get', $modelClassOrTableName);
     }
 
     public function create(string $modelClassOrTableName): Crud
     {
-        $instance = $this->createInstance($modelClassOrTableName);
-        $crud = new Crud();
-        if ($instance instanceof Model) {
-            $crud->model($instance)->create();
-        }
-        if ($instance instanceof Builder) {
-            $crud->table($instance, $modelClassOrTableName)->create();
-        }
-        Route::middleware(config('ladmin.auth.middleware'))->post($crud->route(), function (Request $request) use ($crud) {
-            return $crud->controller()->create($request);
-        })->name($crud->routeName());
-        Ladmin::crudRegister($crud);
-        return $crud;
+        return $this->crudMethods('create', 'post', $modelClassOrTableName);
     }
 
     public function update(string $modelClassOrTableName): Crud
     {
-        $instance = $this->createInstance($modelClassOrTableName);
-        $crud = new Crud();
-        if ($instance instanceof Model) {
-            $crud->model($instance)->update();
-        }
-        if ($instance instanceof Builder) {
-            $crud->table($instance, $modelClassOrTableName)->update();
-        }
-        Route::middleware(config('ladmin.auth.middleware'))->post($crud->route(), function (Request $request) use ($crud) {
-            return $crud->controller()->update($request);
-        })->name($crud->routeName());
-        Ladmin::crudRegister($crud);
-        return $crud;
+        return $this->crudMethods('update', 'post', $modelClassOrTableName);
     }
 
     public function destroy(string $modelClassOrTableName): Crud
     {
+        return $this->crudMethods('destroy', 'post', $modelClassOrTableName);
+    }
+
+    private function crudMethods(string $crudMethod, string $routingMethod, string $modelClassOrTableName): Crud
+    {
         $instance = $this->createInstance($modelClassOrTableName);
-        $crud = new Crud();
+        $crud = null;
         if ($instance instanceof Model) {
-            $crud->model($instance)->destroy();
+            $crud = new Crud($instance->getTable());
+            $crud->model($instance)->{$crudMethod}();
+        } else if ($instance instanceof Builder) {
+            $crud = new Crud($modelClassOrTableName);
+            $crud->table($instance, $modelClassOrTableName)->{$crudMethod}();
         }
-        if ($instance instanceof Builder) {
-            $crud->table($instance, $modelClassOrTableName)->destroy();
+        if (!$crud) {
+            throw new \Exception("The variable 'modelClassOrTableName' must be either a model class name or a table name.");
         }
-        Route::middleware(config('ladmin.auth.middleware'))->post($crud->route(), function (Request $request) use ($crud) {
-            return $crud->controller()->destroy($request);
+        Route::middleware(config('ladmin.auth.middleware'))->{$routingMethod}($crud->route(), function (Request $request) use ($crud, $crudMethod) {
+            return $crud->controller()->{$crudMethod}($request);
         })->name($crud->routeName());
         Ladmin::crudRegister($crud);
         return $crud;

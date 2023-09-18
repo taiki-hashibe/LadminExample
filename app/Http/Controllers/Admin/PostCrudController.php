@@ -7,7 +7,7 @@ use LowB\Ladmin\Fields\Show\ShowField;
 
 class PostCrudController extends CrudController
 {
-    public function showFields()
+    public function showFields(): array
     {
         return [
             ShowField::column('title')->setLabel('タイトル'),
@@ -15,12 +15,12 @@ class PostCrudController extends CrudController
         ];
     }
 
-    public function detailFields()
+    public function detailFields(): array
     {
         return [];
     }
 
-    public function editorFields()
+    public function editorFields(): array
     {
         return [];
     }

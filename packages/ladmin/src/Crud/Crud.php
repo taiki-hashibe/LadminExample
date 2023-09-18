@@ -13,7 +13,7 @@ use LowB\Ladmin\Support\Facades\LadminRoute as FacadesLadminRoute;
 
 class Crud
 {
-    protected string $name = '';
+    protected string $name;
     protected Model|Builder|null $query = null;
     protected string $label = '';
     protected string $route = 'default';
@@ -26,6 +26,11 @@ class Crud
     protected array $config = [];
     protected array $navigation = [];
     protected CrudController $controller;
+
+    public function __construct(string $name)
+    {
+        $this->name = $name;
+    }
 
     protected function init(): self
     {
@@ -159,12 +164,14 @@ class Crud
         $this->navigation = array_values($this->navigation);
     }
 
-    public function navigation(string|array|null $navigation = null): array
+    public function navigation(string|array|null $navigation = null): array|self
     {
         if (is_array($navigation)) {
             $this->navigation = $navigation;
+            return $this;
         } elseif ($navigation) {
             $this->navigation[] = $navigation;
+            return $this;
         }
         return $this->navigation;
     }
