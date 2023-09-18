@@ -2,9 +2,9 @@
 
 namespace App\Http\Controllers\Admin;
 
-use LowB\Ladmin\Controllers\CrudController as BaseCrudController;
+use LowB\Ladmin\Controllers\CrudController;
 
-class PostCrudController extends BaseCrudController
+class PostCrudController extends CrudController
 {
     public function showFields()
     {

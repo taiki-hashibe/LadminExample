@@ -12,7 +12,7 @@ class MakeControllerCommand extends GeneratorCommand
      *
      * @var string
      */
-    protected $signature = 'ladmin:make:controller {model}';
+    protected $signature = 'ladmin:make:controller {query}';
 
     /**
      * The console command description.
@@ -29,7 +29,7 @@ class MakeControllerCommand extends GeneratorCommand
     /**
      * @var string
      */
-    protected $modelName;
+    protected $queryName;
 
     /**
      * Execute the console command.
@@ -38,13 +38,8 @@ class MakeControllerCommand extends GeneratorCommand
      */
     public function handle()
     {
-        $this->modelName = $this->getModelInput();
-        if (!$this->modelExists()) {
-            $this->error('Model does not exists !');
-
-            return false;
-        }
-        $this->controllerName = class_basename($this->modelName) . 'CrudController';
+        $this->queryName = $this->getQueryInput();
+        $this->controllerName = class_basename($this->queryName) . 'CrudController';
 
         $name = $this->qualifyClass(config('ladmin.namespace.controller') . '\\' . $this->controllerName);
         $path = $this->getPath($name);
@@ -57,9 +52,9 @@ class MakeControllerCommand extends GeneratorCommand
      *
      * @return string
      */
-    protected function getModelInput()
+    protected function getQueryInput()
     {
-        return trim($this->argument('model'));
+        return trim($this->argument('query'));
     }
 
     protected function buildClass($name)
@@ -84,19 +79,10 @@ class MakeControllerCommand extends GeneratorCommand
                 'DummyControllerName',
             ],
             [
-                'test/test\\test/\test\/',
+                config('ladmin.namespace.controller'),
                 $this->controllerName,
             ],
             $stub
         );
-    }
-
-    protected function modelExists()
-    {
-        if (empty($this->modelName)) {
-            return true;
-        }
-
-        return class_exists($this->modelName) && is_subclass_of($this->modelName, Model::class);
     }
 }

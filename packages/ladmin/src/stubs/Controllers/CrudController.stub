@@ -2,9 +2,9 @@
 
 namespace DummyNamespace;
 
-use LowB\Ladmin\Controllers\CrudController as BaseCrudController;
+use LowB\Ladmin\Controllers\CrudController;
 
-class DummyControllerName extends BaseCrudController
+class DummyControllerName extends CrudController
 {
     public function showFields()
     {
