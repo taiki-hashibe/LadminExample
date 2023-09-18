@@ -42,7 +42,7 @@ class ProfileController extends Controller
         return back()->with('status', 'password-updated');
     }
 
-    public function destroy(): RedirectResponse
+    public function destroy(Request $request): RedirectResponse
     {
         $request->user()->delete();
         return redirect()->route(Ladmin::login()->getRouteName());
