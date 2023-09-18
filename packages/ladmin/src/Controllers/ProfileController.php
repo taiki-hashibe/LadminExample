@@ -7,6 +7,8 @@ use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use LowB\Ladmin\Facades\Ladmin;
+use Illuminate\Support\Facades\Hash;
+use Illuminate\Validation\Rules\Password;
 
 class ProfileController extends Controller
 {
@@ -19,16 +21,30 @@ class ProfileController extends Controller
 
     public function update(Request $request)
     {
-        Auth::user()->update([
+        $request->user()->update([
             'name' => $request->name,
             'email' => $request->email
         ]);
         return back()->with('status', 'profile updated');
     }
 
+    public function passwordUpdate(Request $request): RedirectResponse
+    {
+        $validated = $request->validateWithBag('updatePassword', [
+            'current_password' => ['required', 'current_password'],
+            'password' => ['required', Password::defaults(), 'confirmed'],
+        ]);
+
+        $request->user()->update([
+            'password' => Hash::make($validated['password']),
+        ]);
+
+        return back()->with('status', 'password-updated');
+    }
+
     public function destroy(): RedirectResponse
     {
-        Auth::user()->delete();
+        $request->user()->delete();
         return redirect()->route(Ladmin::login()->getRouteName());
     }
 }

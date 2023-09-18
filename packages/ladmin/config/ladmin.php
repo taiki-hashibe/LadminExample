@@ -24,6 +24,38 @@ return [
     ],
     'auth' => [
         'middleware' => 'auth',
-        'guard' => 'web'
+        'guard' => 'web',
+        'login' => [
+            'url' => '/login',
+            'name' => 'login'
+        ],
+        'logout' => [
+            'url' => '/logout',
+            'name' => 'logout'
+        ]
+    ],
+    'dashboard' => [
+        'show' => [
+            'url' => '/dashboard',
+            'name' => 'dashboard'
+        ]
+    ],
+    'profile' => [
+        'show' => [
+            'url' => '/profile',
+            'name' => 'profile'
+        ],
+        'update' => [
+            'url' => '/profile/update',
+            'name' => 'profile.update'
+        ],
+        'password-update' => [
+            'url' => '/profile/password-update',
+            'name' => 'profile.password-update'
+        ],
+        'destroy' => [
+            'url' => '/profile/destroy',
+            'name' => 'profile.destroy'
+        ]
     ]
 ];

@@ -22,4 +22,4 @@ LadminRoute::show(Comments::class)->setLabel('コメント');
 // LadminRoute::crud('users'); テーブル名での指定も可能にしたい
 // LadminRoute::crud('users')->setConnection('sqlite'); コネクション指定
 
-// LadminRoute::get('/profile', [ProfileController::class, 'index']); プレーンなコントローラー、ほぼRouteと同じ機能
+// LadminRoute::get('/profile', [ProfileController::class, 'index'], 'profile.index'); プレーンなコントローラー、ほぼRouteと同じ機能、nameは必須にする

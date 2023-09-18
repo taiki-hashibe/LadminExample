@@ -20,36 +20,42 @@ class LadminRoute
 
     public function get(string $uri, array|string|callable|null $action = null, string $name)
     {
+        $uri = SupportLadminRoute::route($uri);
         $routeName = SupportLadminRoute::routeName($name);
         return Route::get($uri, $action)->name($routeName);
     }
 
     public function post(string $uri, array|string|callable|null $action = null, string $name)
     {
+        $uri = SupportLadminRoute::route($uri);
         $routeName = SupportLadminRoute::routeName($name);
         return Route::post($uri, $action)->name($routeName);
     }
 
     public function put(string $uri, array|string|callable|null $action = null, string $name)
     {
+        $uri = SupportLadminRoute::route($uri);
         $routeName = SupportLadminRoute::routeName($name);
         return Route::put($uri, $action)->name($routeName);
     }
 
     public function patch(string $uri, array|string|callable|null $action = null, string $name)
     {
+        $uri = SupportLadminRoute::route($uri);
         $routeName = SupportLadminRoute::routeName($name);
         return Route::patch($uri, $action)->name($routeName);
     }
 
     public function delete(string $uri, array|string|callable|null $action = null, string $name)
     {
+        $uri = SupportLadminRoute::route($uri);
         $routeName = SupportLadminRoute::routeName($name);
         return Route::delete($uri, $action)->name($routeName);
     }
 
     public function match(array|string $methods, string $uri, array|string|callable|null $action = null, string $name)
     {
+        $uri = SupportLadminRoute::route($uri);
         $routeName = SupportLadminRoute::routeName($name);
         return Route::match($methods, $uri, $action)->name($routeName);
     }
@@ -57,7 +63,7 @@ class LadminRoute
     public function auth()
     {
         $action = [AuthController::class, 'logout'];
-        $uri = SupportLadminRoute::route(config('ladmin.route.logout'), null, false);
+        $uri = SupportLadminRoute::route(config('ladmin.route.logout'));
         $routeName = config('ladmin.route.logout');
         $crud = new Crud();
         $crud->setTableName(config('ladmin.route.logout'));
@@ -68,7 +74,7 @@ class LadminRoute
         $this->post($uri, $action, $routeName)->middleware(config('ladmin.auth.middleware'));
 
         $action = [AuthController::class, 'login'];
-        $uri = SupportLadminRoute::route(config('ladmin.route.login'), null, false);
+        $uri = SupportLadminRoute::route(config('ladmin.route.login'));
         $routeName = config('ladmin.route.login');
         $crud = new Crud();
         $crud->setTableName(config('ladmin.route.login'));
@@ -80,72 +86,16 @@ class LadminRoute
         return $crud;
     }
 
-    public function dashboard(?array $action = null)
+    public function dashboard()
     {
-        if (!$action) {
-            $action = [DashboardController::class, 'index'];
-        }
-        $uri = SupportLadminRoute::route(config('ladmin.route.dashboard'), null, false);
-        $routeName = config('ladmin.route.dashboard');
-        $crud = new Crud();
-        $crud->setTableName(config('ladmin.route.dashboard'));
-        $crud->setLabel(config('ladmin.route.dashboard'));
-        $crud->setRoute($uri);
-        $crud->setRouteName(SupportLadminRoute::routeName($routeName));
-        $crud->addNavigation('navigation');
-        Ladmin::crudRegister($crud);
-        $this->get($uri, $action, $routeName)->middleware(config('ladmin.auth.middleware'));
-        return $crud;
+        $this->get(config('ladmin.dashboard.show.url'), [DashboardController::class, 'show'], config('ladmin.dashboard.show.name'))->middleware(config('ladmin.auth.middleware'));
     }
 
-    public function profile(?array $action = null)
+    public function profile()
     {
-        $action = [PasswordController::class, 'update'];
-        $uri = SupportLadminRoute::route(config('ladmin.route.profile') . '-password', config('ladmin.route.update'), false);
-        $routeName = config('ladmin.route.profile') . '-password';
-        $crud = new Crud();
-        $crud->setTableName($routeName);
-        $crud->setLabel(config('ladmin.route.profile') . '-password');
-        $crud->setRoute($uri);
-        $crud->setRouteName($routeName . '.' . config('ladmin.route.update'));
-        Ladmin::crudRegister($crud);
-
-        $this->post($uri, $action, $routeName . '.' . config('ladmin.route.update'))->middleware(config('ladmin.auth.middleware'));
-
-        $action = [ProfileController::class, 'update'];
-        $uri = SupportLadminRoute::route(config('ladmin.route.profile'), config('ladmin.route.update'), false);
-        $routeName = config('ladmin.route.profile') . '.' . config('ladmin.route.update');
-        $crud = new Crud();
-        $crud->setTableName($routeName);
-        $crud->setLabel(config('ladmin.route.profile'));
-        $crud->setRoute($uri);
-        $crud->setRouteName($routeName);
-        Ladmin::crudRegister($crud);
-        $this->post($uri, $action, $routeName)->middleware(config('ladmin.auth.middleware'));
-
-        $action = [ProfileController::class, 'destroy'];
-        $uri = SupportLadminRoute::route(config('ladmin.route.profile'), config('ladmin.route.destroy'), false);
-        $routeName = config('ladmin.route.profile') . '.' . config('ladmin.route.destroy');
-        $crud = new Crud();
-        $crud->setTableName($routeName);
-        $crud->setLabel(config('ladmin.route.profile'));
-        $crud->setRoute($uri);
-        $crud->setRouteName($routeName);
-        Ladmin::crudRegister($crud);
-        $this->post($uri, $action, $routeName)->middleware(config('ladmin.auth.middleware'));
-
-        $action = [ProfileController::class, 'show'];
-        $uri = SupportLadminRoute::route(config('ladmin.route.profile'), null, false);
-        $routeName = config('ladmin.route.profile');
-        $crud = new Crud();
-        $crud->setTableName(config('ladmin.route.profile'));
-        $crud->setLabel(config('ladmin.route.profile'));
-        $crud->setRoute($uri);
-        $crud->setRouteName(SupportLadminRoute::routeName($routeName));
-        $crud->addNavigation('dropdown');
-        Ladmin::crudRegister($crud);
-        $this->get($uri, $action, $routeName)->middleware(config('ladmin.auth.middleware'));
-        return $crud;
+        $this->get(config('ladmin.profile.show.url'), [ProfileController::class, 'show'], config('ladmin.profile.show.name'))->middleware(config('ladmin.auth.middleware'));
+        $this->post(config('ladmin.profile.update.url'), [ProfileController::class, 'update'], config('ladmin.profile.update.name'))->middleware(config('ladmin.auth.middleware'));
+        $this->post(config('ladmin.profile.destroy.url'), [ProfileController::class, 'destroy'], config('ladmin.profile.destroy.name'))->middleware(config('ladmin.auth.middleware'));
     }
 
     public function crud(string $modelClassOrTableName)

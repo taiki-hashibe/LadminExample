@@ -237,7 +237,7 @@ class Crud
 
     public function getDetailRoute(): string
     {
-        return FacadesLadminRoute::route($this->tableName, config('ladmin.route.detail'));
+        return FacadesLadminRoute::route($this->tableName, config('ladmin.route.detail'), true);
     }
 
     public function getDetailRouteName(): string

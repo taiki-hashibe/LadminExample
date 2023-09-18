@@ -7,7 +7,7 @@ use Illuminate\Support\Str;
 
 class LadminRoute
 {
-    public function route(string $table, ?string $crud = null, string|int|bool $primaryKey = '{primaryKey}')
+    public function route(string $table, ?string $crud = null, string|bool $primaryKey = false)
     {
         $prefix = LadminConfig::prefix() ? config('ladmin.route.prefix') : '';
         $route = '/' . $prefix . LadminConfig::route();
@@ -19,7 +19,7 @@ class LadminRoute
         }
         if (!$primaryKey) {
             $route = Str::of($route)->remove('/{primaryKey}');
-        } else {
+        } elseif ($primaryKey !== true) {
             $route = Str::of($route)->replace('{primaryKey}', $primaryKey);
         }
         return $route->__toString();
