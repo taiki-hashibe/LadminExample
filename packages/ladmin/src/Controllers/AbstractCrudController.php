@@ -11,6 +11,8 @@ use LowB\Ladmin\Crud\Crud;
 use LowB\Ladmin\Facades\Ladmin;
 use LowB\Ladmin\Fields\Detail\DetailField;
 use LowB\Ladmin\Fields\Editor\EditorField;
+use LowB\Ladmin\Fields\Editor\LongTextEditorField;
+use LowB\Ladmin\Fields\Editor\NumberEditorField;
 use LowB\Ladmin\Fields\Show\ShowField;
 
 class AbstractCrudController extends Controller implements CrudControllerInterface
@@ -463,6 +465,13 @@ class AbstractCrudController extends Controller implements CrudControllerInterfa
         $editorFields = [];
         foreach ($this->crud->getColumns() as $col) {
             /** @var \Doctrine\DBAL\Schema\Column $col */
+            dump($col);
+            // BigIntType
+            if ($col->getType() instanceof \Doctrine\DBAL\Types\BigIntType) {
+                $editorFields[] = NumberEditorField::column($col->getName());
+                continue;
+            }
+
             // ArrayType
             if ($col->getType() instanceof \Doctrine\DBAL\Types\ArrayType) {
                 $editorFields[] = EditorField::column($col->getName());
@@ -471,12 +480,6 @@ class AbstractCrudController extends Controller implements CrudControllerInterfa
 
             // AsciiStringType
             if ($col->getType() instanceof \Doctrine\DBAL\Types\AsciiStringType) {
-                $editorFields[] = EditorField::column($col->getName());
-                continue;
-            }
-
-            // BigIntType
-            if ($col->getType() instanceof \Doctrine\DBAL\Types\BigIntType) {
                 $editorFields[] = EditorField::column($col->getName());
                 continue;
             }
@@ -555,19 +558,19 @@ class AbstractCrudController extends Controller implements CrudControllerInterfa
 
             // IntegerType
             if ($col->getType() instanceof \Doctrine\DBAL\Types\IntegerType) {
-                $editorFields[] = EditorField::column($col->getName());
+                $editorFields[] = NumberEditorField::column($col->getName());
                 continue;
             }
 
             // JsonType
             if ($col->getType() instanceof \Doctrine\DBAL\Types\JsonType) {
-                $editorFields[] = EditorField::column($col->getName());
+                $editorFields[] = LongTextEditorField::column($col->getName());
                 continue;
             }
 
             // ObjectType
             if ($col->getType() instanceof \Doctrine\DBAL\Types\ObjectType) {
-                $editorFields[] = EditorField::column($col->getName());
+                $editorFields[] = LongTextEditorField::column($col->getName());
                 continue;
             }
 
@@ -591,18 +594,18 @@ class AbstractCrudController extends Controller implements CrudControllerInterfa
 
             // SmallIntType
             if ($col->getType() instanceof \Doctrine\DBAL\Types\SmallIntType) {
-                $editorFields[] = EditorField::column($col->getName());
-                continue;
-            }
-
-            // StringType
-            if ($col->getType() instanceof \Doctrine\DBAL\Types\StringType) {
-                $editorFields[] = EditorField::column($col->getName());
+                $editorFields[] = NumberEditorField::column($col->getName());
                 continue;
             }
 
             // TextType
             if ($col->getType() instanceof \Doctrine\DBAL\Types\TextType) {
+                $editorFields[] = LongTextEditorField::column($col->getName());
+                continue;
+            }
+
+            // StringType
+            if ($col->getType() instanceof \Doctrine\DBAL\Types\StringType) {
                 $editorFields[] = EditorField::column($col->getName());
                 continue;
             }
