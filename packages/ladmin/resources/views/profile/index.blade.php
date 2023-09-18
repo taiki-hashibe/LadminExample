@@ -3,7 +3,7 @@
     <x-slot name="content">
         <div class="bg-white shadow">
             <div class="max-w-7xl mx-auto py-6 px-4 sm:px-6 lg:px-8">
-                {{ Ladmin::crud()->getLabel() }}
+                {{ Ladmin::crud()->label() }}
             </div>
         </div>
         <div class="py-12">
@@ -20,8 +20,7 @@
                                     {{ __("Update your account's profile information and email address.") }}
                                 </p>
                             </header>
-
-                            <form method="post" action="{{ route(Ladmin::profile()->getUpdateRouteName()) }}"
+                            <form method="post" action="{{ Ladmin::route(config('ladmin.profile.update.name')) }}"
                                 class="mt-6 space-y-6">
                                 @csrf
 
@@ -62,7 +61,8 @@
                                 </p>
                             </header>
 
-                            <form method="post" action="{{ route(Ladmin::password()->getUpdateRouteName()) }}"
+                            <form method="post"
+                                action="{{ Ladmin::route(config('ladmin.profile.update-password.name')) }}"
                                 class="mt-6 space-y-6">
                                 @csrf
 
@@ -115,8 +115,8 @@
                                 x-on:click.prevent="$dispatch('open-modal', 'confirm-user-deletion')">{{ __('Delete Account') }}</x-ladmin::danger-button>
 
                             <x-ladmin::modal name="confirm-user-deletion" :show="$errors->userDeletion->isNotEmpty()" focusable>
-                                <form method="post" action="{{ route(Ladmin::profile()->getDestroyRouteName()) }}"
-                                    class="p-6">
+                                <form method="post"
+                                    action="{{ Ladmin::route(config('ladmin.profile.destroy.name')) }}" class="p-6">
                                     @csrf
 
                                     <h2 class="text-lg font-medium text-gray-900">

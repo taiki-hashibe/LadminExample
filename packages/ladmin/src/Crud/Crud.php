@@ -67,7 +67,7 @@ class Crud
     public function router(\Illuminate\Routing\Route $router, string $name)
     {
         $this->name = $name;
-        $this->route = $router->uri;
+        $this->route = '/' . $router->uri;
         $this->routeName = $router->action['as'];
     }
 
@@ -84,7 +84,7 @@ class Crud
         if ($name) {
             $this->name = $name;
         }
-        return $this->routeName;
+        return $this->name;
     }
 
     public function routeName(?string $routeName = null)

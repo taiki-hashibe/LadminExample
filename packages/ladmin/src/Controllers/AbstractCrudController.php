@@ -96,7 +96,7 @@ class AbstractCrudController extends Controller implements CrudControllerInterfa
     {
         $request->validate($this->validationRules());
         Ladmin::query()->create($this->getRequestValues($request));
-        return redirect()->route(Ladmin::crud()->getDetailRouteName(), [
+        return redirect()->route(Ladmin::crud()->detailRouteName(), [
             'primaryKey' => Ladmin::currentPrimaryKey()
         ]);
     }
@@ -105,7 +105,7 @@ class AbstractCrudController extends Controller implements CrudControllerInterfa
     {
         $request->validate($this->validationRules());
         Ladmin::currentItemUpdate($this->getRequestValues($request));
-        return redirect()->route(Ladmin::crud()->getDetailRouteName(), [
+        return redirect()->route(Ladmin::crud()->detailRouteName(), [
             'primaryKey' => Ladmin::currentPrimaryKey()
         ]);;
     }
@@ -113,6 +113,6 @@ class AbstractCrudController extends Controller implements CrudControllerInterfa
     public function destroy(Request $request): RedirectResponse
     {
         Ladmin::itemDelete($request->primaryKey);
-        return redirect()->route(Ladmin::crud()->getShowRouteName());
+        return redirect()->route(Ladmin::crud()->showRouteName());
     }
 }

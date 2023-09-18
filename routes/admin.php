@@ -2,6 +2,7 @@
 
 use App\Models\Comments;
 use App\Models\Post;
+use LowB\Ladmin\Facades\Ladmin;
 use LowB\Ladmin\Route\Facades\LadminRoute;
 
 LadminRoute::auth();

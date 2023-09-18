@@ -162,6 +162,11 @@ class Ladmin
         }
     }
 
+    public function route(?string $name = null)
+    {
+        return $this->crud($name)->route();
+    }
+
     public function login()
     {
         return $this->crud(config('ladmin.auth.login'));
@@ -174,16 +179,16 @@ class Ladmin
 
     public function profile()
     {
-        return $this->crud(config('ladmin.profile.show'));
+        return $this->crud(config('ladmin.profile.show.name'));
     }
 
     public function password()
     {
-        return $this->crud(config('ladmin.profile.password-update'));
+        return $this->crud(config('ladmin.profile.password-update.name'));
     }
 
     public function hasProfile()
     {
-        return $this->crud(config('ladmin.profile.show'));
+        return $this->crud(config('ladmin.profile.show.name'));
     }
 }
