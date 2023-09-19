@@ -34,8 +34,7 @@
                                                 [
                                                     'primaryKey' => $item->{Ladmin::crud()->primaryKey()},
                                                 ],
-                                            ) }}"
-                                            class="dropdown-item text-decoration-none">{{ __('detail') }}</a>
+                                            ) }}">{{ __('detail') }}</a>
                                     </x-ladmin::td>
                                 @endif
                             </tr>

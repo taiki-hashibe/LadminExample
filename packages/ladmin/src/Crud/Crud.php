@@ -65,8 +65,9 @@ class Crud
     {
         $this->query = $builder;
         $this->queryBaseName = Str::studly($tableName);
-        $this->tableName = $tableName;
+        $this->primaryKey = Schema::getConnection()->getDoctrineSchemaManager()->introspectTable($tableName)->getPrimaryKey()->getColumns()[0];
         $this->displayKey = $displayKey ?? $this->primaryKey;
+        $this->tableName = $tableName;
         $this->init();
         return $this;
     }

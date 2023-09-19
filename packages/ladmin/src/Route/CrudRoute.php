@@ -20,7 +20,7 @@ trait CrudRoute
 
     public function detail(string $modelClassOrTableName, ?string $displayKey = null): Crud
     {
-        return $this->crudMethods('detail', 'get', $modelClassOrTableName, $displayKey);
+        return $this->crudMethods('detail', 'get', $modelClassOrTableName, $displayKey, true);
     }
 
     public function editor(string $modelClassOrTableName, ?string $displayKey = null): Crud
@@ -35,12 +35,12 @@ trait CrudRoute
 
     public function update(string $modelClassOrTableName, ?string $displayKey = null): Crud
     {
-        return $this->crudMethods('update', 'post', $modelClassOrTableName, $displayKey);
+        return $this->crudMethods('update', 'post', $modelClassOrTableName, $displayKey, true);
     }
 
     public function destroy(string $modelClassOrTableName, ?string $displayKey = null): Crud
     {
-        return $this->crudMethods('destroy', 'post', $modelClassOrTableName, $displayKey);
+        return $this->crudMethods('destroy', 'post', $modelClassOrTableName, $displayKey, true);
     }
 
     private function crudMethods(string $crudMethod, string $routingMethod, string $modelClassOrTableName, ?string $displayKey = null, string|bool $primaryKey = false): Crud
