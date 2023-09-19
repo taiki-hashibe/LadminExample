@@ -48,7 +48,7 @@
 
                                 <!-- Authentication -->
                                 <form method="POST"
-                                    action="{{ route(Ladmin::crud(config('ladmin.auth.login.name'))->routeName()) }}">
+                                    action="{{ route(Ladmin::crud(config('ladmin.auth.logout.name'))->routeName()) }}">
                                     @csrf
 
                                     <button
