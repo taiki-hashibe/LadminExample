@@ -15,7 +15,7 @@ class CrudController extends AbstractCrudController
     {
         $fields = $this->showFields();
         $items = Ladmin::query()->paginate($this->paginate);
-        return FacadesView::first(['admin.crud.show', LadminConfig::theme() . 'crud.show'], [
+        return FacadesView::first($this->generateViewPriority('show'), [
             'items' => $items,
             'fields' => $fields
         ]);
@@ -27,7 +27,7 @@ class CrudController extends AbstractCrudController
         if (!Ladmin::currentItem()) {
             abort(404);
         }
-        return FacadesView::first(['admin.crud.detail', LadminConfig::theme() . 'crud.detail'], [
+        return FacadesView::first($this->generateViewPriority('detail'), [
             'fields' => $fields,
         ]);
     }
@@ -38,7 +38,7 @@ class CrudController extends AbstractCrudController
         if (!Ladmin::currentItem()) {
             abort(404);
         }
-        return FacadesView::first(['admin.crud.detail', LadminConfig::theme() . 'crud.editor'], [
+        return FacadesView::first($this->generateViewPriority('editor'), [
             'fields' => $fields,
         ]);
     }
@@ -65,5 +65,10 @@ class CrudController extends AbstractCrudController
     {
         Ladmin::itemDelete($request->primaryKey);
         return redirect()->route(Ladmin::crud()->show()->routeName());
+    }
+
+    protected function generateViewPriority(string $method): array
+    {
+        return [LadminConfig::localViewPrefix() . Ladmin::crud()->tableName() . '.' . $method, LadminConfig::localViewPrefix() . 'crud.' . $method, LadminConfig::theme() . 'crud.' . $method];
     }
 }

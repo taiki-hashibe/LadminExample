@@ -5,9 +5,12 @@ namespace LowB\Ladmin\Fields;
 use Illuminate\Contracts\View\View as ViewView;
 use Illuminate\Support\Facades\View;
 use LowB\Ladmin\Config\Facades\LadminConfig;
+use LowB\Ladmin\Facades\Ladmin;
 
 abstract class Field
 {
+    const PREFIX = 'ladmin::';
+
     protected string $view = 'fields.show.default';
 
     protected string $columnName;
@@ -63,7 +66,7 @@ abstract class Field
 
     public function getView(mixed $model): ViewView
     {
-        return View::first([$this->generateLocalViewName(), LadminConfig::theme() . $this->view], [
+        return View::first([$this->generateDetailedLocalViewName(), $this->generateLocalViewName(), LadminConfig::theme() . $this->view, self::PREFIX . $this->view], [
             'field' => $this,
             'label' => $this->getLabel(),
             'name' => $this->columnName,
@@ -74,6 +77,14 @@ abstract class Field
     public function isRequired(): bool
     {
         return in_array('required', $this->validation);
+    }
+
+    private function generateDetailedLocalViewName(): string|null
+    {
+        if (Ladmin::crud() && Ladmin::crud()->tableName()) {
+            return LadminConfig::localViewPrefix() . Ladmin::crud()->tableName() . '.' . $this->view;
+        }
+        return null;
     }
 
     private function generateLocalViewName(): string
