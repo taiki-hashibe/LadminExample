@@ -184,12 +184,12 @@ class Ladmin
 
     public function login(): Crud|null
     {
-        return $this->crud(config('ladmin.auth.login'));
+        return $this->crud(config('ladmin.auth.login.name'));
     }
 
     public function logout(): Crud|null
     {
-        return $this->crud(config('ladmin.auth.logout'));
+        return $this->crud(config('ladmin.auth.logout.name'));
     }
 
     public function profile(): Crud|null

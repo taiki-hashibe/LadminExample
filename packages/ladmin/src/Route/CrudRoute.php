@@ -13,37 +13,37 @@ use LowB\Ladmin\Support\Facades\LadminRoute;
 trait CrudRoute
 {
 
-    public function show(string $modelClassOrTableName, string $displayKey): Crud
+    public function show(string $modelClassOrTableName, ?string $displayKey = null): Crud
     {
         return $this->crudMethods('show', 'get', $modelClassOrTableName, $displayKey)->navigation('navigation');
     }
 
-    public function detail(string $modelClassOrTableName, string $displayKey): Crud
+    public function detail(string $modelClassOrTableName, ?string $displayKey = null): Crud
     {
         return $this->crudMethods('detail', 'get', $modelClassOrTableName, $displayKey);
     }
 
-    public function editor(string $modelClassOrTableName, string $displayKey): Crud
+    public function editor(string $modelClassOrTableName, ?string $displayKey = null): Crud
     {
         return $this->crudMethods('editor', 'get', $modelClassOrTableName, $displayKey, '{primaryKey?}');
     }
 
-    public function create(string $modelClassOrTableName, string $displayKey): Crud
+    public function create(string $modelClassOrTableName, ?string $displayKey = null): Crud
     {
         return $this->crudMethods('create', 'post', $modelClassOrTableName, $displayKey);
     }
 
-    public function update(string $modelClassOrTableName, string $displayKey): Crud
+    public function update(string $modelClassOrTableName, ?string $displayKey = null): Crud
     {
         return $this->crudMethods('update', 'post', $modelClassOrTableName, $displayKey);
     }
 
-    public function destroy(string $modelClassOrTableName, string $displayKey): Crud
+    public function destroy(string $modelClassOrTableName, ?string $displayKey = null): Crud
     {
         return $this->crudMethods('destroy', 'post', $modelClassOrTableName, $displayKey);
     }
 
-    private function crudMethods(string $crudMethod, string $routingMethod, string $modelClassOrTableName, string $displayKey, string|bool $primaryKey = false): Crud
+    private function crudMethods(string $crudMethod, string $routingMethod, string $modelClassOrTableName, ?string $displayKey = null, string|bool $primaryKey = false): Crud
     {
         $instance = $this->createInstance($modelClassOrTableName);
         $crud = null;

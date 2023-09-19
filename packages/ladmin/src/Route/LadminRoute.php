@@ -32,7 +32,7 @@ class LadminRoute
         $this->post(config('ladmin.profile.destroy.url'), [ProfileController::class, 'destroy'], config('ladmin.profile.destroy.name'))->middleware(config('ladmin.auth.middleware'));
     }
 
-    public function crud(string $modelClassOrTableName, string $displayKey): Crud
+    public function crud(string $modelClassOrTableName, ?string $displayKey = null): Crud
     {
         $this->detail($modelClassOrTableName, $displayKey);
         $this->editor($modelClassOrTableName, $displayKey);

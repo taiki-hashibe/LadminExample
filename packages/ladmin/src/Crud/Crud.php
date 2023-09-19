@@ -14,14 +14,14 @@ class Crud
 {
     protected string $name;
     protected string $crud;
+    protected string $route;
+    protected string $routeName;
     protected Model|Builder|null $query = null;
-    protected string $label = '';
-    protected string $route = 'default';
-    protected string $routeName = 'default';
-    protected string $queryBaseName = 'default';
-    protected string $tableName = 'default';
-    protected string $primaryKey = 'id';
-    protected string $displayKey = '';
+    protected string|null $label = null;
+    protected string|null $queryBaseName = null;
+    protected string|null $tableName = null;
+    protected string|null $primaryKey = null;
+    protected string|null $displayKey = null;
     protected array $columns = [];
     protected array $columnNames = [];
     protected array $navigation = [];
@@ -50,23 +50,23 @@ class Crud
         return $this;
     }
 
-    public function model(Model $model, string $displayKey): self
+    public function model(Model $model, ?string $displayKey = null): self
     {
         $this->query = $model;
         $this->queryBaseName = class_basename(get_class($this->query));
         $this->primaryKey = $this->query->getKeyName();
-        $this->displayKey = $displayKey;
+        $this->displayKey = $displayKey ?? $this->primaryKey;
         $this->tableName = $this->query->getTable();
         $this->init();
         return $this;
     }
 
-    public function table(Builder $builder, string $tableName, string $displayKey): self
+    public function table(Builder $builder, string $tableName, ?string $displayKey = null): self
     {
         $this->query = $builder;
         $this->queryBaseName = Str::studly($tableName);
         $this->tableName = $tableName;
-        $this->displayKey = $displayKey;
+        $this->displayKey = $displayKey ?? $this->primaryKey;
         $this->init();
         return $this;
     }
@@ -90,7 +90,7 @@ class Crud
         return $this->crud;
     }
 
-    public function routeName(): string
+    public function routeName(): string|null
     {
         return $this->routeName;
     }
@@ -100,7 +100,7 @@ class Crud
         return $this->query;
     }
 
-    public function primaryKey(): string
+    public function primaryKey(): string|null
     {
         return $this->primaryKey;
     }
@@ -115,12 +115,12 @@ class Crud
         return $this->columns;
     }
 
-    public function tableName(): string
+    public function tableName(): string|null
     {
         return $this->tableName;
     }
 
-    public function label(?string $label = null): string
+    public function label(?string $label = null): string|null
     {
         if ($label) {
             $this->label = $label;
