@@ -46,7 +46,7 @@
             </div>
         </form>
         <hr>
-        <form method="post" action="{{ Ladmin::route()->profile()->destroy()->url }}" class="p-6">
+        <form method="post" action="{{ Ladmin::route()->profile()->destroy()->url }}">
             @csrf
             <button>{{ __('Delete Account') }}</button>
             </div>
