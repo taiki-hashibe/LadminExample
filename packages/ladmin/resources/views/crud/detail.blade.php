@@ -18,7 +18,7 @@
         @if (Ladmin::hasEdit())
             <a
                 href="{{ route(Ladmin::getEditRouteName(), [
-                    'primaryKey' => Ladmin::currentItem()->{Ladmin::currentQuery()->primaryKey},
+                    'primaryKey' => Ladmin::currentItemPrimaryKey(),
                 ]) }}">{{ __('Edit') }}</a>
         @endif
     </x-slot>

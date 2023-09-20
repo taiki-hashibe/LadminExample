@@ -27,11 +27,16 @@ class Ladmin
         return $currentQuery;
     }
 
+    public function itemPrimaryKey(mixed $item): mixed
+    {
+        return $item->{$this->currentQuery()->primaryKey};
+    }
+
     private function _currentItem(): mixed
     {
         $primaryKey = request()->primaryKey;
         $query = $this->currentQuery();
-        $currentItem = $query->where($query->primaryKey, $primaryKey)->first();
+        $currentItem = $query->find($primaryKey)->first();
         return $currentItem;
     }
 
@@ -48,6 +53,25 @@ class Ladmin
             throw new Exception("Current item with primary key '$primaryKey' not found.");
         }
         return $currentItem;
+    }
+
+    public function currentItemPrimaryKey()
+    {
+        return $this->currentItem()->{$this->currentQuery()->primaryKey};
+    }
+
+    public function currentItemUpdate(mixed $value)
+    {
+        $primaryKey = request()->primaryKey;
+        $query = $this->currentQuery();
+        return $query->findUpdate($primaryKey, $value);
+    }
+
+    public function currentItemDelete()
+    {
+        $primaryKey = request()->primaryKey;
+        $query = $this->currentQuery();
+        return $query->findDelete($primaryKey);
     }
 
     public function getNavigation(?string $name = null)

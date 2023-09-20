@@ -24,7 +24,7 @@
                         @if (Ladmin::hasDetail())
                             <td><a
                                     href="{{ route(Ladmin::getDetailRouteName(), [
-                                        'primaryKey' => $item->{Ladmin::currentQuery()->primaryKey},
+                                        'primaryKey' => Ladmin::itemPrimaryKey($item),
                                     ]) }}">{{ __('Detail') }}</a>
                             </td>
                         @endif

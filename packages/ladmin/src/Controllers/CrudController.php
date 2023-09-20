@@ -32,19 +32,28 @@ class CrudController extends AbstractCrudController
         ]);
     }
 
-    public function create(Request $request)
+    public function create(Request $request): RedirectResponse
     {
-        dump('create');
+        $request->validate($this->validationRules());
+        Ladmin::query()->create($this->getRequestValues($request));
+        return redirect()->route(Ladmin::crud()->detail()->create()->routeName(), [
+            'primaryKey' => Ladmin::currentPrimaryKey()
+        ]);
     }
 
-    public function update(Request $request)
+    public function update(Request $request): RedirectResponse
     {
-        dump('update');
+        $request->validate($this->validationRules());
+        Ladmin::currentItemUpdate($this->getRequestValues($request));
+        return redirect()->route(Ladmin::getDetailRouteName(), [
+            'primaryKey' => Ladmin::currentItemPrimaryKey()
+        ]);;
     }
 
-    public function destroy(Request $request)
+    public function destroy(Request $request): RedirectResponse
     {
-        dump('destroy');
+        Ladmin::currentItemDelete();
+        return redirect()->route(Ladmin::getShowRouteName());
     }
 
     protected function generateViewPriority(string $method): array

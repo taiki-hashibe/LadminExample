@@ -27,7 +27,7 @@ class AbstractCrudController extends Controller
     protected function validationRules(): array
     {
         $validations = [];
-        $editorFields = $this->editorFields();
+        $editorFields = $this->editFields();
         foreach ($editorFields as $field) {
             $validations[$field->getName()] = $field->getValidation();
         }
@@ -37,7 +37,7 @@ class AbstractCrudController extends Controller
     protected function getRequestValues(Request $request): array
     {
         $values = [];
-        $editorFields = $this->editorFields();
+        $editorFields = $this->editFields();
         foreach ($editorFields as $field) {
             $values[$field->getName()] = $request->{$field->getName()};
         }

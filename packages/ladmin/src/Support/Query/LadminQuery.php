@@ -91,4 +91,27 @@ class LadminQuery
     {
         return $this->primaryKey;
     }
+
+    public function find(mixed $primaryKey)
+    {
+        return $this->query->where($this->primaryKey, $primaryKey);
+    }
+
+    public function findUpdate(mixed $primaryKey, mixed $value)
+    {
+        $currentItem = $this->find($primaryKey);
+        if ($this->queryType === self::TYPE_MODEL) {
+            return $currentItem->first()->update($value);
+        }
+        return $currentItem->update($value);
+    }
+
+    public function findDelete(mixed $primaryKey)
+    {
+        $currentItem = $this->find($primaryKey);
+        if ($this->queryType === self::TYPE_MODEL) {
+            return $currentItem->first()->delete();
+        }
+        return $currentItem->delete();
+    }
 }
