@@ -16,6 +16,7 @@ use LowB\Ladmin\Route\Facades\LadminRoute;
 |
 */
 
+LadminRoute::auth();
 LadminRoute::dashboard();
 LadminRoute::profile();
 LadminRoute::crud(User::class)->setLabel('ユーザー');

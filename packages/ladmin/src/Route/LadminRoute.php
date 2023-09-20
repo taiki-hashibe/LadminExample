@@ -21,6 +21,7 @@ class LadminRoute
     public const PRIMARY_KEY_OPTIONAL = "{primaryKey?}";
 
     private array $routes = [];
+    private bool $useMiddleware = false;
 
     public function getRoutes()
     {
@@ -48,8 +49,8 @@ class LadminRoute
             $args[0] = '/' . LadminConfig::getPrefix() . $args[0];
         }
         $router = Route::make()->{$method}(...$args)->name($this->generateName($args[0]));
-        if (Ladmin::hasAuth()) {
-            $router->middleware(config('ladmin.guard'));
+        if ($this->useMiddleware) {
+            $router->middleware(config('ladmin.middleware'));
         }
         $this->routes[] = $router;
         return $router;
@@ -127,8 +128,10 @@ class LadminRoute
 
     public function auth(string $controllerName = AuthController::class): mixed
     {
-        $this->post('/logout', [$controllerName, 'logout'])->setGroupName('auth')->setLabel('Logout');
-        return $this->get('/login', [$controllerName, 'login'])->setGroupName('auth')->setLabel('Login');
+        $this->get('/login', [$controllerName, 'login'])->setGroupName('auth')->setLabel('Login');
+        $this->post('/login/register', [$controllerName, 'register'])->setGroupName('auth');
+        $this->useMiddleware = true;
+        return $this->get('/logout', [$controllerName, 'logout'])->setGroupName('auth')->setLabel('Logout')->setNavigation(['dropdown']);
     }
 
     public function dashboard(string $controllerName = DashboardController::class): mixed

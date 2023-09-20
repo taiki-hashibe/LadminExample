@@ -2,6 +2,7 @@
 
 return [
     'guard' => 'web',
+    'middleware' => 'auth',
     'uri' => [
         'show' => 'show',
         'detail' => 'detail',
