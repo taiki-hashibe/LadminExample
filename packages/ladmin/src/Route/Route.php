@@ -9,6 +9,7 @@ class Route
 {
     protected mixed $route = null;
     protected string $label = '';
+    protected string|null $crudAction = null;
     protected string|null $groupName = null;
     protected string|null $tableName = null;
     protected array $navigation = [];
@@ -42,6 +43,17 @@ class Route
     public function getLabel(): string
     {
         return $this->label;
+    }
+
+    public function setCrudAction(string $crudAction): self
+    {
+        $this->crudAction = $crudAction;
+        return $this;
+    }
+
+    public function getCrudAction(): string|null
+    {
+        return $this->crudAction;
     }
 
     public function setGroupName(string $groupName): self

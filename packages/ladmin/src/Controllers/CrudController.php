@@ -13,17 +13,17 @@ class CrudController extends AbstractCrudController
 {
     public function show(Request $request)
     {
-        dump('show');
+        return view('ladmin::crud.show');
     }
 
     public function detail(Request $request)
     {
-        dump('detail');
+        Ladmin::getNavigation('navigation')->render();
     }
 
     public function editor(Request $request)
     {
-        dump('editor');
+        Ladmin::getNavigation('navigation')->render();
     }
 
     public function create(Request $request)

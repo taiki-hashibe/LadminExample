@@ -37,7 +37,5 @@ class LadminServiceProvider extends PackageServiceProvider
         Blade::component('layouts-ladmin', \LowB\Ladmin\View\Components\LadminLayout::class);
         Blade::component('layouts-auth', \LowB\Ladmin\View\Components\AuthLayout::class);
         Blade::component('layouts-guest', \LowB\Ladmin\View\Components\GuestLayout::class);
-
-        View::composer('ladmin::layouts.auth', AuthLayoutComposer::class);
     }
 }

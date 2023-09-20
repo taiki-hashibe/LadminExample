@@ -8,7 +8,7 @@ class LadminQueryManager
 {
     protected array $queries = [];
 
-    public function remember(LadminQuery $query)
+    public function register(LadminQuery $query)
     {
         $this->queries[] = $query;
     }
@@ -16,7 +16,7 @@ class LadminQueryManager
     public function getQuery(string $tableName): LadminQuery
     {
         foreach ($this->queries as $query) {
-            if ($query->getTableName() === $tableName) {
+            if ($query->getTable() === $tableName) {
                 return $query;
             }
         }

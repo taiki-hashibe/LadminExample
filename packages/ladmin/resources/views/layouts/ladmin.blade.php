@@ -5,34 +5,15 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <link rel="preconnect" href="https://fonts.bunny.net">
-    <link href="https://fonts.bunny.net/css?family=figtree:400,500,600&display=swap" rel="stylesheet" />
-    <script src="https://cdn.tailwindcss.com"></script>
-    <script src="https://unpkg.com/scrollbooster@2/dist/scrollbooster.min.js"></script>
-    <script src="//unpkg.com/alpinejs" defer></script>
     <title>{{ config('app.name') }}</title>
 </head>
 
-<body class="font-sans antialiased">
-    <div class="min-h-screen bg-gray-100">
+<body>
+    <div>
         {{ $header }}
         {{ $content }}
         {{ $footer }}
     </div>
-    <script>
-        const viewElms = document.querySelectorAll('.sb-x-view');
-        viewElms.forEach((e) => {
-            const c = e.querySelector(".sb-content");
-            if (c) {
-                new ScrollBooster({
-                    viewport: e,
-                    content: c,
-                    scrollMode: 'transform',
-                    direction: 'horizontal'
-                });
-            }
-        })
-    </script>
 </body>
 
 </html>

@@ -13,6 +13,7 @@ class LadminQuery
 {
     public const TYPE_MODEL = 'model';
     public const TYPE_BUILDER = 'builder';
+    public string $primaryKey = 'id';
     public Model|Builder $query;
     public string $queryType;
 
@@ -20,6 +21,9 @@ class LadminQuery
     {
         $this->query = self::makeQuery($name);
         $this->queryType = self::typeOf($this->query);
+        if ($this->queryType === self::TYPE_MODEL) {
+            $this->primaryKey = $this->query->getKeyName();
+        }
     }
 
     public function __call($method, $args)
@@ -32,11 +36,11 @@ class LadminQuery
         return $this->query->{$name};
     }
 
-    public static function make(string $name, ?bool $remember = true): self
+    public static function make(string $name, ?bool $register = true): self
     {
         $query = new self($name);
-        if ($remember) {
-            LadminQueryManager::remember($query);
+        if ($register) {
+            LadminQueryManager::register($query);
         }
         return $query;
     }
@@ -81,5 +85,10 @@ class LadminQuery
     public function getColumnNames()
     {
         return Schema::connection(config('database.default'))->getColumnListing($this->getTable());
+    }
+
+    public function getPrimaryKeyName()
+    {
+        return $this->primaryKey;
     }
 }
