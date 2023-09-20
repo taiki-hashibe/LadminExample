@@ -17,6 +17,7 @@ class LadminRoute
         if ($this->routes) {
             foreach ($this->routes as $route) {
                 $routeMethod =  Str::of($route->getRoute()->action['uses'])->after('@')->__toString();
+                $routeMethod = Str::camel($routeMethod);
                 if ($method === $routeMethod) {
                     $this->route = $route;
                     return $this;

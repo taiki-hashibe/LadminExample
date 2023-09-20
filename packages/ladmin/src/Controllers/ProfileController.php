@@ -16,7 +16,6 @@ class ProfileController extends Controller
 {
     public function index(): ViewView
     {
-        dump(LadminRoute::profile()->index()->url);
         return View::first(['ladmin::profile.index'], [
             'user' => Auth::user()
         ]);

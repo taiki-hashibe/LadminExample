@@ -6,10 +6,16 @@ use Exception;
 use LowB\Ladmin\Route\Facades\LadminRoute;
 use LowB\Ladmin\Route\Route;
 use LowB\Ladmin\Support\Facades\LadminQueryManager;
+use LowB\Ladmin\Support\LadminRoute as SupportLadminRoute;
 use LowB\Ladmin\Support\RenderableArray;
 
 class Ladmin
 {
+    public function route()
+    {
+        return new SupportLadminRoute();
+    }
+
     public function currentQuery()
     {
         $currentRoute = LadminRoute::getCurrentRoute();

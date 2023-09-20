@@ -1,30 +1,23 @@
 <x-layouts-auth>
 
     <x-slot name="content">
-        <form method="post" action="{{ LadminRoute::profile()->update()->url }}" class="mt-6 space-y-6">
+        <form method="post" action="{{ Ladmin::route()->profile()->update()->url }}" class="mt-6 space-y-6">
             @csrf
 
-            <div class="mb-2">
-                <x-ladmin::text-input label="{{ __('Name') }}" name="name" type="text" :value="old('name', $user->name)" required
-                    autofocus autocomplete="name" />
-            </div>
+            @include('ladmin::fields.edit.default', [
+                'label' => 'username',
+                'name' => 'name',
+            ])
 
-            <div class="mb-2">
-                <x-ladmin::text-input label="{{ __('Email') }}" id="email" name="email" type="email"
-                    class="mt-1 block w-full" :value="old('email', $user->email)" required autocomplete="username" />
-            </div>
+            @include('ladmin::fields.edit.default', [
+                'label' => 'email',
+                'name' => 'email',
+            ])
 
-            <div class="flex items-center gap-4">
-                <x-ladmin::primary-button>{{ __('Save') }}</x-ladmin::primary-button>
-
-                @if (session('status') === 'profile-updated')
-                    <p x-data="{ show: true }" x-show="show" x-transition x-init="setTimeout(() => show = false, 2000)"
-                        class="text-sm text-gray-600">{{ __('Saved.') }}</p>
-                @endif
-            </div>
+            <button>{{ __('Save') }}</button>
         </form>
-
-        <form method="post" action="{{ Ladmin::route(config('ladmin.profile.update-password.name')) }}">
+        <hr>
+        <form method="post" action="{{ Ladmin::route()->profile()->passwordChange()->url }}">
             @csrf
 
             <div class="mb-2">
@@ -52,8 +45,8 @@
                 @endif
             </div>
         </form>
-
-        <form method="post" action="{{ Ladmin::route(config('ladmin.profile.destroy.name')) }}" class="p-6">
+        <hr>
+        <form method="post" action="{{ Ladmin::route()->profile()->destroy()->url }}" class="p-6">
             @csrf
             <button>{{ __('Delete Account') }}</button>
             </div>
