@@ -10,11 +10,13 @@ use LowB\Ladmin\Facades\Ladmin;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\View;
 use Illuminate\Validation\Rules\Password;
+use LowB\Ladmin\Support\Facades\LadminRoute;
 
 class ProfileController extends Controller
 {
     public function index(): ViewView
     {
+        dump(LadminRoute::profile()->index()->url);
         return View::first(['ladmin::profile.index'], [
             'user' => Auth::user()
         ]);

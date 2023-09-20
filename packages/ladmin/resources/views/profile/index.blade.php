@@ -1,7 +1,7 @@
 <x-layouts-auth>
 
     <x-slot name="content">
-        <form method="post" action="{{ Ladmin::route(config('ladmin.profile.update.name')) }}" class="mt-6 space-y-6">
+        <form method="post" action="{{ LadminRoute::profile()->update()->url }}" class="mt-6 space-y-6">
             @csrf
 
             <div class="mb-2">

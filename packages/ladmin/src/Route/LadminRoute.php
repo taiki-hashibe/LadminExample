@@ -129,8 +129,8 @@ class LadminRoute
 
     public function profile(string $controllerName = ProfileController::class): mixed
     {
-        $this->post('/profile/update', [$controllerName, 'update']);
-        $this->post('/profile/password-change', [$controllerName, 'passwordChange']);
+        $this->post('/profile/update', [$controllerName, 'update'])->setGroupName('profile');
+        $this->post('/profile/password-change', [$controllerName, 'passwordChange'])->setGroupName('profile');
         return $this->get('/profile', [$controllerName, 'index'])
             ->setGroupName('profile')
             ->setLabel('Profile')

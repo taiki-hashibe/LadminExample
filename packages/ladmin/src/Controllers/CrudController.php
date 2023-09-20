@@ -2,10 +2,8 @@
 
 namespace LowB\Ladmin\Controllers;
 
-use Illuminate\Contracts\View\View;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\View as FacadesView;
 use LowB\Ladmin\Config\Facades\LadminConfig;
 use LowB\Ladmin\Facades\Ladmin;
 

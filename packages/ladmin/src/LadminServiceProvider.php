@@ -3,16 +3,20 @@
 namespace LowB\Ladmin;
 
 use Illuminate\Support\Facades\Blade;
-use Illuminate\Support\Facades\View;
 use Spatie\LaravelPackageTools\Commands\InstallCommand;
 use Spatie\LaravelPackageTools\Package;
 use Spatie\LaravelPackageTools\PackageServiceProvider;
 use LowB\Ladmin\Commands\LadminCommand;
 use LowB\Ladmin\Commands\MakeControllerCommand;
-use LowB\Ladmin\View\Composers\AuthLayoutComposer;
 
 class LadminServiceProvider extends PackageServiceProvider
 {
+    public function register()
+    {
+        parent::register();
+        $this->app->bind('myName', \Reffect\MyName::class);
+    }
+
     public function configurePackage(Package $package): void
     {
         /*
