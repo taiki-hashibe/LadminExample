@@ -10,9 +10,13 @@ use LowB\Ladmin\Controllers\ProfileController;
 use LowB\Ladmin\Route\Route;
 use LowB\Ladmin\Support\Query\LadminQuery;
 use Illuminate\Support\Str;
+use Illuminate\Support\Facades\Route as SupportRoute;
 
 class LadminRoute
 {
+    public const PRIMARY_KEY = "{primaryKey}";
+    public const PRIMARY_KEY_OPTIONAL = "{primaryKey?}";
+
     private array $routes = [];
 
     public function getRoutes()
@@ -22,11 +26,15 @@ class LadminRoute
 
     public function getCurrentRoute(): mixed
     {
-        $currentUri = Str::of(request()->getPathInfo())->replaceFirst('/', '')->__toString();
+        $currentRouteName = SupportRoute::currentRouteName();
+        if ($currentRouteName === null) {
+            throw new Exception("Current route name is not available.");
+        }
         foreach ($this->routes as $route) {
-            if ($route->getRoute()->uri === $currentUri) {
+            $routeName = $route->getRoute()->action['as'];
+            if ($currentRouteName === $routeName) {
                 return $route;
-            };
+            }
         }
         return null;
     }
@@ -58,12 +66,12 @@ class LadminRoute
 
     private function _detail(LadminQuery $query, CrudController $controller): mixed
     {
-        return $this->_crudRouting($query,  $controller, 'get', config('ladmin.uri.detail'), 'detail', '{primaryKey}');
+        return $this->_crudRouting($query,  $controller, 'get', config('ladmin.uri.detail'), 'detail', self::PRIMARY_KEY);
     }
 
     private function _edit(LadminQuery $query, CrudController $controller): mixed
     {
-        return $this->_crudRouting($query,  $controller, 'get', config('ladmin.uri.edit'), 'edit', '{primaryKey?}');
+        return $this->_crudRouting($query,  $controller, 'get', config('ladmin.uri.edit'), 'edit', self::PRIMARY_KEY_OPTIONAL);
     }
 
     private function _create(LadminQuery $query, CrudController $controller): mixed
@@ -73,12 +81,12 @@ class LadminRoute
 
     private function _update(LadminQuery $query, CrudController $controller): mixed
     {
-        return $this->_crudRouting($query,  $controller, 'post', config('ladmin.uri.update'), 'update', '{primaryKey?}');
+        return $this->_crudRouting($query,  $controller, 'post', config('ladmin.uri.update'), 'update', self::PRIMARY_KEY);
     }
 
     private function _destroy(LadminQuery $query, CrudController $controller): mixed
     {
-        return $this->_crudRouting($query,  $controller, 'post', config('ladmin.uri.destroy'), 'destroy', '{primaryKey?}');
+        return $this->_crudRouting($query,  $controller, 'post', config('ladmin.uri.destroy'), 'destroy', self::PRIMARY_KEY);
     }
 
     public function show(string $modelOrTable, string $controllerName = CrudController::class): mixed

@@ -10,17 +10,15 @@ use LowB\Ladmin\Fields\Editor\LongTextEditorField;
 use LowB\Ladmin\Fields\Editor\NumberEditorField;
 use LowB\Ladmin\Fields\Show\ShowField;
 use LowB\Ladmin\Support\Facades\GenerateValidationRules;
+use LowB\Ladmin\Support\Query\LadminQuery;
 
 class GenerateFields
 {
-    public function show(Crud $crud): array
+    public function show(LadminQuery $query): array
     {
         $showFields = [];
-        foreach ($crud->columns() as $col) {
+        foreach ($query->getColumns() as $col) {
             /** @var \Doctrine\DBAL\Schema\Column $col */
-            if (in_array($col->getName(), LadminConfig::hiddenShow())) {
-                continue;
-            }
             // ArrayType
             // if ($col->getType() instanceof \Doctrine\DBAL\Types\ArrayType) {
             //     $showFields[] = ShowField::column($col->getName())->setValidation(GenerateValidationRules::generateColumn($col));
@@ -222,14 +220,11 @@ class GenerateFields
         return $showFields;
     }
 
-    public function detail(Crud $crud): array
+    public function detail(LadminQuery $query): array
     {
         $detailFields = [];
-        foreach ($crud->columns() as $col) {
+        foreach ($query->getColumns() as $col) {
             /** @var \Doctrine\DBAL\Schema\Column $col */
-            if (in_array($col->getName(), LadminConfig::hiddenDetail())) {
-                continue;
-            }
             // ArrayType
             // if ($col->getType() instanceof \Doctrine\DBAL\Types\ArrayType) {
             //     $detailFields[] = DetailField::column($col->getName())->setValidation(GenerateValidationRules::generateColumn($col));
@@ -431,14 +426,11 @@ class GenerateFields
         return $detailFields;
     }
 
-    public function editor(Crud $crud): array
+    public function edit(LadminQuery $query): array
     {
         $editorFields = [];
-        foreach ($crud->columns() as $col) {
+        foreach ($query->getColumns() as $col) {
             /** @var \Doctrine\DBAL\Schema\Column $col */
-            if (in_array($col->getName(), LadminConfig::hiddenEditor())) {
-                continue;
-            }
             // BigIntType
             if ($col->getType() instanceof \Doctrine\DBAL\Types\BigIntType) {
                 $editorFields[] = NumberEditorField::column($col->getName())->setValidation(GenerateValidationRules::generateColumn($col));

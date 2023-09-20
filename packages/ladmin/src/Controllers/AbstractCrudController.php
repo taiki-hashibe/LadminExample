@@ -4,31 +4,24 @@ namespace LowB\Ladmin\Controllers;
 
 use Illuminate\Http\Request;
 use LowB\Ladmin\Crud\Crud;
+use LowB\Ladmin\Facades\Ladmin;
 use LowB\Ladmin\Support\Facades\GenerateFields;
 
 class AbstractCrudController extends Controller
 {
-    public Crud|null $crud = null;
-    public int $paginate = 24;
-
-    public function init(Crud $crud): void
-    {
-        $this->crud = $crud;
-    }
-
     public function showFields(): array
     {
-        return GenerateFields::show($this->crud);
+        return GenerateFields::show(Ladmin::currentQuery());
     }
 
     public function detailFields(): array
     {
-        return GenerateFields::detail($this->crud);
+        return GenerateFields::detail(Ladmin::currentQuery());
     }
 
-    public function editorFields(): array
+    public function editFields(): array
     {
-        return GenerateFields::editor($this->crud);
+        return GenerateFields::edit(Ladmin::currentQuery());
     }
 
     protected function validationRules(): array

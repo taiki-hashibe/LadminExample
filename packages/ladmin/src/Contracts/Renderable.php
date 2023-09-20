@@ -6,5 +6,5 @@ use Illuminate\Contracts\View\View;
 
 interface Renderable
 {
-    public function render(?array $params = []): View;
+    public function render(mixed $params = []): View;
 }

@@ -27,6 +27,29 @@ class Ladmin
         return $currentQuery;
     }
 
+    private function _currentItem(): mixed
+    {
+        $primaryKey = request()->primaryKey;
+        $query = $this->currentQuery();
+        $currentItem = $query->where($query->primaryKey, $primaryKey)->first();
+        return $currentItem;
+    }
+
+    public function hasCurrentItem(): bool
+    {
+        return $this->_currentItem() !== null;
+    }
+
+    public function currentItem()
+    {
+        $primaryKey = request()->primaryKey;
+        $currentItem = $this->_currentItem();
+        if ($currentItem === null) {
+            throw new Exception("Current item with primary key '$primaryKey' not found.");
+        }
+        return $currentItem;
+    }
+
     public function getNavigation(?string $name = null)
     {
         $navigation = new RenderableArray();
@@ -65,7 +88,7 @@ class Ladmin
         return $crud;
     }
 
-    public function getCrudAction(string $crudAction): Route
+    private function getCrudAction(string $crudAction): Route
     {
         $currentCrudGroup = $this->getCurrentCrudGroup();
         if (!$currentCrudGroup) {
@@ -81,7 +104,7 @@ class Ladmin
 
     public function getShow(): Route
     {
-        return $this->getCrudAction(config('ladmin.route.show'));
+        return $this->getCrudAction(config('ladmin.uri.show'));
     }
 
     public function getShowUri(): string
@@ -96,7 +119,7 @@ class Ladmin
 
     public function getDetail(): Route
     {
-        return $this->getCrudAction(config('ladmin.route.detail'));
+        return $this->getCrudAction(config('ladmin.uri.detail'));
     }
 
     public function getDetailUri(): string
@@ -111,7 +134,7 @@ class Ladmin
 
     public function getEdit(): Route
     {
-        return $this->getCrudAction(config('ladmin.route.edit'));
+        return $this->getCrudAction(config('ladmin.uri.edit'));
     }
 
     public function getEditUri(): string
@@ -126,7 +149,7 @@ class Ladmin
 
     public function getCreate(): Route
     {
-        return $this->getCrudAction(config('ladmin.route.create'));
+        return $this->getCrudAction(config('ladmin.uri.create'));
     }
 
     public function getCreateUri(): string
@@ -141,7 +164,7 @@ class Ladmin
 
     public function getUpdate(): Route
     {
-        return $this->getCrudAction(config('ladmin.route.update'));
+        return $this->getCrudAction(config('ladmin.uri.update'));
     }
 
     public function getUpdateUri(): string
@@ -156,7 +179,7 @@ class Ladmin
 
     public function getDestroy(): Route
     {
-        return $this->getCrudAction(config('ladmin.route.destroy'));
+        return $this->getCrudAction(config('ladmin.uri.destroy'));
     }
 
     public function getDestroyUri(): string

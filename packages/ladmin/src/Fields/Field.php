@@ -2,12 +2,13 @@
 
 namespace LowB\Ladmin\Fields;
 
-use Illuminate\Contracts\View\View as ViewView;
+use Illuminate\Contracts\View\View as ContractsView;
 use Illuminate\Support\Facades\View;
 use LowB\Ladmin\Config\Facades\LadminConfig;
+use LowB\Ladmin\Contracts\Renderable;
 use LowB\Ladmin\Facades\Ladmin;
 
-abstract class Field
+abstract class Field implements Renderable
 {
     const PREFIX = 'ladmin::';
 
@@ -64,13 +65,13 @@ abstract class Field
         return $this->validation;
     }
 
-    public function getView(mixed $model): ViewView
+    public function render(mixed $params = []): ContractsView
     {
-        return View::first([$this->generateDetailedLocalViewName(), $this->generateLocalViewName(), LadminConfig::theme() . $this->view, self::PREFIX . $this->view], [
+        return View::first([self::PREFIX . $this->view], [
             'field' => $this,
             'label' => $this->getLabel(),
             'name' => $this->columnName,
-            'value' => $this->getValue($model),
+            'value' => $this->getValue($params),
         ]);
     }
 
@@ -81,9 +82,9 @@ abstract class Field
 
     private function generateDetailedLocalViewName(): string|null
     {
-        if (Ladmin::crud() && Ladmin::crud()->tableName()) {
-            return LadminConfig::localViewPrefix() . Ladmin::crud()->tableName() . '.' . $this->view;
-        }
+        // if (Ladmin::crud() && Ladmin::crud()->tableName()) {
+        //     return LadminConfig::localViewPrefix() . Ladmin::crud()->tableName() . '.' . $this->view;
+        // }
         return null;
     }
 

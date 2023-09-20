@@ -48,7 +48,7 @@ class Navigation implements Renderable
         ];
     }
 
-    public function render(?array $params = []): ContractsView
+    public function render(mixed $params = []): ContractsView
     {
         return View::first([$this->view], [
             'navigation' => $this,

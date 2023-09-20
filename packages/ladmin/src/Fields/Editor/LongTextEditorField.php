@@ -8,7 +8,7 @@ use LowB\Ladmin\Fields\Column;
 
 class LongTextEditorField implements FieldInterface
 {
-    protected static string $view = 'fields.editor.textarea';
+    protected static string $view = 'fields.edit.default';
 
     public static function column(string $columnName): Column
     {

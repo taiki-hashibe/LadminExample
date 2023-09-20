@@ -13,17 +13,23 @@ class CrudController extends AbstractCrudController
 {
     public function show(Request $request)
     {
-        return view('ladmin::crud.show');
+        return view('ladmin::crud.show', [
+            'fields' => $this->showFields()
+        ]);
     }
 
     public function detail(Request $request)
     {
-        Ladmin::getNavigation('navigation')->render();
+        return view('ladmin::crud.detail', [
+            'fields' => $this->detailFields()
+        ]);
     }
 
-    public function editor(Request $request)
+    public function edit(Request $request)
     {
-        Ladmin::getNavigation('navigation')->render();
+        return view('ladmin::crud.edit', [
+            'fields' => $this->editFields()
+        ]);
     }
 
     public function create(Request $request)

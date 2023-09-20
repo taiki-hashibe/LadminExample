@@ -18,10 +18,8 @@
             <tbody>
                 @foreach (Ladmin::currentQuery()->paginate(24) as $item)
                     <tr>
-                        @foreach (Ladmin::currentQuery()->getColumnNames() as $columnName)
-                            <td>
-                                {{ $item->{$columnName} }}
-                            </td>
+                        @foreach ($fields as $field)
+                            {{ $field->render($item) }}
                         @endforeach
                         @if (Ladmin::hasDetail())
                             <td><a
