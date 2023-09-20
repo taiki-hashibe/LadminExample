@@ -1,6 +1,7 @@
 <?php
 
 return [
+    'guard' => 'web',
     'uri' => [
         'show' => 'show',
         'detail' => 'detail',

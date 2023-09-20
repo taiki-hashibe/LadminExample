@@ -222,6 +222,17 @@ class Ladmin
         return $this->getDestroy()->getRoute()->action['as'];
     }
 
+    public function hasAuth(): bool
+    {
+        $routes = LadminRoute::getRoutes();
+        foreach ($routes as $route) {
+            if ($route->getGroupName() === 'auth') {
+                return true;
+            }
+        }
+        return false;
+    }
+
     public function hasCrudAction(string $crudAction): bool
     {
         $currentCrudGroup = $this->getCurrentCrudGroup();

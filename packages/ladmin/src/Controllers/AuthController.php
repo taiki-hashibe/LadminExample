@@ -9,6 +9,7 @@ use Illuminate\Support\Facades\Auth;
 use LowB\Ladmin\Facades\Ladmin;
 use Illuminate\Support\Facades\View as FacadesView;
 use LowB\Ladmin\Config\Facades\LadminConfig;
+use LowB\Ladmin\Support\Facades\LadminRoute;
 
 class AuthController extends Controller
 {
@@ -20,21 +21,21 @@ class AuthController extends Controller
                 'password' => ['required'],
             ]);
 
-            if (Auth::guard(config('ladmin.auth.guard'))->attempt($credentials)) {
+            if (Auth::guard(config('ladmin.guard'))->attempt($credentials)) {
                 $request->session()->regenerate();
 
-                return redirect()->intended(route(Ladmin::index()->routeName()));
+                return redirect()->intended(route(LadminRoute::dashboard()->index()->name));
             }
 
             return back()->withErrors([
                 'email' => 'The provided credentials do not match our records.',
             ])->onlyInput('email');
         }
-        return FacadesView::first(['admin.auth.login', LadminConfig::theme() . 'auth.login']);
+        return FacadesView::first(['ladmin::auth.login']);
     }
 
     public function logout(): RedirectResponse
     {
-        return redirect()->route(Ladmin::login()->routeName());
+        return redirect()->route(LadminRoute::auth()->login()->name);
     }
 }

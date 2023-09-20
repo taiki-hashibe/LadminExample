@@ -11,6 +11,9 @@ use LowB\Ladmin\Route\Route;
 use LowB\Ladmin\Support\Query\LadminQuery;
 use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Route as SupportRoute;
+use LowB\Ladmin\Controllers\AuthController;
+use LowB\Ladmin\Facades\Ladmin;
+use LowB\Ladmin\Support\Facades\LadminRoute as SupportLadminRoute;
 
 class LadminRoute
 {
@@ -45,6 +48,9 @@ class LadminRoute
             $args[0] = '/' . LadminConfig::getPrefix() . $args[0];
         }
         $router = Route::make()->{$method}(...$args)->name($this->generateName($args[0]));
+        if (Ladmin::hasAuth()) {
+            $router->middleware(config('ladmin.guard'));
+        }
         $this->routes[] = $router;
         return $router;
     }
@@ -117,6 +123,12 @@ class LadminRoute
     public function destroy(string $modelOrTable, string $controllerName = CrudController::class): mixed
     {
         return $this->_destroy(LadminQuery::make($modelOrTable), $this->makeController($controllerName));
+    }
+
+    public function auth(string $controllerName = AuthController::class): mixed
+    {
+        $this->post('/logout', [$controllerName, 'logout'])->setGroupName('auth')->setLabel('Logout');
+        return $this->get('/login', [$controllerName, 'login'])->setGroupName('auth')->setLabel('Login');
     }
 
     public function dashboard(string $controllerName = DashboardController::class): mixed
