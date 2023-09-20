@@ -2,53 +2,107 @@
 
 namespace LowB\Ladmin\Route;
 
-use Illuminate\Contracts\Database\Query\Builder as QueryBuilder;
-use Illuminate\Database\Eloquent\Model;
-use Illuminate\Support\Facades\DB;
-use LowB\Ladmin\Controllers\AuthController;
-use LowB\Ladmin\Controllers\DashboardController;
-use LowB\Ladmin\Controllers\ProfileController;
-use LowB\Ladmin\Crud\Crud;
+use Exception;
+use LowB\Ladmin\Controllers\CrudController;
+use LowB\Ladmin\Route\Facades\Route;
+use LowB\Ladmin\Support\Query\LadminQuery;
 
 class LadminRoute
 {
-    use Basically, CrudRoute;
+    private array $routes;
 
-    public function auth(): void
+    public function __call($method, $args)
     {
-        $this->post(config('ladmin.auth.logout.url'), [AuthController::class, 'logout'], config('ladmin.auth.logout.name'))->middleware(config('ladmin.auth.middleware'));
-        $this->match(['GET', 'POST'], config('ladmin.auth.login.name'), [AuthController::class, 'login'], config('ladmin.auth.login.name'));
+        $router = Route::prefix(config('ladmin.route.prefix'))->{$method}(...$args);
+        $this->routes[] = $router;
+        return $router;
     }
 
-    public function dashboard(): void
+    private function _crudRouting(LadminQuery $query, CrudController $controller, string $method, string $actionName): mixed
     {
-        $this->get(config('ladmin.dashboard.show.url'), [DashboardController::class, 'show'], config('ladmin.dashboard.show.name'))->middleware(config('ladmin.auth.middleware'));
+        $router = Route::prefix(config('ladmin.route.prefix'))->{$method}($query->getTable() . '/' . $actionName, [$controller::class, $actionName]);
+        $this->routes[] = $router;
+        return $router;
     }
 
-    public function profile(): void
+    private function _show(LadminQuery $query, CrudController $controller): mixed
     {
-        $this->get(config('ladmin.profile.show.url'), [ProfileController::class, 'show'], config('ladmin.profile.show.name'))->middleware(config('ladmin.auth.middleware'));
-        $this->post(config('ladmin.profile.update.url'), [ProfileController::class, 'update'], config('ladmin.profile.update.name'))->middleware(config('ladmin.auth.middleware'));
-        $this->post(config('ladmin.profile.destroy.url'), [ProfileController::class, 'destroy'], config('ladmin.profile.destroy.name'))->middleware(config('ladmin.auth.middleware'));
+        return $this->_crudRouting($query,  $controller, 'get', 'show');
     }
 
-    public function crud(string $modelClassOrTableName, ?string $displayKey = null): Crud
+    private function _detail(LadminQuery $query, CrudController $controller): mixed
     {
-        $this->detail($modelClassOrTableName, $displayKey);
-        $this->editor($modelClassOrTableName, $displayKey);
-        $this->create($modelClassOrTableName, $displayKey);
-        $this->update($modelClassOrTableName, $displayKey);
-        $this->destroy($modelClassOrTableName, $displayKey);
-        $showCrud = $this->show($modelClassOrTableName, $displayKey);
-        return $showCrud;
+        return $this->_crudRouting($query,  $controller, 'get', 'detail');
     }
 
-    protected function createInstance(string $modelClassOrTableName): Model | QueryBuilder
+    private function _edit(LadminQuery $query, CrudController $controller): mixed
     {
-        if (class_exists($modelClassOrTableName) && is_subclass_of($modelClassOrTableName, 'Illuminate\Database\Eloquent\Model')) {
-            return app()->make($modelClassOrTableName);
-        } else {
-            return DB::table($modelClassOrTableName);
+        return $this->_crudRouting($query,  $controller, 'get', 'edit');
+    }
+
+    private function _create(LadminQuery $query, CrudController $controller): mixed
+    {
+        return $this->_crudRouting($query,  $controller, 'post', 'create');
+    }
+
+    private function _update(LadminQuery $query, CrudController $controller): mixed
+    {
+        return $this->_crudRouting($query,  $controller, 'post', 'update');
+    }
+
+    private function _destroy(LadminQuery $query, CrudController $controller): mixed
+    {
+        return $this->_crudRouting($query,  $controller, 'post', 'destroy');
+    }
+
+    public function show(string $modelOrTable, string $controllerName = CrudController::class): mixed
+    {
+        return $this->_show(LadminQuery::make($modelOrTable), $this->makeController($controllerName));
+    }
+
+    public function detail(string $modelOrTable, string $controllerName = CrudController::class): mixed
+    {
+        return $this->_detail(LadminQuery::make($modelOrTable), $this->makeController($controllerName));
+    }
+
+    public function edit(string $modelOrTable, string $controllerName = CrudController::class): mixed
+    {
+        return $this->_edit(LadminQuery::make($modelOrTable), $this->makeController($controllerName));
+    }
+
+    public function create(string $modelOrTable, string $controllerName = CrudController::class): mixed
+    {
+        return $this->_create(LadminQuery::make($modelOrTable), $this->makeController($controllerName));
+    }
+
+    public function update(string $modelOrTable, string $controllerName = CrudController::class): mixed
+    {
+        return $this->_update(LadminQuery::make($modelOrTable), $this->makeController($controllerName));
+    }
+
+    public function destroy(string $modelOrTable, string $controllerName = CrudController::class): mixed
+    {
+        return $this->_destroy(LadminQuery::make($modelOrTable), $this->makeController($controllerName));
+    }
+
+    public function crud(string $modelOrTable, string $controllerName = CrudController::class): mixed
+    {
+        $query = LadminQuery::make($modelOrTable);
+        $controller = $this->makeController($controllerName);
+        $this->_detail($query, $controller);
+        $this->_edit($query, $controller);
+        $this->_create($query, $controller);
+        $this->_update($query, $controller);
+        $this->_destroy($query, $controller);
+
+        return $this->_show($query, $controller);
+    }
+
+    private function makeController(string $name): CrudController
+    {
+        if (!class_exists($name)) {
+            throw new Exception("Target class [$name] does not exist.");
         }
+        return app()->make($name);
     }
 }
