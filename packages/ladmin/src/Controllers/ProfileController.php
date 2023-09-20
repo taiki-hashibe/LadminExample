@@ -30,7 +30,7 @@ class ProfileController extends Controller
         return back()->with('status', 'profile updated');
     }
 
-    public function passwordUpdate(Request $request): RedirectResponse
+    public function passwordChange(Request $request): RedirectResponse
     {
         $validated = $request->validateWithBag('updatePassword', [
             'current_password' => ['required', 'current_password'],

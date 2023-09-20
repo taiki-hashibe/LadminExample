@@ -7,11 +7,13 @@
             @include('ladmin::fields.edit.default', [
                 'label' => 'username',
                 'name' => 'name',
+                'value' => auth()->user()->name,
             ])
 
             @include('ladmin::fields.edit.default', [
                 'label' => 'email',
                 'name' => 'email',
+                'value' => auth()->user()->email,
             ])
 
             <button>{{ __('Save') }}</button>
@@ -19,29 +21,23 @@
         <hr>
         <form method="post" action="{{ Ladmin::route()->profile()->passwordChange()->url }}">
             @csrf
-
-            <div class="mb-2">
-                <x-ladmin::text-input label="{{ __('Current Password') }}" id="current_password" name="current_password"
-                    type="password" class="mt-1 block w-full" autocomplete="current-password" />
-            </div>
-
-            <div class="mb-2">
-                <x-ladmin::text-input label="{{ __('New Password') }}" id="password" name="password" type="password"
-                    class="mt-1 block w-full" autocomplete="new-password" />
-            </div>
-
-            <div class="mb-2">
-                <x-ladmin::text-input label="{{ __('Confirm Password') }}" id="password_confirmation"
-                    name="password_confirmation" type="password" class="mt-1 block w-full"
-                    autocomplete="new-password" />
-            </div>
-
+            @include('ladmin::fields.edit.default', [
+                'label' => 'current password',
+                'name' => 'current_password',
+            ])
+            @include('ladmin::fields.edit.default', [
+                'label' => 'new password',
+                'name' => 'password',
+            ])
+            @include('ladmin::fields.edit.default', [
+                'label' => 'new password confirmation',
+                'name' => 'password_confirmation',
+            ])
             <div class="flex items-center gap-4">
-                <x-ladmin::primary-button>{{ __('Save') }}</x-ladmin::primary-button>
+                <button>{{ __('Save') }}</button>
 
                 @if (session('status') === 'password-updated')
-                    <p x-data="{ show: true }" x-show="show" x-transition x-init="setTimeout(() => show = false, 2000)"
-                        class="text-sm text-gray-600">{{ __('Saved.') }}</p>
+                    <p>{{ __('Saved.') }}</p>
                 @endif
             </div>
         </form>
