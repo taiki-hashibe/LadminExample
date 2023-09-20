@@ -1,6 +1,8 @@
 <?php
 
 use App\Models\User;
+use Illuminate\Support\Facades\Route;
+use LowB\Ladmin\Facades\Ladmin;
 use LowB\Ladmin\Route\Facades\LadminRoute;
 
 /*
@@ -14,12 +16,12 @@ use LowB\Ladmin\Route\Facades\LadminRoute;
 |
 */
 
+LadminRoute::dashboard();
+LadminRoute::profile();
 LadminRoute::crud(User::class)->setLabel('ユーザー');
-LadminRoute::crud('posts');
-LadminRoute::get('/', function () {
-    dump(1);
+LadminRoute::crud('posts')->setLabel('投稿');
+Route::get('/test', function () {
+    Ladmin::getNavigation('navigation')->render();
 });
-
-
 
 // require __DIR__ . '/admin.php';

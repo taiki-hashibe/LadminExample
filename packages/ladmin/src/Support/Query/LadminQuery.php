@@ -7,6 +7,7 @@ use Illuminate\Database\Query\Builder;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Schema;
+use LowB\Ladmin\Support\Facades\LadminQueryManager;
 
 class LadminQuery
 {
@@ -31,9 +32,13 @@ class LadminQuery
         return $this->query->{$name};
     }
 
-    public static function make(string $name): self
+    public static function make(string $name, ?bool $remember = true): self
     {
-        return new self($name);
+        $query = new self($name);
+        if ($remember) {
+            LadminQueryManager::remember($query);
+        }
+        return $query;
     }
 
     public static function makeQuery(string $name): Model|Builder

@@ -8,8 +8,9 @@ use LowB\Ladmin\Config\Facades\LadminConfig;
 
 class DashboardController extends Controller
 {
-    public function show(): ViewView
+    public function index(): ViewView
     {
+        dd('dashboard');
         return View::first(['admin.dashboard', LadminConfig::theme() . 'dashboard']);
     }
 }
