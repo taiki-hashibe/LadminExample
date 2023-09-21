@@ -1,0 +1,14 @@
+{
+  "resources/ts/ladmin.css": {
+    "file": "ladmin.css",
+    "src": "resources/ts/ladmin.css"
+  },
+  "resources/ts/ladmin.ts": {
+    "css": [
+      "ladmin.css"
+    ],
+    "file": "ladmin.js",
+    "isEntry": true,
+    "src": "resources/ts/ladmin.ts"
+  }
+}
