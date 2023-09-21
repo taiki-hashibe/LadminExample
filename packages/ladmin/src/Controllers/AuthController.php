@@ -13,7 +13,10 @@ class AuthController extends Controller
 {
     public function login(Request $request): View|RedirectResponse
     {
-        return FacadesView::first([config('ladmin.view.prefix') . '.auth.login', 'ladmin::auth.login']);
+        return FacadesView::first([
+            config('ladmin.view.prefix') . '.auth.login',
+            'ladmin::auth.login'
+        ]);
     }
 
     public function register(Request $request): RedirectResponse

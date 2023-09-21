@@ -16,7 +16,10 @@ class ProfileController extends Controller
 {
     public function index(): ViewView
     {
-        return View::first([config('ladmin.view.prefix') . '.profile.index', 'ladmin::profile.index'], [
+        return View::first([
+            config('ladmin.view.prefix') . '.profile.index',
+            'ladmin::profile.index'
+        ], [
             'user' => Auth::user()
         ]);
     }

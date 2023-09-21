@@ -26,7 +26,10 @@ class CrudController extends AbstractCrudController
 
     public function edit(Request $request)
     {
-        return View::first([config('ladmin.view.prefix') . '.crud.detail', 'ladmin::crud.edit'], [
+        return View::first([
+            config('ladmin.view.prefix') . '.crud.detail',
+            'ladmin::crud.edit'
+        ], [
             'fields' => $this->editFields()
         ]);
     }
