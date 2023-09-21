@@ -3,26 +3,15 @@
 namespace LowB\Ladmin\Route;
 
 use Exception;
-use LowB\Ladmin\Config\Facades\LadminConfig;
 use LowB\Ladmin\Controllers\CrudController;
 use LowB\Ladmin\Controllers\DashboardController;
 use LowB\Ladmin\Controllers\ProfileController;
-use LowB\Ladmin\Route\Route;
 use LowB\Ladmin\Support\Query\LadminQuery;
-use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Route as SupportRoute;
 use LowB\Ladmin\Controllers\AuthController;
-use LowB\Ladmin\Facades\Ladmin;
-use LowB\Ladmin\Support\Facades\LadminRoute as SupportLadminRoute;
 
-class LadminRoute
+class LadminRoute extends BaseLadminRoute
 {
-    public const PRIMARY_KEY = "{primaryKey}";
-    public const PRIMARY_KEY_OPTIONAL = "{primaryKey?}";
-
-    private array $routes = [];
-    private bool $useMiddleware = false;
-
     public function getRoutes()
     {
         return $this->routes;
@@ -41,59 +30,6 @@ class LadminRoute
             }
         }
         return null;
-    }
-
-    public function __call($method, $args)
-    {
-        if (LadminConfig::getPrefix()) {
-            $args[0] = '/' . LadminConfig::getPrefix() . $args[0];
-        }
-        $router = Route::make()->{$method}(...$args)->name($this->generateName($args[0]));
-        if ($this->useMiddleware) {
-            $router->middleware(config('ladmin.middleware'));
-        }
-        $this->routes[] = $router;
-        return $router;
-    }
-
-    private function _crudRouting(LadminQuery $query, CrudController $controller, string $method, string $crudAction, string $actionName, string|null $primaryKey = null): mixed
-    {
-        $uri = "/{$query->getTable()}/$crudAction" . ($primaryKey ? "/$primaryKey" : '');
-        return $this->{$method}($uri, [$controller::class, $actionName])
-            ->setTableName($query->getTable())
-            ->setGroupName($query->getTable())
-            ->setLabel($query->getTable())
-            ->setCrudAction($crudAction);
-    }
-
-    private function _show(LadminQuery $query, CrudController $controller): mixed
-    {
-        return $this->_crudRouting($query,  $controller, 'get', config('ladmin.uri.show'), 'show')->setNavigation(['navigation']);
-    }
-
-    private function _detail(LadminQuery $query, CrudController $controller): mixed
-    {
-        return $this->_crudRouting($query,  $controller, 'get', config('ladmin.uri.detail'), 'detail', self::PRIMARY_KEY);
-    }
-
-    private function _edit(LadminQuery $query, CrudController $controller): mixed
-    {
-        return $this->_crudRouting($query,  $controller, 'get', config('ladmin.uri.edit'), 'edit', self::PRIMARY_KEY_OPTIONAL);
-    }
-
-    private function _create(LadminQuery $query, CrudController $controller): mixed
-    {
-        return $this->_crudRouting($query,  $controller, 'post', config('ladmin.uri.create'), 'create');
-    }
-
-    private function _update(LadminQuery $query, CrudController $controller): mixed
-    {
-        return $this->_crudRouting($query,  $controller, 'post', config('ladmin.uri.update'), 'update', self::PRIMARY_KEY);
-    }
-
-    private function _destroy(LadminQuery $query, CrudController $controller): mixed
-    {
-        return $this->_crudRouting($query,  $controller, 'post', config('ladmin.uri.destroy'), 'destroy', self::PRIMARY_KEY);
     }
 
     public function show(string $modelOrTable, string $controllerName = CrudController::class): mixed
@@ -164,19 +100,5 @@ class LadminRoute
         $this->_destroy($query, $controller);
 
         return $this->_show($query, $controller);
-    }
-
-    private function makeController(string $name): CrudController
-    {
-        if (!class_exists($name)) {
-            throw new Exception("Target class [$name] does not exist.");
-        }
-        return app()->make($name);
-    }
-
-    private function generateName(string $uri)
-    {
-        $name = Str::of($uri)->replace('/', '.')->replaceFirst('.', '');
-        return $name->__toString();
     }
 }
