@@ -2,6 +2,6 @@
 
 namespace LowB\Ladmin\Fields;
 
-class Column extends Field
+class Column extends FieldRenderer
 {
 }

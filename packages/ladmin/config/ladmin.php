@@ -10,7 +10,11 @@ return [
         'create' => 'create',
         'update' => 'update',
         'destroy' => 'destroy'
-    ]
+    ],
+    'namespace' => [
+        'controller' => 'App\Admin\Controllers',
+        'fields' => 'App\Admin\Fields',
+    ],
     // 'index' => null,
     // 'route' => [
     //     'prefix' => 'admin',

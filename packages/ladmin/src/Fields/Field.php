@@ -2,94 +2,17 @@
 
 namespace LowB\Ladmin\Fields;
 
-use Illuminate\Contracts\View\View as ContractsView;
-use Illuminate\Support\Facades\View;
-use LowB\Ladmin\Config\Facades\LadminConfig;
-use LowB\Ladmin\Contracts\Renderable;
-use LowB\Ladmin\Facades\Ladmin;
-
-abstract class Field implements Renderable
+abstract class Field
 {
-    const PREFIX = 'ladmin::';
+    protected static string $view = 'fields.default';
 
-    protected string $view = 'fields.show.default';
-
-    protected string $columnName;
-
-    protected string $label;
-
-    protected array $validation = [];
-
-    public function __construct(string $columnName, string $view)
+    public static function column(string $columnName, ?string $type = null): Column
     {
-        $this->columnName = $columnName;
-        $this->label = $columnName;
-        $this->view = $view;
+        return new Column($columnName, static::$view, $type);
     }
 
-    public function getName(): string
+    public static function belongsTo(string $columnName, string $belongsTo, ?string $type = null): BelongsTo
     {
-        return $this->columnName;
-    }
-
-    public function setLabel(string $label): self
-    {
-        $this->label = $label;
-        return $this;
-    }
-
-    public function getLabel(): string
-    {
-        return $this->label;
-    }
-
-    public function getValue(mixed $model): mixed
-    {
-        return $model->{$this->columnName};
-    }
-
-    public function setView(string $view): self
-    {
-        $this->view = $view;
-        return $this;
-    }
-
-    public function setValidation(array $validation): self
-    {
-        $this->validation = $validation;
-        return $this;
-    }
-
-    public function getValidation(): array
-    {
-        return $this->validation;
-    }
-
-    public function render(mixed $params = []): ContractsView
-    {
-        return View::first([self::PREFIX . $this->view], [
-            'field' => $this,
-            'label' => $this->getLabel(),
-            'name' => $this->columnName,
-            'value' => $this->getValue($params),
-        ]);
-    }
-
-    public function isRequired(): bool
-    {
-        return in_array('required', $this->validation);
-    }
-
-    private function generateDetailedLocalViewName(): string|null
-    {
-        // if (Ladmin::crud() && Ladmin::crud()->tableName()) {
-        //     return LadminConfig::localViewPrefix() . Ladmin::crud()->tableName() . '.' . $this->view;
-        // }
-        return null;
-    }
-
-    private function generateLocalViewName(): string
-    {
-        return LadminConfig::localViewPrefix() . $this->view;
+        return new BelongsTo($columnName, $belongsTo, static::$view, $type);
     }
 }
