@@ -17,12 +17,12 @@ class BaseLadminRoute
 
     public function __call($method, $args)
     {
-        if (LadminConfig::getPrefix()) {
-            $args[0] = '/' . LadminConfig::getPrefix() . $args[0];
+        if (LadminConfig::config('view.prefix')) {
+            $args[0] = '/' . LadminConfig::config('view.prefix') . $args[0];
         }
         $router = Route::make()->{$method}(...$args)->name($this->generateName($args[0]));
         if ($this->useMiddleware) {
-            $router->middleware(config('ladmin.middleware'));
+            $router->middleware(LadminConfig::config('middleware'));
         }
         $this->routes[] = $router;
         return $router;
@@ -40,32 +40,32 @@ class BaseLadminRoute
 
     protected function _show(LadminQuery $query, CrudController $controller): mixed
     {
-        return $this->_crudRouting($query,  $controller, 'get', config('ladmin.uri.show'), 'show')->setNavigation(['navigation']);
+        return $this->_crudRouting($query,  $controller, 'get', LadminConfig::config('uri.show'), 'show')->setNavigation(['navigation']);
     }
 
     protected function _detail(LadminQuery $query, CrudController $controller): mixed
     {
-        return $this->_crudRouting($query,  $controller, 'get', config('ladmin.uri.detail'), 'detail', self::PRIMARY_KEY);
+        return $this->_crudRouting($query,  $controller, 'get', LadminConfig::config('uri.detail'), 'detail', self::PRIMARY_KEY);
     }
 
     protected function _edit(LadminQuery $query, CrudController $controller): mixed
     {
-        return $this->_crudRouting($query,  $controller, 'get', config('ladmin.uri.edit'), 'edit', self::PRIMARY_KEY_OPTIONAL);
+        return $this->_crudRouting($query,  $controller, 'get', LadminConfig::config('uri.edit'), 'edit', self::PRIMARY_KEY_OPTIONAL);
     }
 
     protected function _create(LadminQuery $query, CrudController $controller): mixed
     {
-        return $this->_crudRouting($query,  $controller, 'post', config('ladmin.uri.create'), 'create');
+        return $this->_crudRouting($query,  $controller, 'post', LadminConfig::config('uri.create'), 'create');
     }
 
     protected function _update(LadminQuery $query, CrudController $controller): mixed
     {
-        return $this->_crudRouting($query,  $controller, 'post', config('ladmin.uri.update'), 'update', self::PRIMARY_KEY);
+        return $this->_crudRouting($query,  $controller, 'post', LadminConfig::config('uri.update'), 'update', self::PRIMARY_KEY);
     }
 
     protected function _destroy(LadminQuery $query, CrudController $controller): mixed
     {
-        return $this->_crudRouting($query,  $controller, 'post', config('ladmin.uri.destroy'), 'destroy', self::PRIMARY_KEY);
+        return $this->_crudRouting($query,  $controller, 'post', LadminConfig::config('uri.destroy'), 'destroy', self::PRIMARY_KEY);
     }
 
 

@@ -5,6 +5,7 @@ namespace LowB\Ladmin\Support;
 use Illuminate\Contracts\View\View as ContractsView;
 use Illuminate\Support\Facades\View;
 use Illuminate\Support\Str;
+use LowB\Ladmin\Config\Facades\LadminConfig;
 use LowB\Ladmin\Contracts\Renderable;
 use LowB\Ladmin\Route\Facades\LadminRoute;
 
@@ -52,8 +53,8 @@ class Navigation implements Renderable
     public function render(mixed $params = []): ContractsView
     {
         return View::first([
-            config('ladmin.view.prefix') . '.' . Str::of($this->view)->replace('default', $this->name),
-            config('ladmin.view.prefix') .  ".$this->view",
+            LadminConfig::config('view.prefix') . '.' . Str::of($this->view)->replace('default', $this->name),
+            LadminConfig::config('view.prefix') .  ".$this->view",
             'ladmin::' . Str::of($this->view)->replace('default', $this->name),
             "ladmin::$this->view"
         ], [

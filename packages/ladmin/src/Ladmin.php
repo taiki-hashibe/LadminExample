@@ -3,6 +3,7 @@
 namespace LowB\Ladmin;
 
 use Exception;
+use LowB\Ladmin\Config\Facades\LadminConfig;
 use LowB\Ladmin\Route\Facades\LadminRoute;
 use LowB\Ladmin\Route\Route;
 use LowB\Ladmin\Support\Facades\LadminQueryManager;
@@ -134,7 +135,7 @@ class Ladmin
 
     public function getShow(): Route
     {
-        return $this->getCrudAction(config('ladmin.uri.show'));
+        return $this->getCrudAction(LadminConfig::config('uri.show'));
     }
 
     public function getShowUri(): string
@@ -149,7 +150,7 @@ class Ladmin
 
     public function getDetail(): Route
     {
-        return $this->getCrudAction(config('ladmin.uri.detail'));
+        return $this->getCrudAction(LadminConfig::config('uri.detail'));
     }
 
     public function getDetailUri(): string
@@ -164,7 +165,7 @@ class Ladmin
 
     public function getEdit(): Route
     {
-        return $this->getCrudAction(config('ladmin.uri.edit'));
+        return $this->getCrudAction(LadminConfig::config('uri.edit'));
     }
 
     public function getEditUri(): string
@@ -179,7 +180,7 @@ class Ladmin
 
     public function getCreate(): Route
     {
-        return $this->getCrudAction(config('ladmin.uri.create'));
+        return $this->getCrudAction(LadminConfig::config('uri.create'));
     }
 
     public function getCreateUri(): string
@@ -194,7 +195,7 @@ class Ladmin
 
     public function getUpdate(): Route
     {
-        return $this->getCrudAction(config('ladmin.uri.update'));
+        return $this->getCrudAction(LadminConfig::config('uri.update'));
     }
 
     public function getUpdateUri(): string
@@ -209,7 +210,7 @@ class Ladmin
 
     public function getDestroy(): Route
     {
-        return $this->getCrudAction(config('ladmin.uri.destroy'));
+        return $this->getCrudAction(LadminConfig::config('uri.destroy'));
     }
 
     public function getDestroyUri(): string
@@ -249,31 +250,31 @@ class Ladmin
 
     public function hasShow(): bool
     {
-        return $this->hasCrudAction(config('ladmin.uri.show'));
+        return $this->hasCrudAction(LadminConfig::config('uri.show'));
     }
 
     public function hasDetail(): bool
     {
-        return $this->hasCrudAction(config('ladmin.uri.detail'));
+        return $this->hasCrudAction(LadminConfig::config('uri.detail'));
     }
 
     public function hasEdit(): bool
     {
-        return $this->hasCrudAction(config('ladmin.uri.edit'));
+        return $this->hasCrudAction(LadminConfig::config('uri.edit'));
     }
 
     public function hasCreate(): bool
     {
-        return $this->hasCrudAction(config('ladmin.uri.create'));
+        return $this->hasCrudAction(LadminConfig::config('uri.create'));
     }
 
     public function hasUpdate(): bool
     {
-        return $this->hasCrudAction(config('ladmin.uri.update'));
+        return $this->hasCrudAction(LadminConfig::config('uri.update'));
     }
 
     public function hasDestroy(): bool
     {
-        return $this->hasCrudAction(config('ladmin.uri.destroy'));
+        return $this->hasCrudAction(LadminConfig::config('uri.destroy'));
     }
 }

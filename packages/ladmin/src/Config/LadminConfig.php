@@ -2,18 +2,25 @@
 
 namespace LowB\Ladmin\Config;
 
+use Illuminate\Support\Arr;
+
 class LadminConfig
 {
-    protected string $route = '/{table}/{crud}/{primaryKey}';
-    protected string|null $prefix;
+    protected array $config = [];
+    protected string $theme = 'ladmin';
 
     public function __construct()
     {
-        $this->prefix = config('ladmin.route.prefix');
+        $this->config = config('ladmin');
     }
 
-    public function getPrefix(): string | null
+    public function config(string $key)
     {
-        return $this->prefix;
+        return Arr::get($this->config, $key);
+    }
+
+    public function theme()
+    {
+        return "$this->theme::";
     }
 }

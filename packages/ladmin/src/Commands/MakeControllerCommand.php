@@ -3,6 +3,7 @@
 namespace LowB\Ladmin\Commands;
 
 use Illuminate\Console\GeneratorCommand;
+use LowB\Ladmin\Config\Facades\LadminConfig;
 
 class MakeControllerCommand extends GeneratorCommand
 {
@@ -35,7 +36,7 @@ class MakeControllerCommand extends GeneratorCommand
         $this->queryName = $this->getQueryInput();
         $this->controllerName = class_basename($this->queryName) . 'CrudController';
 
-        $name = $this->qualifyClass(config('ladmin.namespace.controller') . '\\' . $this->controllerName);
+        $name = $this->qualifyClass(LadminConfig::config('namespace.controller') . '\\' . $this->controllerName);
         $path = $this->getPath($name);
         $this->makeDirectory($path);
         $this->files->put($path, $this->sortImports($this->buildClass($name)));
@@ -74,7 +75,7 @@ class MakeControllerCommand extends GeneratorCommand
                 'DummyControllerName',
             ],
             [
-                config('ladmin.namespace.controller'),
+                LadminConfig::config('namespace.controller'),
                 $this->controllerName,
             ],
             $stub

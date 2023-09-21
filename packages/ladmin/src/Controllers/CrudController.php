@@ -12,14 +12,14 @@ class CrudController extends AbstractCrudController
 {
     public function show(Request $request)
     {
-        return View::first([config('ladmin.view.prefix') . '.crud.show', 'ladmin::crud.show'], [
+        return View::first([LadminConfig::config('view.prefix') . '.crud.show', 'ladmin::crud.show'], [
             'fields' => $this->showFields()
         ]);
     }
 
     public function detail(Request $request)
     {
-        return View::first([config('ladmin.view.prefix') . '.crud.detail', 'ladmin::crud.detail'], [
+        return View::first([LadminConfig::config('view.prefix') . '.crud.detail', 'ladmin::crud.detail'], [
             'fields' => $this->detailFields()
         ]);
     }
@@ -27,7 +27,7 @@ class CrudController extends AbstractCrudController
     public function edit(Request $request)
     {
         return View::first([
-            config('ladmin.view.prefix') . '.crud.detail',
+            LadminConfig::config('view.prefix') . '.crud.detail',
             'ladmin::crud.edit'
         ], [
             'fields' => $this->editFields()
@@ -56,10 +56,5 @@ class CrudController extends AbstractCrudController
     {
         Ladmin::currentItemDelete();
         return redirect()->route(Ladmin::getShowRouteName());
-    }
-
-    protected function generateViewPriority(string $method): array
-    {
-        return [LadminConfig::localViewPrefix() . Ladmin::crud()->tableName() . '.' . $method, LadminConfig::localViewPrefix() . 'crud.' . $method, LadminConfig::theme() . 'crud.' . $method];
     }
 }

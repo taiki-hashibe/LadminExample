@@ -7,6 +7,7 @@ use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\View as FacadesView;
+use LowB\Ladmin\Config\Facades\LadminConfig;
 use LowB\Ladmin\Support\Facades\LadminRoute;
 
 class AuthController extends Controller
@@ -14,7 +15,7 @@ class AuthController extends Controller
     public function login(Request $request): View|RedirectResponse
     {
         return FacadesView::first([
-            config('ladmin.view.prefix') . '.auth.login',
+            LadminConfig::config('view.prefix') . '.auth.login',
             'ladmin::auth.login'
         ]);
     }
@@ -26,7 +27,7 @@ class AuthController extends Controller
             'password' => ['required'],
         ]);
 
-        if (Auth::guard(config('ladmin.guard'))->attempt($credentials)) {
+        if (Auth::guard(LadminConfig::config('guard'))->attempt($credentials)) {
             $request->session()->regenerate();
 
             return redirect()->intended(route(LadminRoute::dashboard()->index()->name));
@@ -38,7 +39,7 @@ class AuthController extends Controller
 
     public function logout(Request $request): RedirectResponse
     {
-        Auth::guard(config('ladmin.guard'))->logout();
+        Auth::guard(LadminConfig::config('guard'))->logout();
 
         $request->session()->invalidate();
 

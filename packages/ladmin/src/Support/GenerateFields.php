@@ -5,6 +5,7 @@ namespace LowB\Ladmin\Support;
 use LowB\Ladmin\Support\Facades\GenerateValidationRules;
 use LowB\Ladmin\Support\Query\LadminQuery;
 use Illuminate\Support\Str;
+use LowB\Ladmin\Config\Facades\LadminConfig;
 use LowB\Ladmin\Fields\Field;
 
 class GenerateFields
@@ -49,8 +50,8 @@ class GenerateFields
     {
         $studlyActionName = Str::studly($action);
         $fieldClass = "\LowB\Ladmin\Fields\\$studlyActionName\\$studlyActionName" . "Field";
-        if (class_exists(config('ladmin.namespace.fields') . "\\$studlyActionName\\$studlyActionName" . Str::studly($typeName) . "Field")) {
-            $fieldClass = config('ladmin.namespace.fields') . "\\$studlyActionName\\$studlyActionName" . Str::studly($typeName) . "Field";
+        if (class_exists(LadminConfig::config('namespace.fields') . "\\$studlyActionName\\$studlyActionName" . Str::studly($typeName) . "Field")) {
+            $fieldClass = LadminConfig::config('namespace.fields') . "\\$studlyActionName\\$studlyActionName" . Str::studly($typeName) . "Field";
         } else if (class_exists("\LowB\Ladmin\Fields\\$studlyActionName\\$studlyActionName" . Str::studly($typeName) . "Field")) {
             $fieldClass = "\LowB\Ladmin\Fields\\$studlyActionName\\$studlyActionName" . Str::studly($typeName) . "Field";
         }
