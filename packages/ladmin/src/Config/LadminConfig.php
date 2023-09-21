@@ -19,8 +19,13 @@ class LadminConfig
         return Arr::get($this->config, $key);
     }
 
-    public function theme()
+    public function localView(string $view)
     {
-        return "$this->theme::";
+        return $this->config('view.prefix') . "::$view";
+    }
+
+    public function themeView(string $view)
+    {
+        return "$this->theme::$view";
     }
 }

@@ -16,7 +16,7 @@ class AuthController extends Controller
     {
         return FacadesView::first([
             LadminConfig::config('view.prefix') . '.auth.login',
-            'ladmin::auth.login'
+            LadminConfig::themeView('auth.login')
         ]);
     }
 

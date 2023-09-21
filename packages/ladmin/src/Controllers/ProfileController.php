@@ -18,8 +18,8 @@ class ProfileController extends Controller
     public function index(): ViewView
     {
         return View::first([
-            LadminConfig::config('view.prefix') . '.profile.index',
-            'ladmin::profile.index'
+            LadminConfig::localView('profile.index'),
+            LadminConfig::themeView('profile.index')
         ], [
             'user' => Auth::user()
         ]);

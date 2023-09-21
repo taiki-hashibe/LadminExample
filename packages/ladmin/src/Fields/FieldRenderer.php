@@ -5,12 +5,11 @@ namespace LowB\Ladmin\Fields;
 use Illuminate\Contracts\View\View as ContractsView;
 use Illuminate\Support\Facades\View;
 use Illuminate\Support\Str;
+use LowB\Ladmin\Config\Facades\LadminConfig;
 use LowB\Ladmin\Contracts\Renderable;
 
 abstract class FieldRenderer implements Renderable
 {
-    const PREFIX = 'ladmin::';
-
     protected string $view = 'fields.default';
 
     protected string|null $type;
@@ -71,13 +70,13 @@ abstract class FieldRenderer implements Renderable
     {
         $viewPriority = [];
         if ($this->type) {
-            $viewPriority[] = "admin." . Str::of($this->view)->replace('default', $this->type);
+            $viewPriority[] = LadminConfig::localView(Str::of($this->view)->replace('default', $this->type));
         }
-        $viewPriority[] = "admin.$this->view";
+        $viewPriority[] = LadminConfig::localView($this->view);
         if ($this->type) {
-            $viewPriority[] = self::PREFIX . Str::of($this->view)->replace('default', $this->type);
+            $viewPriority[] = LadminConfig::localView(Str::of($this->view)->replace('default', $this->type));
         }
-        $viewPriority[] = self::PREFIX . $this->view;
+        $viewPriority[] = LadminConfig::themeView($this->view);
         return View::first($viewPriority, [
             'field' => $this,
             'label' => $this->getLabel(),

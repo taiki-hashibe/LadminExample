@@ -11,8 +11,8 @@ class DashboardController extends Controller
     public function index(): ViewView
     {
         return View::first([
-            LadminConfig::config('view.prefix') . '.dashboard',
-            'ladmin::dashboard'
+            LadminConfig::localView('dashboard'),
+            LadminConfig::themeView('dashboard')
         ]);
     }
 }

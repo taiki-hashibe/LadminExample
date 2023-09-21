@@ -53,10 +53,10 @@ class Navigation implements Renderable
     public function render(mixed $params = []): ContractsView
     {
         return View::first([
-            LadminConfig::config('view.prefix') . '.' . Str::of($this->view)->replace('default', $this->name),
-            LadminConfig::config('view.prefix') .  ".$this->view",
-            'ladmin::' . Str::of($this->view)->replace('default', $this->name),
-            "ladmin::$this->view"
+            LadminConfig::localView(Str::of($this->view)->replace('default', $this->name)),
+            LadminConfig::localView($this->view),
+            LadminConfig::themeView(Str::of($this->view)->replace('default', $this->name)),
+            LadminConfig::themeView($this->view)
         ], [
             'navigation' => $this,
             'params' => $params
