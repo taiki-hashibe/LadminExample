@@ -4,6 +4,7 @@ namespace LowB\Ladmin\Controllers;
 
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\View;
 use LowB\Ladmin\Config\Facades\LadminConfig;
 use LowB\Ladmin\Facades\Ladmin;
 
@@ -11,21 +12,21 @@ class CrudController extends AbstractCrudController
 {
     public function show(Request $request)
     {
-        return view('ladmin::crud.show', [
+        return View::first([config('ladmin.view.prefix') . '.crud.show', 'ladmin::crud.show'], [
             'fields' => $this->showFields()
         ]);
     }
 
     public function detail(Request $request)
     {
-        return view('ladmin::crud.detail', [
+        return View::first([config('ladmin.view.prefix') . '.crud.detail', 'ladmin::crud.detail'], [
             'fields' => $this->detailFields()
         ]);
     }
 
     public function edit(Request $request)
     {
-        return view('ladmin::crud.edit', [
+        return View::first([config('ladmin.view.prefix') . '.crud.detail', 'ladmin::crud.edit'], [
             'fields' => $this->editFields()
         ]);
     }

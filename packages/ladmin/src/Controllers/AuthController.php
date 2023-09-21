@@ -6,16 +6,14 @@ use Illuminate\Contracts\View\View;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-use LowB\Ladmin\Facades\Ladmin;
 use Illuminate\Support\Facades\View as FacadesView;
-use LowB\Ladmin\Config\Facades\LadminConfig;
 use LowB\Ladmin\Support\Facades\LadminRoute;
 
 class AuthController extends Controller
 {
     public function login(Request $request): View|RedirectResponse
     {
-        return FacadesView::first(['ladmin::auth.login']);
+        return FacadesView::first([config('ladmin.view.prefix') . '.auth.login', 'ladmin::auth.login']);
     }
 
     public function register(Request $request): RedirectResponse

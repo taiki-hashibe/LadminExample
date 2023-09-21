@@ -15,6 +15,9 @@ return [
         'controller' => 'App\Admin\Controllers',
         'fields' => 'App\Admin\Fields',
     ],
+    'view' => [
+        'prefix' => 'admin'
+    ]
     // 'index' => null,
     // 'route' => [
     //     'prefix' => 'admin',

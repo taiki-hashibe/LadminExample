@@ -4,6 +4,7 @@ namespace LowB\Ladmin\Support;
 
 use Illuminate\Contracts\View\View as ContractsView;
 use Illuminate\Support\Facades\View;
+use Illuminate\Support\Str;
 use LowB\Ladmin\Contracts\Renderable;
 use LowB\Ladmin\Route\Facades\LadminRoute;
 
@@ -12,7 +13,7 @@ class Navigation implements Renderable
     public string $label;
     public string $uri;
     public string $name;
-    public string $view = 'ladmin::navigation.default';
+    public string $view = 'navigation.default';
 
     public function __construct(string $label, string $uri, string $name, ?string $view = null)
     {
@@ -50,7 +51,7 @@ class Navigation implements Renderable
 
     public function render(mixed $params = []): ContractsView
     {
-        return View::first([$this->view], [
+        return View::first([config('ladmin.view.prefix') . '.' . Str::of($this->view)->replace('default', $this->name), config('ladmin.view.prefix') .  ".$this->view", 'ladmin::' . Str::of($this->view)->replace('default', $this->name), "ladmin::$this->view"], [
             'navigation' => $this,
             'params' => $params
         ]);
