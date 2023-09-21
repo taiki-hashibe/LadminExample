@@ -2,6 +2,7 @@
 
 use App\Models\User;
 use Illuminate\Support\Facades\Route;
+use LowB\Ladmin\Config\Facades\LadminConfig;
 use LowB\Ladmin\Facades\Ladmin;
 use LowB\Ladmin\Route\Facades\LadminRoute;
 
@@ -16,6 +17,7 @@ use LowB\Ladmin\Route\Facades\LadminRoute;
 |
 */
 
+LadminConfig::theme('ladmin-basic-theme');
 LadminRoute::auth();
 LadminRoute::dashboard();
 LadminRoute::profile();
@@ -24,5 +26,3 @@ LadminRoute::crud('posts')->setLabel('投稿');
 Route::get('/test', function () {
     Ladmin::getNavigation('navigation')->render();
 });
-
-// require __DIR__ . '/admin.php';
