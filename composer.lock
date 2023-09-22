@@ -2109,7 +2109,7 @@
             "dist": {
                 "type": "path",
                 "url": "../packages/ladmin",
-                "reference": "7f3b5cd21b5c15c260c8b15cfffdeeaca186027d"
+                "reference": "639f400c2df7f7c660c9a6a3c6f17631328cba19"
             },
             "require": {
                 "doctrine/dbal": "^3.6",
@@ -2215,7 +2215,7 @@
             "dist": {
                 "type": "path",
                 "url": "../packages/ladmin-basic-theme",
-                "reference": "417241209e509827843d5a42a5a506c7efc16c18"
+                "reference": "166e487adfda7199f8b8e2814650b36c8598ff9d"
             },
             "require": {
                 "illuminate/contracts": "*",

@@ -19,10 +19,10 @@ use LowB\Ladmin\Route\Facades\LadminRoute;
 
 LadminConfig::theme('ladmin-basic-theme');
 LadminRoute::auth();
-LadminRoute::dashboard();
-LadminRoute::profile();
-LadminRoute::crud(User::class)->setLabel('ユーザー');
-LadminRoute::crud('posts')->setLabel('投稿');
+LadminRoute::dashboard()->setLabel('ダッシュボード');
+LadminRoute::profile()->setLabel('プロフィール');
+LadminRoute::crud(User::class);
+LadminRoute::crud('posts');
 Route::get('/test', function () {
     Ladmin::getNavigation('navigation')->render();
 });
